@@ -79,7 +79,7 @@ Expo Go cannot run this custom native module. Browser inspection deliberately bl
 
 ## Install the EAS development build on your iPhone
 
-You need an Expo account and Apple Developer Program membership for a signed physical-device internal build. EAS handles the Mac/Xcode compilation and signing. No accounts, signing assets, remote repositories or EAS cloud project were created by this implementation.
+You need an Expo account and Apple Developer Program membership for a signed physical-device internal build. EAS handles the Mac/Xcode compilation and signing. The project is linked to the existing Expo account `etcaterva` (EAS project ID `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`). No remote repository was created. The first TestFlight attempt stopped during signing setup because its expired provisioning profile referenced a distribution certificate Apple no longer has; no build was queued.
 
 ```bash
 cd ~/dev/signalguard

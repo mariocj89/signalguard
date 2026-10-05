@@ -63,6 +63,13 @@
     "web": {
       "bundler": "metro",
       "output": "single"
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4cc4b82b-a106-40ab-a46f-2c87cb45a2a3"
+      }
+    },
+    "owner": "etcaterva"
   }
 }
