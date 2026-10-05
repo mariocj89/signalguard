@@ -27,15 +27,20 @@ export default function Settings() {
     <Pressable disabled={!__DEV__} onLongPress={__DEV__ ? () => router.push('/diagnostics') : undefined}>
       <Heading>{t('settings')}</Heading>
     </Pressable>
-    <Card style={{ gap: 0, paddingVertical: 4 }}>
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={{ color: colors.muted, fontSize: 16, fontWeight: '600', paddingHorizontal: 16 }}>{t('monitorSection')}</Text>
+      <Card style={{ gap: 0, paddingVertical: 4, paddingHorizontal: 16 }}>
       {(['internet', 'cellular'] as const).map((key, index) => <View key={key} style={[styles.row, { minHeight: 64, borderBottomWidth: index === 0 ? StyleSheet.hairlineWidth : 0, borderBottomColor: colors.line }]}>
-        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', flex: 1 }}>
-          <Ionicons name={key === 'internet' ? 'globe-outline' : 'call-outline'} size={22} color={colors.muted} accessible={false} />
-          <Text style={{ fontSize: 17, color: colors.text }}>{t(key)}</Text>
+        <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center', flex: 1, minWidth: 0 }}>
+          <Ionicons name={key === 'internet' ? 'globe-outline' : 'call-outline'} size={22} color={colors.muted} accessible={false} style={{ width: 24, textAlign: 'center' }} />
+          <Text style={{ flex: 1, flexShrink: 1, fontSize: 17, color: colors.text }}>{t(key)}</Text>
         </View>
-        <Switch accessibilityLabel={t(key)} accessibilityHint={locked ? t('lockedSettings') : undefined} value={state.settings[key]} disabled={locked || saving} onValueChange={(value) => { void change(key, value); }} trackColor={{ true: colors.green }} />
+        <View style={{ width: 52, minHeight: 44, flexShrink: 0, alignItems: 'flex-end', justifyContent: 'center' }}>
+          <Switch accessibilityLabel={t(key)} accessibilityHint={locked ? t('lockedSettings') : undefined} value={state.settings[key]} disabled={locked || saving} onValueChange={(value) => { void change(key, value); }} trackColor={{ true: colors.green }} />
+        </View>
       </View>)}
-    </Card>
+      </Card>
+    </View>
     {error && <Text accessibilityRole="alert" style={{ color: colors.red }}>{error}</Text>}
   </Page>;
 }

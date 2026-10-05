@@ -124,5 +124,6 @@
   "powerBusy": "ESPERA",
   "powerLimit": "Límite de 24 horas",
   "chooseEndTime": "Elegir hora de fin",
-  "monitoringStopped": "Monitorización detenida"
+  "monitoringStopped": "Monitorización detenida",
+  "monitorSection": "Monitorizar"
 }

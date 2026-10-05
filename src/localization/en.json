@@ -124,5 +124,6 @@
   "powerBusy": "WAIT",
   "powerLimit": "24-hour limit",
   "chooseEndTime": "Choose end time",
-  "monitoringStopped": "Monitoring stopped"
+  "monitoringStopped": "Monitoring stopped",
+  "monitorSection": "Monitor"
 }

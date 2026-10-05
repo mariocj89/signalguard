@@ -8,6 +8,12 @@ test('browser inspection fails closed and navigation exposes compact settings an
   await expect(page.getByRole('switch', { name: 'Internet', exact: true })).toBeVisible();
   await expect(page.getByRole('switch', { name: 'Cellular network', exact: true })).toBeVisible();
   await expect(page.getByRole('switch')).toHaveCount(2);
+  await expect(page.getByRole('heading', { name: 'Monitor', exact: true })).toBeVisible();
+  const internet = await page.getByRole('switch', { name: 'Internet', exact: true }).boundingBox();
+  const cellular = await page.getByRole('switch', { name: 'Cellular network', exact: true }).boundingBox();
+  expect(internet).not.toBeNull();
+  expect(cellular).not.toBeNull();
+  expect(Math.abs(internet!.x - cellular!.x)).toBeLessThanOrEqual(1);
   await expect(page.getByText('Private by design')).toHaveCount(0);
   await page.getByRole('tab', { name: /History/ }).click();
   await expect(page.getByText('No guards yet')).toBeVisible();
@@ -20,6 +26,7 @@ test('Spanish route content is complete', async ({ browser }) => {
   await page.getByRole('tab', { name: /Ajustes/ }).click();
   await expect(page.getByRole('switch', { name: 'Internet', exact: true })).toBeVisible();
   await expect(page.getByRole('switch', { name: 'Red móvil', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Monitorizar', exact: true })).toBeVisible();
   await expect(page.getByRole('switch')).toHaveCount(2);
   await page.getByRole('tab', { name: /Historial/ }).click();
   await expect(page.getByText('Todavía no hay guardias')).toBeVisible();
