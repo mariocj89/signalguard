@@ -24,7 +24,7 @@ The vulnerable installed versions of braces and node-forge are also the latest r
 
 ## Requires EAS and a physical iPhone
 
-No iOS native compilation, signing or cloud build was performed, and no EAS account/project or remote repository was created. Linux cannot typecheck UIKit, BackgroundTasks, CoreTelephony, Network or UserNotifications against the Apple SDK. The production JavaScript bundle and generated native configuration are validated; the native Apple-framework build still requires EAS.
+The initial record above described WSL checks. On 5 October 2026, at the user’s explicit TestFlight request, production **1.0.0 (3)** successfully compiled the Apple-framework Swift module, archived and signed on EAS (build `420f2806-ed0c-4113-b5d7-11403fb89cab`). EAS Submit job `7baa5463-6a49-41ef-b85f-35a9447e9222` completed the App Store Connect upload. The EAS project is linked to the existing account; no remote repository was created. Apple processing is also confirmed: the new upload is `VALID` with internal beta state `IN_BETA_TESTING`. Real-device behavior remains unvalidated until the acceptance checklist is run.
 
 A real iPhone must validate immediate task submission/launch, system Live Activity presentation, background execution duration, cellular and dual-SIM registration observations, notification permissions/Time Sensitive delivery, sound, acknowledgement, reminder cancellation, task expiry, force-close watchdog delivery and scheduled completion. Follow [the acceptance checklist](REAL_DEVICE_TESTS.md) before relying on or distributing the app.
 

@@ -79,7 +79,7 @@ Expo Go cannot run this custom native module. Browser inspection deliberately bl
 
 ## Install the EAS development build on your iPhone
 
-You need an Expo account and Apple Developer Program membership for a signed physical-device internal build. EAS handles the Mac/Xcode compilation and signing. The project is linked to the existing Expo account `etcaterva` (EAS project ID `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`). No remote repository was created. The expired signing setup was repaired using the stored App Store Connect API key, without revoking other apps’ signing assets. The first cloud build reached Xcode but failed because the Apple bundle identifier did not yet have Time Sensitive Notifications enabled. Enable that capability in the Apple Developer portal before regenerating the provisioning profile and retrying.
+You need an Expo account and Apple Developer Program membership for a signed physical-device internal build. EAS handles the Mac/Xcode compilation and signing. The project is linked to the existing Expo account `etcaterva` (EAS project ID `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`). No remote repository was created. The signing setup was repaired without revoking other apps’ assets, and Time Sensitive Notifications is enabled in Apple’s portal. Version **1.0.0 (3)** compiled and signed successfully on EAS and was submitted to App Store Connect on 5 October 2026. Apple has processed the build (`VALID`, `IN_BETA_TESTING`); the existing internal TestFlight group **Devs** has access. See `HANDOFF.md` for build/submission links and the latest availability check.
 
 ```bash
 cd ~/dev/signalguard
@@ -117,7 +117,7 @@ TestFlight submission is configured for the existing App Store Connect app `6736
 
 Run [docs/REAL_DEVICE_TESTS.md](docs/REAL_DEVICE_TESTS.md) on a real phone, including force-close without reopening, Wi-Fi/cellular independence, Time Sensitive preflight, acknowledgement/recovery, midnight and dual-SIM tests.
 
-[docs/VALIDATION.md](docs/VALIDATION.md) records checks performed and their limits. Linux can compile/test the actual pure Swift core and parse Swift sources; it cannot compile Apple frameworks, verify signing entitlements or prove system task/notification delivery. The first EAS build and the real-device checklist are required before release.
+[docs/VALIDATION.md](docs/VALIDATION.md) records checks performed and their limits. Linux can compile/test the actual pure Swift core and parse Swift sources; it cannot compile Apple frameworks, verify signing entitlements or prove system task/notification delivery. The EAS native build has passed; the real-device checklist remains required before release.
 
 If execution is killed just after a reminder is submitted, that near-term request can still arrive before the watchdog. iOS cannot condition a local notification on live connectivity without running the app. Reminder copy says connectivity could not be confirmed, rather than asserting a still-current physical outage. No distant reminders are left scheduled, and reopening removes old incident requests from the system queue.
 
