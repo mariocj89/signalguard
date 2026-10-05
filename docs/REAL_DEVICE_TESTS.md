@@ -84,3 +84,11 @@ Start with both services registered. Lose registration on one original service w
 Open Settings → Development diagnostics. Before starting, enable short timings (10-second grace, 30-second reminders, 18-second watchdog; heartbeat 3 seconds/probes 5 seconds). Return Home and start a real native task; simulations never bypass real preflight/task submission.
 
 Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restore real readings before real connectivity tests. Test a Release preview build to verify diagnostics are inaccessible and simulation/timing methods are absent. Short timings are memory-only and cannot persist into production.
+
+## Power control and compact activity
+
+- With valid setup, tap the central OFF power button. Verify ON appears only after the native task starts, and the end time is within 24 hours. No end-time selection is required; the 24-hour limit is visible before starting. iOS can still expire the task earlier.
+- Tap the ON button, cancel the confirmation, and verify monitoring continues. Tap again and confirm; verify the native task ends and the watchdog/reminders are cancelled.
+- Expand “Choose end time”, select +4h, and verify the guard ends four hours after the press. Collapse the control before starting another session and verify the 24-hour default is restored.
+- Verify the system activity shows SignalGuard plus only Internet and Cellular (Red móvil in Spanish). There is no notification row, duplicate guard status row or end-time subtitle. Confirm green/amber/red/unknown markers reflect the native status; Apple controls layout and progress presentation.
+- Test dark mode, large text and a narrow iPhone. The power button must remain tappable and status labels must remain readable without horizontal scrolling.

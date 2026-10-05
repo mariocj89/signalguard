@@ -149,4 +149,11 @@ final class GuardCoreTests: XCTestCase {
     XCTAssertFalse(GuardClock.consistent(wallStart: base, now: date(1800), elapsed: 60))
   }
 
+  func testActivityMarkersKeepUnknownAndDisabledDistinctFromConfirmedConnectivity() {
+    XCTAssertEqual(ActivityPresentation.mark(.healthy), "🟢 ✓")
+    XCTAssertEqual(ActivityPresentation.mark(.checking), "🟠 …")
+    XCTAssertEqual(ActivityPresentation.mark(.unavailable), "🔴 ✕")
+    XCTAssertEqual(ActivityPresentation.mark(.unknown), "⚪ ?")
+    XCTAssertEqual(ActivityPresentation.mark(.disabled), "—")
+  }
 }

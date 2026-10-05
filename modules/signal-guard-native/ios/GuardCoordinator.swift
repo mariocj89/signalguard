@@ -300,7 +300,7 @@ final class GuardCoordinator {
         await interrupt(code: "monitorInterrupted"); return
       }
       task.progress.completedUnitCount = min(task.progress.totalUnitCount, max(0, Int64(Date().timeIntervalSince(session.start))))
-      task.updateTitle(NativeStrings.text("task.title"), subtitle: NativeStrings.subtitle(internet: machine?.health(.internet, now: Date()) ?? .unknown, cellular: machine?.health(.cellular, now: Date()) ?? .unknown, end: session.scheduledEnd))
+      task.updateTitle(NativeStrings.text("task.title"), subtitle: NativeStrings.subtitle(internet: machine?.health(.internet, now: Date()) ?? .unknown, cellular: machine?.health(.cellular, now: Date()) ?? .unknown))
       emit()
     } catch { if epoch == generation { await interrupt(code: "notificationSchedulingFailed") } }
   }

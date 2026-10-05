@@ -1,6 +1,6 @@
-"task.title" = "SignalGuard active";
+"task.title" = "SignalGuard";
 "task.starting" = "Confirming monitoring…";
-"task.subtitle" = "Internet %@ · Cellular %@ · Until %@";
+"task.subtitle" = "Internet %@ · Cellular %@";
 "action.acknowledge" = "Acknowledge";
 "watchdog.title" = "SignalGuard monitoring interrupted";
 "watchdog.body" = "SignalGuard can no longer confirm your connectivity. Open the app to restart monitoring.";

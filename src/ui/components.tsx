@@ -1,4 +1,5 @@
 import React from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useColorScheme, View, type ViewStyle } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { healthTone } from '../domain/presentation';
@@ -30,13 +31,16 @@ export function Button({ label, onPress, disabled = false, busy = false, seconda
     {busy ? <ActivityIndicator color={secondary ? colors.text : colors.buttonText} /> : <Text style={[styles.buttonLabel, { color: secondary ? colors.text : colors.buttonText }]}>{label}</Text>}
   </Pressable>;
 }
-export function StatusRow({ label, health, last = false }: { label: string; health: Health; last?: boolean }) {
+export function StatusRow({ label, health, last = false, icon }: { label: string; health: Health; last?: boolean; icon?: React.ComponentProps<typeof Ionicons>['name'] }) {
   const colors = usePalette();
   const tone = healthTone(health);
   const mark = health === 'healthy' ? '✓' : health === 'checking' ? '…' : health === 'unavailable' ? '✕' : '—';
   const background = health === 'healthy' ? colors.green : tone === 'amber' ? colors.amberTint : tone === 'red' ? colors.redTint : colors.inset;
   return <View accessibilityLabel={`${label}: ${t(health)}`} style={[styles.row, styles.statusRow, { borderBottomColor: colors.line, borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth }]}>
-    <Text style={[styles.rowLabel, { color: colors.text }]}>{label}</Text>
+    <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', flexShrink: 1 }}>
+      {icon && <Ionicons name={icon} size={21} color={colors.muted} accessible={false} />}
+      <Text style={[styles.rowLabel, { color: colors.text }]}>{label}</Text>
+    </View>
     <View style={[styles.statusBadge, { backgroundColor: background }]}>
       <Text style={[styles.mark, { color: health === 'healthy' ? colors.greenText : colors[tone] }]}>{mark}</Text>
     </View>
@@ -49,7 +53,7 @@ export const styles = StyleSheet.create({
   card: { borderRadius: 20, borderWidth: StyleSheet.hairlineWidth, padding: 20, gap: 14 },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, gap: 12 },
   rowLabel: { fontSize: 17, fontWeight: '500', flexShrink: 1 },
-  statusRow: { minHeight: 60, paddingVertical: 12 },
+  statusRow: { minHeight: 52, paddingVertical: 8 },
   statusBadge: { minWidth: 32, minHeight: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
   mark: { fontSize: 20, fontWeight: '700', textAlign: 'center', lineHeight: 26 },
   button: { padding: 18, minHeight: 56, borderRadius: 16, borderWidth: StyleSheet.hairlineWidth, alignItems: 'center', justifyContent: 'center' },

@@ -14,7 +14,7 @@
   "startGuard": "START GUARD",
   "restartGuard": "RESTART GUARD",
   "stopGuard": "STOP GUARD",
-  "active": "GUARD ACTIVE",
+  "active": "Monitoring active",
   "until": "Until {{time}}",
   "lastConfirmed": "Last confirmed",
   "justNow": "Just now",
@@ -121,5 +121,10 @@
   "genericFailure": "SignalGuard could not confirm the operation. Check setup and try again.",
   "simulationActive": "Development simulation is active. Restore real readings before use.",
   "testTimingActive": "Short development timings are active.",
-  "clockChanged": "The iPhone’s clock changed while monitoring. Restart the guard to confirm its end time."
+  "clockChanged": "The iPhone’s clock changed while monitoring. Restart the guard to confirm its end time.",
+  "powerOn": "ON",
+  "powerOff": "OFF",
+  "powerBusy": "WAIT",
+  "powerLimit": "24-hour limit",
+  "chooseEndTime": "Choose end time"
 }

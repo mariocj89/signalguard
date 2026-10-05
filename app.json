@@ -58,7 +58,9 @@
         }
       ],
       "@react-native-community/datetimepicker",
-      "./modules/signal-guard-native/plugin"
+      "./modules/signal-guard-native/plugin",
+      "expo-asset",
+      "expo-font"
     ],
     "web": {
       "bundler": "metro",

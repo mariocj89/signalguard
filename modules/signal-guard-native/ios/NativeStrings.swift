@@ -21,10 +21,7 @@ enum NativeStrings {
     formatter.timeStyle = .short
     return formatter.string(from: date)
   }
-  static func subtitle(internet: Health, cellular: Health, end: Date) -> String {
-    func mark(_ health: Health) -> String {
-      switch health { case .healthy: return "✓"; case .disabled: return "—"; case .checking: return "…"; default: return "✕" }
-    }
-    return text("task.subtitle", mark(internet), mark(cellular), clock(end))
+  static func subtitle(internet: Health, cellular: Health) -> String {
+    text("task.subtitle", ActivityPresentation.mark(internet), ActivityPresentation.mark(cellular))
   }
 }

@@ -46,3 +46,17 @@ These changes are local only. No new EAS build or submission was dispatched for 
 Updated the code-native SVG and regenerated `assets/icon.png`: a solid white shield with a bold green check on navy, matching the UI’s confirmed-state green. The icon has an opaque full-square background so iOS applies its own mask. Visually reviewed the rendered asset and verified PNG dimensions 1024×1024, 8-bit RGB, no alpha channel. TypeScript, lint, 23 Jest tests and Expo Doctor 21/21 pass.
 
 This icon and the UI polish remain local; TestFlight build 3 has the previous icon. No new build/submission was requested or launched for this icon edit.
+
+## Power-button home and compact activity — local, after build 3
+
+At the user’s request, Home now centres on a large, accessible power control with actual native ON/OFF state. Only confirmed native monitoring can show ON; pending starts show a spinner, and turning off an active guard still requires confirmation. Healthy active monitoring is green; a candidate outage turns the control amber and an incident turns it red while remaining ON. Interruption explicitly shows OFF and a restart message.
+
+The normal start requires no time selection: it starts a finite guard with a visible **24-hour limit**, preserving the native hard maximum and all expiry/watchdog behavior. This is not indefinite operation. Optional “Choose end time” expands the original time picker and 1/4/8/12-hour controls, defaulting to eight hours when enabled. Collapsing it restores the 24-hour normal mode.
+
+Home shows only a narrower Internet/Cellular card (maximum width 310, 52-point rows), with globe/call icons. Notification readiness still blocks starting and shows contextual permission/settings actions when needed. It is no longer a redundant healthy status row. Expo Go/browser show unavailable native observations as unknown, not a claimed physical outage. Tabs use standard outline icons. SDK-compatible vector icons, font and asset dependencies/plugins were added.
+
+The native system activity title is simply SignalGuard; its subtitle contains only localized Internet and Cellular/Red móvil states, without notification/guard rows or end time. Text-only API limits are respected: Unicode status markers provide green/amber/red/neutral colour plus check/ellipsis/cross/question mark. Real duration progress remains unchanged. No extra ActivityKit activity was created. Actual Lock Screen/Dynamic Island layout and markers require the next iPhone build.
+
+Validated: typecheck, lint, **27 Jest tests**, **18 Swift tests**, two English/Spanish browser tests, iOS bundle export, Expo Doctor 21/21 and iOS CNG prebuild. The added tests exercise normal 24-hour start, optional shorter duration, stop confirmation and conservative unknown presentation; Swift tests cover activity markers. Browser layout was reviewed at 390×844 with no horizontal overflow. The existing public Expo Go manifest/bundle was verified to serve the updated power-button interface successfully.
+
+These changes remain local and available via the running Expo Go preview. TestFlight still has version 1.0.0 build 3. No new cloud build or submission was launched for this design request.

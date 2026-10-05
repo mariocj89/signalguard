@@ -14,7 +14,7 @@
   "startGuard": "INICIAR GUARDIA",
   "restartGuard": "REINICIAR GUARDIA",
   "stopGuard": "DETENER GUARDIA",
-  "active": "GUARDIA ACTIVA",
+  "active": "Monitorización activa",
   "until": "Hasta las {{time}}",
   "lastConfirmed": "Última confirmación",
   "justNow": "Ahora mismo",
@@ -121,5 +121,10 @@
   "genericFailure": "SignalGuard no ha podido confirmar la operación. Comprueba la configuración e inténtalo de nuevo.",
   "simulationActive": "Simulación de desarrollo activa. Restaura las lecturas reales antes de utilizar la aplicación.",
   "testTimingActive": "Intervalos de prueba de desarrollo activos.",
-  "clockChanged": "La hora del iPhone ha cambiado durante la monitorización. Reinicia la guardia para confirmar su hora de fin."
+  "clockChanged": "La hora del iPhone ha cambiado durante la monitorización. Reinicia la guardia para confirmar su hora de fin.",
+  "powerOn": "ON",
+  "powerOff": "OFF",
+  "powerBusy": "ESPERA",
+  "powerLimit": "Límite de 24 horas",
+  "chooseEndTime": "Elegir hora de fin"
 }
