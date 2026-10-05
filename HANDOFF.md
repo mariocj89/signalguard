@@ -30,3 +30,13 @@ Apple processing is complete: build `543de967-88ef-47ff-bee8-fc9833d54da4`, uplo
 Prior implementation checks are recorded in `docs/VALIDATION.md`. The latest source checks passed: strict TypeScript, lint, 23 Jest tests. These checks also pass after the production auto-increment and EAS submission configuration edits.
 
 Physical-device acceptance remains required; follow `docs/REAL_DEVICE_TESTS.md`. A TestFlight Release build uses production timings and excludes development diagnostics. Do not claim eight-hour execution or guaranteed call receipt.
+
+## UI polish — local changes after TestFlight build 3
+
+The user requested a small style improvement with green checks, a simple layout and less text. Confirmed status marks now use filled green circular badges with contrasting checkmarks; checking, unavailable and unknown states retain amber/red/neutral treatments and never gain green readiness. The status card uses subtle dividers, end-time controls are grouped in a separate compact card, quick durations form one segmented row, and last-confirmed information is a single line. Type hierarchy and light/dark backgrounds are refined.
+
+Home no longer repeats the guard-end heading, scheduling help or the safety footer. Safety limitations remain in Settings and documentation. Shorter English/Spanish copy covers language, local history, advanced options, interruption and acknowledgement. Native monitoring and preflight behavior are unchanged.
+
+Validated: strict TypeScript, lint, 23 Jest tests, 17 Swift tests, two English/Spanish browser smoke tests, iOS production bundle export and Expo Doctor 21/21. Device appearance still needs review on an iPhone.
+
+These changes are local only. No new EAS build or submission was dispatched for the style request; TestFlight still contains 1.0.0 build 3. A future explicitly requested build will include this polish.

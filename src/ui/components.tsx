@@ -7,7 +7,7 @@ import type { Health } from '../../modules/signal-guard-native';
 
 export function usePalette() {
   const dark = useColorScheme() === 'dark';
-  return { background: dark ? '#101316' : '#FAFAF8', card: dark ? '#1C2126' : '#FFFFFF', text: dark ? '#F4F5F6' : '#142029', muted: dark ? '#AEB8C2' : '#586570', line: dark ? '#35404A' : '#DDE2E5', green: dark ? '#5BDC9B' : '#146F45', amber: dark ? '#F3CA66' : '#865B00', red: dark ? '#FF8585' : '#B12937', neutral: dark ? '#AEB8C2' : '#586570', button: dark ? '#F2F5F6' : '#142029', buttonText: dark ? '#142029' : '#FFFFFF' };
+  return { background: dark ? '#101316' : '#F5F6F4', card: dark ? '#1C2126' : '#FFFFFF', inset: dark ? '#14191D' : '#F1F3F2', text: dark ? '#F4F5F6' : '#142029', muted: dark ? '#AEB8C2' : '#586570', line: dark ? '#35404A' : '#DDE2E5', green: dark ? '#5BDC9B' : '#147A48', greenText: dark ? '#102B1B' : '#FFFFFF', amberTint: dark ? '#342B18' : '#FFF4D8', redTint: dark ? '#382127' : '#FCECEE', amber: dark ? '#F3CA66' : '#865B00', red: dark ? '#FF8585' : '#B12937', neutral: dark ? '#AEB8C2' : '#586570', button: dark ? '#F2F5F6' : '#142029', buttonText: dark ? '#142029' : '#FFFFFF' };
 }
 export function Page({ children }: React.PropsWithChildren) {
   const colors = usePalette();
@@ -30,22 +30,28 @@ export function Button({ label, onPress, disabled = false, busy = false, seconda
     {busy ? <ActivityIndicator color={secondary ? colors.text : colors.buttonText} /> : <Text style={[styles.buttonLabel, { color: secondary ? colors.text : colors.buttonText }]}>{label}</Text>}
   </Pressable>;
 }
-export function StatusRow({ label, health }: { label: string; health: Health }) {
+export function StatusRow({ label, health, last = false }: { label: string; health: Health; last?: boolean }) {
   const colors = usePalette();
+  const tone = healthTone(health);
   const mark = health === 'healthy' ? '✓' : health === 'checking' ? '…' : health === 'unavailable' ? '✕' : '—';
-  return <View accessibilityLabel={`${label}: ${t(health)}`} style={styles.row}>
+  const background = health === 'healthy' ? colors.green : tone === 'amber' ? colors.amberTint : tone === 'red' ? colors.redTint : colors.inset;
+  return <View accessibilityLabel={`${label}: ${t(health)}`} style={[styles.row, styles.statusRow, { borderBottomColor: colors.line, borderBottomWidth: last ? 0 : StyleSheet.hairlineWidth }]}>
     <Text style={[styles.rowLabel, { color: colors.text }]}>{label}</Text>
-    <Text style={[styles.mark, { color: colors[healthTone(health)] }]}>{mark}</Text>
+    <View style={[styles.statusBadge, { backgroundColor: background }]}>
+      <Text style={[styles.mark, { color: health === 'healthy' ? colors.greenText : colors[tone] }]}>{mark}</Text>
+    </View>
   </View>;
 }
 export const styles = StyleSheet.create({
   page: { padding: 24, paddingTop: 26, paddingBottom: 32, maxWidth: 560, width: '100%', alignSelf: 'center', gap: 20 },
-  heading: { fontSize: 32, fontWeight: '700', letterSpacing: -1 },
+  heading: { fontSize: 34, fontWeight: '700', letterSpacing: -1.2, marginBottom: 4 },
   body: { fontSize: 16, lineHeight: 24 },
   card: { borderRadius: 20, borderWidth: StyleSheet.hairlineWidth, padding: 20, gap: 14 },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', minHeight: 44, gap: 12 },
-  rowLabel: { fontSize: 18, flexShrink: 1 },
-  mark: { fontSize: 23, fontWeight: '600', minWidth: 28, textAlign: 'center' },
+  rowLabel: { fontSize: 17, fontWeight: '500', flexShrink: 1 },
+  statusRow: { minHeight: 60, paddingVertical: 12 },
+  statusBadge: { minWidth: 32, minHeight: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
+  mark: { fontSize: 20, fontWeight: '700', textAlign: 'center', lineHeight: 26 },
   button: { padding: 18, minHeight: 56, borderRadius: 16, borderWidth: StyleSheet.hairlineWidth, alignItems: 'center', justifyContent: 'center' },
   buttonLabel: { fontSize: 16, fontWeight: '700', letterSpacing: 0.3 },
 });

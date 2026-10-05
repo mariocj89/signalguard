@@ -54,16 +54,16 @@ export default function Home() {
     {__DEV__ && state.testTimingActive && <Text style={{ color: colors.amber }}>{t('testTimingActive')}</Text>}
     {active ? <View style={{ gap: 8 }}>
       <Text accessibilityRole="header" style={{ fontSize: 20, fontWeight: '700', color: phaseColor }}>{t('active')}{state.phase === 'activeHealthy' ? ' ✓' : ''}</Text>
-      <Text style={{ color: colors.muted, fontSize: 24 }}>{t('until', { time: state.end ? clock(state.end) : t('unknown') })}</Text>
+      <Text style={{ color: colors.text, fontSize: 32, fontWeight: '500', letterSpacing: -0.8, fontVariant: ['tabular-nums'] }}>{t('until', { time: state.end ? clock(state.end) : t('unknown') })}</Text>
     </View> : state.phase === 'interrupted' ? <Card>
       <Text accessibilityRole="header" style={{ color: colors.red, fontSize: 22, fontWeight: '700' }}>{t('interrupted')}</Text>
       <Body>{t('interruptedBody')}</Body>
     </Card> : state.phase === 'completed' ? <Body>{t('completed')} ✓</Body> : null}
-    <Card>
+    <Card style={{ gap: 0, paddingVertical: 6 }}>
       <StatusRow label={t('internet')} health={active ? state.internet : inactiveHealth(state.settings.internet, preflight?.internet)} />
       <StatusRow label={t('cellular')} health={active ? state.cellular : inactiveHealth(state.settings.cellular, preflight?.cellular)} />
       {!active && <StatusRow label={t('notifications')} health={inactiveHealth(true, preflight ? preflight.notifications && preflight.timeSensitive : undefined)} />}
-      <StatusRow label={t('monitoring')} health={state.phase === 'interrupted' ? 'unavailable' : active ? 'healthy' : inactiveHealth(true, preflight?.ready)} />
+      <StatusRow last label={t('monitoring')} health={state.phase === 'interrupted' ? 'unavailable' : active ? 'healthy' : inactiveHealth(true, preflight?.ready)} />
     </Card>
     {active && state.internet === 'checking' && <Text style={{ color: colors.amber }}>{t('checkingInternet')}</Text>}
     {active && state.cellular === 'checking' && <Text style={{ color: colors.amber }}>{t('checkingCellular')}</Text>}
@@ -75,12 +75,11 @@ export default function Home() {
       </>}
     </Card>}
     {active ? <>
-      <View style={{ gap: 6 }}><Body muted>{t('lastConfirmed')}</Body><Body>{state.lastConfirmed ? state.lastConfirmationRecent ? t('justNow') : clock(state.lastConfirmed) : t('unknown')}</Body></View>
+      <View style={[styles.row, { minHeight: 28 }]}><Text style={{ color: colors.muted, fontSize: 15 }}>{t('lastConfirmed')}</Text><Text style={{ color: colors.text, fontSize: 15, fontWeight: '500' }}>{state.lastConfirmed ? state.lastConfirmationRecent ? t('justNow') : clock(state.lastConfirmed) : t('unknown')}</Text></View>
       <Button label={t('stopGuard')} onPress={stop} busy={transitioning} />
     </> : <>
-      <View style={{ gap: 6 }}>
-        <Body muted>{t('guardEnds')}</Body>
-        <View style={styles.row}><Body>{t('start')}</Body><Body>{t('now')}</Body></View>
+      <Card style={{ gap: 12 }}>
+        <View style={[styles.row, { minHeight: 28 }]}><Text style={{ color: colors.muted, fontSize: 15 }}>{t('start')}</Text><Text style={{ color: colors.muted, fontSize: 15 }}>{t('now')}</Text></View>
         <View style={styles.row}>
           <Body>{t('end')}</Body>
           {Platform.OS === 'ios' ? <DateTimePicker value={selected} mode="time" display="compact" onChange={(_, value) => {
@@ -90,19 +89,17 @@ export default function Home() {
           }} accessibilityLabel={t('end')} /> : <Text style={{ color: colors.text, fontSize: 36, fontWeight: '500', fontVariant: ['tabular-nums'] }}>{clock(selected)}</Text>}
         </View>
         {duration === null && selected.getDate() !== new Date().getDate() && <Body muted>{t('tomorrow')}</Body>}
-        <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
-          {[1, 4, 8, 12].map((hours) => <Pressable key={hours} accessibilityRole="button" accessibilityLabel={t('quickDuration', { hours })} accessibilityState={{ selected: duration === hours }} onPress={() => { setDuration(hours); setSelected(endForDuration(new Date(), hours)); setError(null); }} style={{ backgroundColor: colors.card, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 16, borderWidth: duration === hours ? 2 : 1, borderColor: duration === hours ? colors.text : colors.line }}>
-            <Text style={{ fontSize: 16, color: colors.text }}>+{hours}h</Text>
+        <View style={{ flexDirection: 'row', gap: 4, backgroundColor: colors.inset, borderRadius: 14, padding: 4 }}>
+          {[1, 4, 8, 12].map((hours) => <Pressable key={hours} accessibilityRole="button" accessibilityLabel={t('quickDuration', { hours })} accessibilityState={{ selected: duration === hours }} onPress={() => { setDuration(hours); setSelected(endForDuration(new Date(), hours)); setError(null); }} style={({ pressed }) => ({ flex: 1, minHeight: 44, alignItems: 'center', justifyContent: 'center', backgroundColor: duration === hours ? colors.card : 'transparent', borderRadius: 10, borderWidth: duration === hours ? 1 : 0, borderColor: colors.line, opacity: pressed ? 0.65 : 1 })}>
+            <Text style={{ fontSize: 16, fontWeight: duration === hours ? '700' : '500', color: duration === hours ? colors.text : colors.muted }}>+{hours}h</Text>
           </Pressable>)}
         </View>
-        <Body muted>{t('endHelp')}</Body>
-      </View>
+      </Card>
       {checking && <Body muted>{t('checkingSetup')}</Body>}
       {preflight?.issues.map((issue) => <Text key={issue} style={{ color: colors.red, fontSize: 16, lineHeight: 23 }}>{t(issue)}</Text>)}
       {preflight?.permissionUndetermined ? <Button secondary label={t('enableNotifications')} onPress={askPermission} disabled={transitioning} /> : preflight?.issues.some((issue) => issue === 'notificationsRequired' || issue === 'timeSensitiveRequired' || issue === 'cellularUnavailable') ? <Button secondary label={t('openSettings')} onPress={() => { void Linking.openSettings().catch((failure: unknown) => setError(errorText(failure))); }} /> : null}
       <Button label={state.phase === 'interrupted' ? t('restartGuard') : t('startGuard')} onPress={() => { void submit(); }} disabled={!preflight?.ready || checking || transitioning} busy={transitioning} />
     </>}
     {(error || nativeError) && <Text accessibilityRole="alert" style={{ color: colors.red, fontSize: 16, lineHeight: 24 }}>{error ?? nativeError}</Text>}
-    <Body muted>{t('safetyNote')}</Body>
   </Page>;
 }
