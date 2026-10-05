@@ -133,7 +133,7 @@ final class GuardCoordinator {
     guard UIApplication.shared.applicationState == .active, GuardLifecycle.validEnd(now: Date(), end: end) else {
       life.reset(); emit(); throw GuardFailure(code: "foregroundRequired")
     }
-    baseline = cellular.registeredServices()
+    baseline = self.cellular.registeredServices()
     if settings.cellular && baseline.isEmpty {
       life.reset(); emit(); throw GuardFailure(code: "cellularUnavailable")
     }
