@@ -87,3 +87,15 @@ The system activity now uses exactly one coloured marker per connection (green, 
 The requested opaque Lock Screen background cannot be set on BGContinuedProcessingTask's system activity: the public API exposes title/subtitle/progress but no background styling. Apple's ActivityKit/WidgetKit activityBackgroundTint styles app-owned activities only. No private API or second activity was introduced. This limitation and real-device contrast checks are documented; any future custom activity must first verify it does not duplicate the system activity.
 
 Validation: TypeScript, lint, 27 Jest tests, 18 Swift tests, two browser tests (English/Spanish) and Git whitespace checks pass. These changes are local only; TestFlight 1.0.0 (4) contains the earlier settings and double markers. No new cloud build was requested or dispatched for this edit.
+
+
+## TestFlight build 5 — minimal settings and single markers
+
+At the user's explicit publishing request, launched production EAS Build with auto-submit. App version 1.0.0, iOS build number **5**. Build `d8c81262-aef6-452e-9793-75b777111d4b` **FINISHED**: Apple SDK compilation, archive and signing succeeded. Includes the minimal Settings screen, development-only heading gesture and single coloured native activity markers from commit 7f61b9f. The system activity background remains controlled by iOS, as documented.
+
+Submission `42ab5da9-c5d6-45e2-a84f-5b465f773362` is currently **IN_QUEUE**, with no error. The Devs group and user access are already configured. Apple processing/availability of build 5 is pending.
+
+Rechecked: typecheck, lint, 27 Jest tests, 18 Swift tests and two English/Spanish browser tests pass. No new signing assets, testing groups, invitations, remote repository or public App Store release were created.
+
+Build: https://expo.dev/accounts/etcaterva/projects/signalguard/builds/d8c81262-aef6-452e-9793-75b777111d4b
+Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/42ab5da9-c5d6-45e2-a84f-5b465f773362
