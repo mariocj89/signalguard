@@ -13,7 +13,7 @@
     "ios": {
       "bundleIdentifier": "com.etcaterva.signalguard",
       "supportsTablet": false,
-      "buildNumber": "5",
+      "buildNumber": "6",
       "infoPlist": {
         "CFBundleDevelopmentRegion": "en",
         "CFBundleLocalizations": [

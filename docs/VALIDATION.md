@@ -42,3 +42,6 @@ Build 5 status follow-up: submission completed at 2026-10-05T16:55:27Z; Apple bu
 
 
 One-tap-stop change: all local checks pass (28 Jest, 18 Swift, two browser tests, typecheck/lint, iOS export, Expo Doctor 21/21). Pending/success/failure stop behaviour is covered. These UI changes are not yet in TestFlight build 5.
+
+
+Build 6 settings alignment: fixed trailing switch column and localized Monitor header pass typecheck/lint, 28 Jest tests, 18 Swift tests, two browser tests (including measured switch alignment), iOS export and Expo Doctor 21/21. EAS build 31135c77-edbc-498e-a0c5-7c6ebe98eb45 is pending, with auto-submit 1f176e8d-a469-4ea9-b097-7e13341b55fc scheduled. This archive also includes the phone icon and direct-stop notice; native compilation and Apple processing for build 6 are not yet confirmed.

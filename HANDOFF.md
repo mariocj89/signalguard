@@ -120,3 +120,17 @@ The user explicitly removed the stop-confirmation requirement. Home now calls na
 Updated the behavioural stop test to check immediate native invocation, no confirmation dialog, disabled pending control, no premature OFF/success notice and final OFF/notice after native completion. Added a failed-stop test. Removed unused stop-dialog translations in both languages and updated README/device acceptance instructions. Native stop lifecycle and cancellation remain unchanged. History-clearing and notification-permission confirmations remain as before.
 
 Validation: typecheck and lint pass; 28 Jest tests, 18 Swift tests, two English/Spanish browser tests, iOS bundle export, Expo Doctor 21/21 and whitespace checks pass. These changes and the phone-shield icon remain local; published TestFlight 1.0.0 (5) still has the old stop confirmation and check-shield icon. No new build/submission was requested for this edit. Android remains unimplemented.
+
+
+## Build 6 — aligned Monitor settings, phone icon and one-tap stop
+
+The user explicitly requested aligned Settings switches, a Monitor section header and submission. Settings now places both switches in a fixed 52-point, non-shrinking trailing column, with flexible/wrapping labels and equal-width icon slots. Added localized section headings Monitor / Monitorizar. English browser inspection checks the two switches share the same x-position within one pixel; both languages verify the heading. Actual native iPhone layout still needs review.
+
+Validation: typecheck/lint, 28 Jest tests, 18 Swift tests, two browser checks, iOS bundle export, Expo Doctor 21/21 and whitespace checks pass. Source checkpoint 712e1a0. No monitoring-engine changes.
+
+Dispatched production EAS build **1.0.0 (6)** with auto-submit: build `31135c77-edbc-498e-a0c5-7c6ebe98eb45`, submission `1f176e8d-a469-4ea9-b097-7e13341b55fc`. Build/submission are pending at this record. The archive includes the previously local phone-shield icon and one-tap manual stop/in-app notice, as well as aligned settings. Existing scoped signing credentials were reused; no new certificate/profile or testing group was created. Android remains unimplemented; no public App Store release.
+
+Build: https://expo.dev/accounts/etcaterva/projects/signalguard/builds/31135c77-edbc-498e-a0c5-7c6ebe98eb45
+Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/1f176e8d-a469-4ea9-b097-7e13341b55fc
+
+Build 6 queue follow-up: EAS reports NEW, NORMAL priority, no error, no logs and no queue-position/wait estimate. Native archive/Apple upload remain unvalidated for this build. Auto-submit is scheduled and will run after successful build; temporary status helpers can follow build 31135c77-edbc-498e-a0c5-7c6ebe98eb45 and submission 1f176e8d-a469-4ea9-b097-7e13341b55fc. Do not claim build 6 is installed/available until Apple processing is confirmed.
