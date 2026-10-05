@@ -60,3 +60,19 @@ The native system activity title is simply SignalGuard; its subtitle contains on
 Validated: typecheck, lint, **27 Jest tests**, **18 Swift tests**, two English/Spanish browser tests, iOS bundle export, Expo Doctor 21/21 and iOS CNG prebuild. The added tests exercise normal 24-hour start, optional shorter duration, stop confirmation and conservative unknown presentation; Swift tests cover activity markers. Browser layout was reviewed at 390×844 with no horizontal overflow. The existing public Expo Go manifest/bundle was verified to serve the updated power-button interface successfully.
 
 These changes remain local and available via the running Expo Go preview. TestFlight still has version 1.0.0 build 3. No new cloud build or submission was launched for this design request.
+
+
+## TestFlight build 4 — 5 October 2026
+
+The user explicitly requested sending the new design to TestFlight. Dispatched production EAS Build with auto-submit, using the existing scoped signing credentials and App Store Connect application 6736607323. Local app.json build number incremented from 3 to 4.
+
+- Version **1.0.0 (4)**: EAS build `2793dc13-6859-44b8-ae7b-f53a65adc732` **FINISHED**. Apple SDK compilation, archive and signing succeeded, including the updated custom Swift module, activity strings/markers and icon/font assets.
+- Submission `783fffd9-9199-4b21-a5bd-b8c02892da50` is **IN_QUEUE** with no error or logs, correctly linked to this finished build. Upload is scheduled but Apple acceptance/processing has not yet been confirmed. Do not claim build 4 is already available in TestFlight until this changes.
+- App Store Connect still shows build 3 as the newest upload at the last direct check. The internal **Devs** group has access to all builds; the user's account is already a member. No invitations or group changes were needed.
+- Rechecked: TypeScript and lint pass, 27 Jest tests and 18 native Swift tests pass. Dependency audit currently reports 54 upstream findings (51 high, three moderate, zero critical); no incompatible broad dependency upgrade was applied.
+- Actual on-device behaviour and system activity layout still require the real-device acceptance checklist.
+
+Build: https://expo.dev/accounts/etcaterva/projects/signalguard/builds/2793dc13-6859-44b8-ae7b-f53a65adc732
+Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/783fffd9-9199-4b21-a5bd-b8c02892da50
+
+Follow up by checking `npx eas-cli@latest submit:view 783fffd9-9199-4b21-a5bd-b8c02892da50 --json` and the latest Apple upload. Temporary read-only helpers `/tmp/signalguard-submission-status.py` and `/tmp/signalguard-apple-build.cjs` report safe status fields without exposing credential or signed-log data.
