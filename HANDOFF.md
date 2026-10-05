@@ -2,18 +2,23 @@
 
 ## Current state — 5 October 2026
 
-The MVP is implemented locally. UI preview is running through a temporary Cloudflare tunnel on Metro port 8084; Expo Go can inspect the interface but cannot run the custom Swift guard. This preview has not been published as a website.
+The MVP is implemented locally. The user explicitly requested a TestFlight build for end-to-end testing and authorized repairing only SignalGuard’s signing setup without revoking/deleting other apps’ assets.
 
-The user has requested a TestFlight build for end-to-end testing. EAS authentication is available under `etcaterva`. The app is linked to EAS project `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`, preserving bundle ID `com.etcaterva.signalguard`.
+EAS account: `etcaterva`; project: `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`; bundle: `com.etcaterva.signalguard`; existing App Store Connect app: `6736607323` (portal display name “Signal Guard”). Production auto-increment and EAS submit settings follow the existing Bosquedoku/Cytowars workflow. No public App Store release is requested.
 
-## Build attempt
+## Signing repair and cloud build
 
-The production iOS build failed before upload/compilation during credentials setup: the provisioning profile was expired, and Apple no longer has the distribution certificate it referenced. No build was queued and nothing was submitted to TestFlight.
+All certificates listed in EAS were expired, including the shared certificate for the other apps. The cached Apple ID session had expired. Using the existing App Store Connect API key in memory, a new distribution certificate was generated and assigned only to SignalGuard, and its provisioning profile was regenerated. No other certificates/profiles were revoked or deleted, and no secret was written into this project.
 
-Automatic approval review rejected the interactive credentials manager because it can mutate other signing assets. Approval has been requested to select/create a distribution certificate and regenerate only SignalGuard’s provisioning profile, without revoking or deleting other apps’ assets.
+Cloud build `b9a51f17-0b38-47ce-bcaf-b93d6a34d38d` (1.0.0 build 1) reached Xcode but failed because the provisioning profile lacks the Time Sensitive Notifications capability/entitlement. No successful build or TestFlight submission exists yet.
 
-## Checks and next steps
+EAS capability synchronization with the stored API key failed. A correctly structured public Apple capability request confirmed that `USERNOTIFICATIONS_TIMESENSITIVE` is not supported by the public provisioning API. The user has been asked to enable **Time Sensitive Notifications** and save at:
+https://developer.apple.com/account/resources/identifiers/bundleId/edit/749T5F96X8
 
-Implementation checks are recorded in `docs/VALIDATION.md`. Latest project-linking changes only add EAS metadata and documentation; rerun TypeScript, lint and configuration checks before the eventual cloud build.
+Do not remove the entitlement or claim that the guard can safely run without this prerequisite. Once the user confirms the portal change, regenerate only SignalGuard’s provisioning profile, verify the entitlement in it, and run the production build with auto-submit. Investigate/fix any native compilation errors before reporting success.
 
-Once approved, repair the app’s credentials, run the production EAS build, fix any Apple-framework compilation errors, and submit the successful build to App Store Connect for TestFlight. Real-device acceptance remains required; follow `docs/REAL_DEVICE_TESTS.md`. No App Store public release is requested.
+## Checks and device testing
+
+Prior implementation checks are recorded in `docs/VALIDATION.md`. The latest source checks passed: strict TypeScript, lint, 23 Jest tests. These checks also pass after the production auto-increment and EAS submission configuration edits.
+
+Physical-device acceptance remains required; follow `docs/REAL_DEVICE_TESTS.md`. A TestFlight Release build uses production timings and excludes development diagnostics. Do not claim eight-hour execution or guaranteed call receipt.

@@ -31,6 +31,14 @@
       },
       "env": {
         "EXPO_NO_TELEMETRY": "1"
+      },
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "6736607323"
       }
     }
   }

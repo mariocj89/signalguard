@@ -79,7 +79,7 @@ Expo Go cannot run this custom native module. Browser inspection deliberately bl
 
 ## Install the EAS development build on your iPhone
 
-You need an Expo account and Apple Developer Program membership for a signed physical-device internal build. EAS handles the Mac/Xcode compilation and signing. The project is linked to the existing Expo account `etcaterva` (EAS project ID `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`). No remote repository was created. The first TestFlight attempt stopped during signing setup because its expired provisioning profile referenced a distribution certificate Apple no longer has; no build was queued.
+You need an Expo account and Apple Developer Program membership for a signed physical-device internal build. EAS handles the Mac/Xcode compilation and signing. The project is linked to the existing Expo account `etcaterva` (EAS project ID `4cc4b82b-a106-40ab-a46f-2c87cb45a2a3`). No remote repository was created. The expired signing setup was repaired using the stored App Store Connect API key, without revoking other apps’ signing assets. The first cloud build reached Xcode but failed because the Apple bundle identifier did not yet have Time Sensitive Notifications enabled. Enable that capability in the Apple Developer portal before regenerating the provisioning profile and retrying.
 
 ```bash
 cd ~/dev/signalguard
@@ -108,10 +108,10 @@ Open the development client and connect to the displayed Metro URL. Tunnel trans
 
 ```bash
 npx eas-cli@latest build --platform ios --profile preview
-npx eas-cli@latest build --platform ios --profile production
+npx eas-cli@latest build --platform ios --profile production --auto-submit
 ```
 
-No store submission, EAS Update, hosting, CI, analytics or Android configuration is added. EAS generates iOS via CNG, including the local module/resources/subscriber. Images use the current EAS `latest` Xcode toolchain with support for iOS 26 APIs. The iOS deployment target stays 26.0.
+TestFlight submission is configured for the existing App Store Connect app `6736607323`, matching `com.etcaterva.signalguard`; production build numbers increment automatically. No public App Store release, EAS Update, hosting, CI, analytics or Android configuration is added. EAS generates iOS via CNG, including the local module/resources/subscriber. Images use the current EAS `latest` Xcode toolchain with support for iOS 26 APIs. The iOS deployment target stays 26.0.
 
 ## Validation and remaining device work
 
