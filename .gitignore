@@ -39,3 +39,12 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Native sources live in modules; CNG directories are disposable.
+/ios
+/android
+/.tools
+/dist
+/playwright-report
+/test-results
+**/.build

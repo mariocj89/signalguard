@@ -1,0 +1,12 @@
+"task.title" = "SignalGuard activo";
+"task.starting" = "Confirmando la monitorización…";
+"task.subtitle" = "Internet %@ · Red móvil %@ · Hasta las %@";
+"action.acknowledge" = "Confirmar aviso";
+"watchdog.title" = "Monitorización de SignalGuard interrumpida";
+"watchdog.body" = "SignalGuard ya no puede confirmar tu conectividad. Abre la app para reiniciar la vigilancia.";
+"incident.title" = "Aviso de SignalGuard";
+"incident.internet" = "No se ha podido confirmar la conectividad a Internet. Abre SignalGuard para comprobar su estado.";
+"incident.cellular" = "No se ha podido confirmar el registro en la red móvil. Abre SignalGuard para comprobar su estado.";
+"incident.both" = "No se ha podido confirmar Internet ni la red móvil. Abre SignalGuard para comprobar su estado.";
+"completion.title" = "✓ Guardia finalizada";
+"completion.body" = "SignalGuard ha monitorizado tu conectividad hasta las %@.";

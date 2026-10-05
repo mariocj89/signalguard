@@ -1,25 +1,68 @@
 {
   "expo": {
-    "name": "signalguard",
+    "name": "SignalGuard",
     "slug": "signalguard",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "signalguard",
+    "userInterfaceStyle": "automatic",
+    "platforms": [
+      "ios"
+    ],
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+      "bundleIdentifier": "com.etcaterva.signalguard",
+      "supportsTablet": false,
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDevelopmentRegion": "en",
+        "CFBundleLocalizations": [
+          "en",
+          "es"
+        ],
+        "LSRequiresIPhoneOS": true,
+        "ITSAppUsesNonExemptEncryption": false
       },
-      "predictiveBackGestureEnabled": false
+      "privacyManifests": {
+        "NSPrivacyTracking": false,
+        "NSPrivacyCollectedDataTypes": [],
+        "NSPrivacyAccessedAPITypes": [
+          {
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
+          }
+        ]
+      }
     },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-localization",
+        {
+          "supportedLocales": {
+            "ios": [
+              "en",
+              "es"
+            ]
+          }
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "26.0"
+          }
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      "./modules/signal-guard-native/plugin"
+    ],
     "web": {
-      "favicon": "./assets/favicon.png"
+      "bundler": "metro",
+      "output": "single"
     }
   }
 }

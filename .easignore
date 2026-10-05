@@ -1,0 +1,14 @@
+/node_modules/
+/.git/
+/.expo/
+/.tools/
+/dist/
+/ios/
+/android/
+/playwright-report/
+/test-results/
+/modules/signal-guard-native/.build/
+.env*.local
+*.p8
+*.p12
+*.mobileprovision
