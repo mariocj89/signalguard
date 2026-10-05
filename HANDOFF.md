@@ -40,3 +40,9 @@ Home no longer repeats the guard-end heading, scheduling help or the safety foot
 Validated: strict TypeScript, lint, 23 Jest tests, 17 Swift tests, two English/Spanish browser smoke tests, iOS production bundle export and Expo Doctor 21/21. Device appearance still needs review on an iPhone.
 
 These changes are local only. No new EAS build or submission was dispatched for the style request; TestFlight still contains 1.0.0 build 3. A future explicitly requested build will include this polish.
+
+## App icon polish — local changes after build 3
+
+Updated the code-native SVG and regenerated `assets/icon.png`: a solid white shield with a bold green check on navy, matching the UI’s confirmed-state green. The icon has an opaque full-square background so iOS applies its own mask. Visually reviewed the rendered asset and verified PNG dimensions 1024×1024, 8-bit RGB, no alpha channel. TypeScript, lint, 23 Jest tests and Expo Doctor 21/21 pass.
+
+This icon and the UI polish remain local; TestFlight build 3 has the previous icon. No new build/submission was requested or launched for this icon edit.
