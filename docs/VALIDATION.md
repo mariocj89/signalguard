@@ -31,3 +31,8 @@ The updated power-button design and coloured activity markers also compiled, arc
 A real iPhone must validate immediate task submission/launch, system Live Activity presentation, background execution duration, cellular and dual-SIM registration observations, notification permissions/Time Sensitive delivery, sound, acknowledgement, reminder cancellation, task expiry, force-close watchdog delivery and scheduled completion. Follow [the acceptance checklist](REAL_DEVICE_TESTS.md) before relying on or distributing the app.
 
 Apple can terminate monitoring. A scheduled watchdog mitigates lost execution but cannot guarantee delivery: iOS notification settings, Focus, device power and operating-system behavior still apply. A queued near-term reminder cannot condition its delivery on later network recovery when the process is no longer executing.
+
+
+## Production build 5
+
+On 5 October 2026, production **1.0.0 (5)** successfully compiled, archived and signed on EAS, including minimal Settings and single activity markers (build `d8c81262-aef6-452e-9793-75b777111d4b`). Typecheck, lint, 27 Jest tests, 18 Swift tests and two English/Spanish browser checks were rerun successfully. Submission `42ab5da9-c5d6-45e2-a84f-5b465f773362` is linked to this finished build but remains IN_QUEUE without logs or errors after extended monitoring. Apple upload, processing and TestFlight availability of build 5 remain unconfirmed. Real-device acceptance checks remain required.

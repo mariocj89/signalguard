@@ -99,3 +99,6 @@ Rechecked: typecheck, lint, 27 Jest tests, 18 Swift tests and two English/Spanis
 
 Build: https://expo.dev/accounts/etcaterva/projects/signalguard/builds/d8c81262-aef6-452e-9793-75b777111d4b
 Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/42ab5da9-c5d6-45e2-a84f-5b465f773362
+
+
+Build 5 follow-up: after extended monitoring, submission remains IN_QUEUE with no logs/errors and canRetry=false. Verified submittedBuild is the correct FINISHED version 1.0.0 (5); Expo's service status page reports EAS Submit operational. There is no upload retry/error to repair yet. All project/signing work is complete; external queue execution and Apple's processing remain pending. Do not tell the user build 5 is installable until checking `python3 /tmp/signalguard-submission-status.py 42ab5da9-c5d6-45e2-a84f-5b465f773362` and `node /tmp/signalguard-apple-build.cjs` for the current upload (the old 2024 build 5 belongs to version 1.1.0 and is expired).
