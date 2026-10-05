@@ -6,7 +6,7 @@ Validated from Windows / Ubuntu 20.04 WSL on 5 October 2026, using Node 22.20, E
 
 - Strict TypeScript typecheck: no errors.
 - Expo ESLint: no errors or warnings.
-- Jest: 27 passing tests, including real UI/provider tests with a mocked native boundary, scheduling, settings, localization and CNG/EAS packaging checks.
+- Jest: 28 passing tests, including real UI/provider tests with a mocked native boundary, scheduling, settings, localization and CNG/EAS packaging checks.
 - Swift XCTest: 18 passing tests in Debug; the earlier 17-test suite also passed in Release. These compile the actual incident state machine, lifecycle, JSON persistence, guard clock and HTTPS probe implementation; URLProtocol fixtures exercise primary/fallback behavior, captive portal responses, request privacy and response-size limits.
 - Swift parser checks: Apple-framework source files parse successfully, including Debug-only declarations. Parsing is not Apple SDK typechecking.
 - Playwright: two passing browser inspection tests covering fail-closed readiness, navigation/privacy/history and Spanish content.
@@ -39,3 +39,6 @@ On 5 October 2026, production **1.0.0 (5)** successfully compiled, archived and 
 
 
 Build 5 status follow-up: submission completed at 2026-10-05T16:55:27Z; Apple build 233e24d3-737e-47de-bc74-19e203d464cb is VALID and IN_BETA_TESTING. The subsequent phone-icon SVG/PNG change passes typecheck, lint and 27 Jest tests but has not been published. Android has a feasibility assessment only; no Android implementation or build is validated.
+
+
+One-tap-stop change: all local checks pass (28 Jest, 18 Swift, two browser tests, typecheck/lint, iOS export, Expo Doctor 21/21). Pending/success/failure stop behaviour is covered. These UI changes are not yet in TestFlight build 5.

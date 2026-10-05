@@ -106,22 +106,37 @@ test('optional end-time controls still start the selected shorter guard', async 
   expect(bridge.startGuard.mock.calls[0]![0].end).toBeLessThanOrEqual(Date.now() + 4 * 3600000);
 });
 
-test('the same power button asks for confirmation before stopping an actual native guard', async () => {
+test('one power-button tap stops directly and only confirms after native completion', async () => {
   const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  let finish!: () => void;
+  bridge.stopGuard.mockImplementation(() => new Promise(resolve => { finish = resolve; }));
   try {
     const screen = await render(<GuardProvider><Home /></GuardProvider>);
     await waitFor(() => expect(bridge.addListener).toHaveBeenCalled());
     await act(() => listener({ ...idle, phase: 'activeHealthy', monitoring: true, internet: 'healthy', cellular: 'healthy', end: Date.now() + 10000 }));
-    expect(screen.getByText('ON')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'STOP GUARD' }));
-    expect(bridge.stopGuard).not.toHaveBeenCalled();
-    expect(screen.getByText('ON')).toBeTruthy();
-    const confirm = alert.mock.calls[0]![2]!.find(button => button.style === 'destructive');
-    await act(() => confirm!.onPress!());
-    await waitFor(() => expect(bridge.stopGuard).toHaveBeenCalledTimes(1));
+    expect(alert).not.toHaveBeenCalled();
+    expect(bridge.stopGuard).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText('Monitoring stopped')).toBeNull();
+    expect(screen.getByRole('button', { name: 'STOP GUARD' }).props.accessibilityState.disabled).toBe(true);
+    expect(screen.queryByText('OFF')).toBeNull();
+    bridge.getGuardState.mockResolvedValue(idle);
+    await act(async () => { finish(); });
+    await waitFor(() => expect(screen.getByText('Monitoring stopped')).toBeTruthy());
+    expect(screen.getByText('OFF')).toBeTruthy();
   } finally { alert.mockRestore(); }
 });
 
+test('failed native stop keeps the guard on and never shows a success notice', async () => {
+  bridge.stopGuard.mockRejectedValue(new Error('genericFailure'));
+  const screen = await render(<GuardProvider><Home /></GuardProvider>);
+  await waitFor(() => expect(bridge.addListener).toHaveBeenCalled());
+  await act(() => listener({ ...idle, phase: 'activeHealthy', monitoring: true, internet: 'healthy', cellular: 'healthy', end: Date.now() + 10000 }));
+  await fireEvent.press(screen.getByRole('button', { name: 'STOP GUARD' }));
+  await waitFor(() => expect(screen.getByText(/SignalGuard could not confirm the operation/)).toBeTruthy());
+  expect(screen.queryByText('Monitoring stopped')).toBeNull();
+  expect(screen.getByText('ON')).toBeTruthy();
+});
 
 test('an unavailable native module shows unconfirmed connections rather than claiming a physical outage', async () => {
   bridge.getPreflightStatus.mockResolvedValue({ ready: false, internet: false, cellular: false, notifications: false, timeSensitive: false, permissionUndetermined: false, issues: ['nativeUnavailable'] });

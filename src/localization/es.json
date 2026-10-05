@@ -40,9 +40,6 @@
   "permissionBody": "SignalGuard utiliza notificaciones urgentes con sonido para avisar de problemas de conectividad y de interrupciones de la monitorización. Permite las notificaciones y mantén activados los avisos, los sonidos y las notificaciones urgentes en los Ajustes de iOS.",
   "continue": "Continuar",
   "cancel": "Cancelar",
-  "stopTitle": "¿Detener esta guardia?",
-  "stopBody": "La monitorización de conectividad y sus avisos finalizarán.",
-  "stopConfirm": "Detener guardia",
   "acknowledge": "Confirmar aviso",
   "acknowledged": "Aviso confirmado · esperando la recuperación",
   "acknowledgeHelp": "Detiene los recordatorios hasta que se recupere la conectividad.",
@@ -126,5 +123,6 @@
   "powerOff": "OFF",
   "powerBusy": "ESPERA",
   "powerLimit": "Límite de 24 horas",
-  "chooseEndTime": "Elegir hora de fin"
+  "chooseEndTime": "Elegir hora de fin",
+  "monitoringStopped": "Monitorización detenida"
 }

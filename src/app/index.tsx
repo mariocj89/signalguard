@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Linking, Platform, Pressable, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useFocusEffect } from 'expo-router';
@@ -18,6 +18,7 @@ export default function Home() {
   const [duration, setDuration] = useState<number | null>(8);
   const [timed, setTimed] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [stopNotice, setStopNotice] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const active = isActive(state);
   const transitioning = busy || state.phase === 'starting' || state.phase === 'stopping';
@@ -25,7 +26,14 @@ export default function Home() {
   useFocusEffect(useCallback(() => {
     void refresh().catch((failure: unknown) => setError(errorText(failure)));
   }, [refresh]));
+  // This timer only dismisses UI feedback; native Swift still owns monitoring.
+  useEffect(() => {
+    if (!stopNotice) return;
+    const timer = setTimeout(() => setStopNotice(false), 4000);
+    return () => clearTimeout(timer);
+  }, [stopNotice]);
   const submit = async () => {
+    setStopNotice(false);
     setBusy(true); setError(null);
     try {
       const now = new Date();
@@ -35,13 +43,16 @@ export default function Home() {
     } catch (failure) { setError(errorText(failure)); await refresh().catch(() => {}); }
     finally { setBusy(false); }
   };
-  const stop = () => Alert.alert(t('stopTitle'), t('stopBody'), [
-    { text: t('cancel'), style: 'cancel' },
-    { text: t('stopConfirm'), style: 'destructive', onPress: () => {
-      setBusy(true);
-      void SignalGuard.stopGuard().then(refresh).catch((failure: unknown) => setError(errorText(failure))).finally(() => setBusy(false));
-    } },
-  ]);
+  const stop = async () => {
+    if (transitioning) return;
+    setBusy(true); setError(null); setStopNotice(false);
+    try {
+      await SignalGuard.stopGuard();
+      setStopNotice(true);
+      await refresh();
+    } catch (failure) { setError(errorText(failure)); }
+    finally { setBusy(false); }
+  };
   const askPermission = () => Alert.alert(t('permissionTitle'), t('permissionBody'), [
     { text: t('cancel'), style: 'cancel' },
     { text: t('continue'), onPress: () => {
@@ -53,12 +64,16 @@ export default function Home() {
   const nativeError = state.error ? errorText(new Error(state.error)) : null;
   return <Page>
     <View style={{ alignItems: 'center' }}><Heading>{t('appName')}</Heading></View>
+    {stopNotice && !active && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.card, borderRadius: 14, padding: 12 }}>
+      <Ionicons name="stop-circle-outline" size={20} color={colors.muted} accessible={false} />
+      <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={{ color: colors.text, fontSize: 15 }}>{t('monitoringStopped')}</Text>
+    </View>}
     {__DEV__ && state.simulationActive && <Text style={{ color: colors.amber }}>{t('simulationActive')}</Text>}
     {__DEV__ && state.testTimingActive && <Text style={{ color: colors.amber }}>{t('testTimingActive')}</Text>}
     <View style={{ alignItems: 'center', gap: 16, paddingVertical: 6 }}>
       <PowerButton active={active} tone={tone} busy={transitioning} disabled={!active && (!preflight?.ready || checking)}
         label={active ? t('stopGuard') : state.phase === 'interrupted' ? t('restartGuard') : t('startGuard')}
-        onPress={active ? stop : () => { void submit(); }} />
+        onPress={() => { void (active ? stop() : submit()); }} />
       {active ? <View style={{ alignItems: 'center', gap: 5 }}>
         <Text accessibilityRole="header" style={{ color: colors[tone], fontSize: 17, fontWeight: '600' }}>{t('active')}</Text>
         <Text style={{ color: colors.muted, fontSize: 15, fontVariant: ['tabular-nums'] }}>{t('until', { time: state.end ? clock(state.end) : t('unknown') })}</Text>

@@ -40,9 +40,6 @@
   "permissionBody": "SignalGuard uses audible Time Sensitive notifications for connectivity incidents and interrupted monitoring. Allow notifications, then keep alerts, sounds and Time Sensitive delivery enabled in iOS Settings.",
   "continue": "Continue",
   "cancel": "Cancel",
-  "stopTitle": "Stop this guard?",
-  "stopBody": "Connectivity monitoring and its alerts will end.",
-  "stopConfirm": "Stop guard",
   "acknowledge": "Acknowledge",
   "acknowledged": "Acknowledged · waiting for recovery",
   "acknowledgeHelp": "Stops reminders until connectivity recovers.",
@@ -126,5 +123,6 @@
   "powerOff": "OFF",
   "powerBusy": "WAIT",
   "powerLimit": "24-hour limit",
-  "chooseEndTime": "Choose end time"
+  "chooseEndTime": "Choose end time",
+  "monitoringStopped": "Monitoring stopped"
 }

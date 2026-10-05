@@ -56,8 +56,8 @@ Use an **iPhone on iOS 26 or later** and the EAS development build. Expo Go, a b
 
 ## Stop and completion
 
-1. Tap STOP GUARD accidentally, cancel confirmation, and verify monitoring continues.
-2. Confirm STOP GUARD. Verify monitoring and pending watchdog/outage/reminder requests stop, system activity ends, and history says Guard stopped.
+1. Tap STOP GUARD once. Verify there is no confirmation dialog, the button waits for native completion and an in-app “Monitoring stopped” notice appears briefly after monitoring stops.
+2. After the stop completes, verify monitoring and pending watchdog/outage/reminder requests stop, system activity ends, and history says Guard stopped.
 3. Select an end time a few minutes ahead. Lock the phone and leave the app backgrounded. At end verify:
    - monitoring stops;
    - system activity completes successfully;
@@ -88,7 +88,7 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 ## Power control and compact activity
 
 - With valid setup, tap the central OFF power button. Verify ON appears only after the native task starts, and the end time is within 24 hours. No end-time selection is required; the 24-hour limit is visible before starting. iOS can still expire the task earlier.
-- Tap the ON button, cancel the confirmation, and verify monitoring continues. Tap again and confirm; verify the native task ends and the watchdog/reminders are cancelled.
+- Tap the ON button once; verify no confirmation dialog appears, a brief in-app notice confirms the actual stop, and the native task ends and the watchdog/reminders are cancelled.
 - Expand “Choose end time”, select +4h, and verify the guard ends four hours after the press. Collapse the control before starting another session and verify the 24-hour default is restored.
 - Verify the system activity shows SignalGuard plus only Internet and Cellular (Red móvil in Spanish). There is no notification row, duplicate guard status row or end-time subtitle. Confirm one green/amber/red/unknown marker per connection reflects the native status, without a second check/cross; Apple controls layout and progress presentation.
 - Test dark mode, large text and a narrow iPhone. The power button must remain tappable and status labels must remain readable without horizontal scrolling.
