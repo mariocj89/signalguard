@@ -4,10 +4,10 @@ import Foundation
 enum ActivityPresentation {
   static func mark(_ health: Health) -> String {
     switch health {
-    case .healthy: return "🟢 ✓"
-    case .checking: return "🟠 …"
-    case .unavailable: return "🔴 ✕"
-    case .unknown: return "⚪ ?"
+    case .healthy: return "🟢"
+    case .checking: return "🟠"
+    case .unavailable: return "🔴"
+    case .unknown: return "⚪"
     case .disabled: return "—"
     }
   }

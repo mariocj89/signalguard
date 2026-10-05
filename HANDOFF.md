@@ -67,8 +67,8 @@ These changes remain local and available via the running Expo Go preview. TestFl
 The user explicitly requested sending the new design to TestFlight. Dispatched production EAS Build with auto-submit, using the existing scoped signing credentials and App Store Connect application 6736607323. Local app.json build number incremented from 3 to 4.
 
 - Version **1.0.0 (4)**: EAS build `2793dc13-6859-44b8-ae7b-f53a65adc732` **FINISHED**. Apple SDK compilation, archive and signing succeeded, including the updated custom Swift module, activity strings/markers and icon/font assets.
-- Submission `783fffd9-9199-4b21-a5bd-b8c02892da50` is **IN_QUEUE** with no error or logs, correctly linked to this finished build. Upload is scheduled but Apple acceptance/processing has not yet been confirmed. Do not claim build 4 is already available in TestFlight until this changes.
-- App Store Connect still shows build 3 as the newest upload at the last direct check. The internal **Devs** group has access to all builds; the user's account is already a member. No invitations or group changes were needed.
+- Submission `783fffd9-9199-4b21-a5bd-b8c02892da50` is **FINISHED**, completed 2026-10-05T12:40:03Z. Apple build `74063d92-928c-473a-afe8-51d729d2ee7d` is **VALID**, version 1.0.0 (4), internal beta state **IN_BETA_TESTING**; confirmed directly against App Store Connect.
+- App Store Connect now shows build 4 as the newest upload. The internal **Devs** group has access to all builds; the user's account is already a member. No invitations or group changes were needed.
 - Rechecked: TypeScript and lint pass, 27 Jest tests and 18 native Swift tests pass. Dependency audit currently reports 54 upstream findings (51 high, three moderate, zero critical); no incompatible broad dependency upgrade was applied.
 - Actual on-device behaviour and system activity layout still require the real-device acceptance checklist.
 
@@ -76,3 +76,14 @@ Build: https://expo.dev/accounts/etcaterva/projects/signalguard/builds/2793dc13-
 Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/783fffd9-9199-4b21-a5bd-b8c02892da50
 
 Follow up by checking `npx eas-cli@latest submit:view 783fffd9-9199-4b21-a5bd-b8c02892da50 --json` and the latest Apple upload. Temporary read-only helpers `/tmp/signalguard-submission-status.py` and `/tmp/signalguard-apple-build.cjs` report safe status fields without exposing credential or signed-log data.
+
+
+## Minimal settings and single activity markers — local changes after build 4
+
+At the user's request, Settings now shows only its heading and two compact Internet/Cellular condition switches with globe/phone icons, green switches and a divider. Removed language/privacy/about/advanced explanatory sections and persistent timing/watchdog text from this screen. Errors remain contextual. Native validation, at-least-one-enabled protection, active-session settings lock and the always-on watchdog remain unchanged. Privacy and limitations remain documented in README. Development diagnostics remain reachable by long-pressing the Settings heading, absent in production; acceptance instructions updated.
+
+The system activity now uses exactly one coloured marker per connection (green, amber, red or grey), removing duplicate checks, ellipses, crosses and question marks. Disabled monitoring retains its dash. Native marker tests and English/Spanish browser navigation checks updated.
+
+The requested opaque Lock Screen background cannot be set on BGContinuedProcessingTask's system activity: the public API exposes title/subtitle/progress but no background styling. Apple's ActivityKit/WidgetKit activityBackgroundTint styles app-owned activities only. No private API or second activity was introduced. This limitation and real-device contrast checks are documented; any future custom activity must first verify it does not duplicate the system activity.
+
+Validation: TypeScript, lint, 27 Jest tests, 18 Swift tests, two browser tests (English/Spanish) and Git whitespace checks pass. These changes are local only; TestFlight 1.0.0 (4) contains the earlier settings and double markers. No new cloud build was requested or dispatched for this edit.

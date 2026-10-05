@@ -150,10 +150,10 @@ final class GuardCoreTests: XCTestCase {
   }
 
   func testActivityMarkersKeepUnknownAndDisabledDistinctFromConfirmedConnectivity() {
-    XCTAssertEqual(ActivityPresentation.mark(.healthy), "🟢 ✓")
-    XCTAssertEqual(ActivityPresentation.mark(.checking), "🟠 …")
-    XCTAssertEqual(ActivityPresentation.mark(.unavailable), "🔴 ✕")
-    XCTAssertEqual(ActivityPresentation.mark(.unknown), "⚪ ?")
+    XCTAssertEqual(ActivityPresentation.mark(.healthy), "🟢")
+    XCTAssertEqual(ActivityPresentation.mark(.checking), "🟠")
+    XCTAssertEqual(ActivityPresentation.mark(.unavailable), "🔴")
+    XCTAssertEqual(ActivityPresentation.mark(.unknown), "⚪")
     XCTAssertEqual(ActivityPresentation.mark(.disabled), "—")
   }
 }

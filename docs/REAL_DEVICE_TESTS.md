@@ -10,7 +10,7 @@ Use an **iPhone on iOS 26 or later** and the EAS development build. Expo Go, a b
 4. Deny notification permission, reopen SignalGuard, and verify START GUARD is disabled with a direct Open Settings action.
 5. Disable Time Sensitive Notifications only. Reopen and verify START GUARD is disabled even if ordinary alerts and sound remain enabled.
 6. Remove cellular registration before starting (Airplane Mode, or disable all SIM lines). Verify the cellular row is unavailable and Start is blocked when cellular monitoring is enabled.
-7. In Advanced, disable Internet, then attempt to disable Cellular. Verify the last enabled condition stays on and a clear explanation appears. Stop an active guard before changing these settings.
+7. In Settings, disable Internet, then attempt to disable Cellular. Verify the last enabled condition stays on and a clear explanation appears. Stop an active guard before changing these settings.
 
 ## Start, Lock Screen and background runtime
 
@@ -81,7 +81,7 @@ Start with both services registered. Lose registration on one original service w
 
 ## Development simulations
 
-Open Settings → Development diagnostics. Before starting, enable short timings (10-second grace, 30-second reminders, 18-second watchdog; heartbeat 3 seconds/probes 5 seconds). Return Home and start a real native task; simulations never bypass real preflight/task submission.
+In a development build, long-press the Settings heading to open Development diagnostics. Before starting, enable short timings (10-second grace, 30-second reminders, 18-second watchdog; heartbeat 3 seconds/probes 5 seconds). Return Home and start a real native task; simulations never bypass real preflight/task submission.
 
 Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restore real readings before real connectivity tests. Test a Release preview build to verify diagnostics are inaccessible and simulation/timing methods are absent. Short timings are memory-only and cannot persist into production.
 
@@ -90,5 +90,7 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 - With valid setup, tap the central OFF power button. Verify ON appears only after the native task starts, and the end time is within 24 hours. No end-time selection is required; the 24-hour limit is visible before starting. iOS can still expire the task earlier.
 - Tap the ON button, cancel the confirmation, and verify monitoring continues. Tap again and confirm; verify the native task ends and the watchdog/reminders are cancelled.
 - Expand “Choose end time”, select +4h, and verify the guard ends four hours after the press. Collapse the control before starting another session and verify the 24-hour default is restored.
-- Verify the system activity shows SignalGuard plus only Internet and Cellular (Red móvil in Spanish). There is no notification row, duplicate guard status row or end-time subtitle. Confirm green/amber/red/unknown markers reflect the native status; Apple controls layout and progress presentation.
+- Verify the system activity shows SignalGuard plus only Internet and Cellular (Red móvil in Spanish). There is no notification row, duplicate guard status row or end-time subtitle. Confirm one green/amber/red/unknown marker per connection reflects the native status, without a second check/cross; Apple controls layout and progress presentation.
 - Test dark mode, large text and a narrow iPhone. The power button must remain tappable and status labels must remain readable without horizontal scrolling.
+
+- Check activity contrast against bright and dark Lock Screen wallpapers. The system activity background is controlled by iOS and cannot be made opaque through BGContinuedProcessingTask. Record readability problems for a future custom-activity evaluation, which must first rule out duplicate activities.
