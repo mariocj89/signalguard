@@ -36,3 +36,6 @@ Apple can terminate monitoring. A scheduled watchdog mitigates lost execution bu
 ## Production build 5
 
 On 5 October 2026, production **1.0.0 (5)** successfully compiled, archived and signed on EAS, including minimal Settings and single activity markers (build `d8c81262-aef6-452e-9793-75b777111d4b`). Typecheck, lint, 27 Jest tests, 18 Swift tests and two English/Spanish browser checks were rerun successfully. Submission `42ab5da9-c5d6-45e2-a84f-5b465f773362` is linked to this finished build but remains IN_QUEUE without logs or errors after extended monitoring. Apple upload, processing and TestFlight availability of build 5 remain unconfirmed. Real-device acceptance checks remain required.
+
+
+Build 5 status follow-up: submission completed at 2026-10-05T16:55:27Z; Apple build 233e24d3-737e-47de-bc74-19e203d464cb is VALID and IN_BETA_TESTING. The subsequent phone-icon SVG/PNG change passes typecheck, lint and 27 Jest tests but has not been published. Android has a feasibility assessment only; no Android implementation or build is validated.

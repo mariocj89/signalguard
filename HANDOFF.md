@@ -102,3 +102,12 @@ Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions
 
 
 Build 5 follow-up: after extended monitoring, submission remains IN_QUEUE with no logs/errors and canRetry=false. Verified submittedBuild is the correct FINISHED version 1.0.0 (5); Expo's service status page reports EAS Submit operational. There is no upload retry/error to repair yet. All project/signing work is complete; external queue execution and Apple's processing remain pending. Do not tell the user build 5 is installable until checking `python3 /tmp/signalguard-submission-status.py 42ab5da9-c5d6-45e2-a84f-5b465f773362` and `node /tmp/signalguard-apple-build.cjs` for the current upload (the old 2024 build 5 belongs to version 1.1.0 and is expired).
+
+
+## Phone icon and Android feasibility discussion
+
+Replaced the icon's check with a green smartphone inside the existing white shield/navy background. Regenerated the 1024×1024 full-square PNG and visually inspected it. Typecheck, lint and all 27 Jest tests pass. Icon changes are local only, not in TestFlight build 5.
+
+At the user's Android question, researched current official foreground-service, phone registration, stopped-state and alarm/Doze documentation. Added docs/ANDROID_FEASIBILITY.md. Android is not enabled or implemented yet; same-engine reuse would be unsafe. A Kotlin native service, visible ongoing notification, phone-state permission, Android notification readiness and independent AlarmManager watchdog must be designed/tested. specialUse is a proposed foreground-service type subject to Play review. Force-stop cancels pending intents on Android 15, making the original force-close watchdog expectation impossible to promise on Android. Idle alarm limits also prevent claiming a universal 60–90-second watchdog bound. Asked asynchronously whether Android with the explicit force-stop limitation is acceptable; await the answer before dependent implementation. No Android cloud build, credentials or Play upload were created.
+
+TestFlight follow-up: build 5 submission 42ab5da9-c5d6-45e2-a84f-5b465f773362 is FINISHED (2026-10-05T16:55:27Z). Direct Apple API confirms build 233e24d3-737e-47de-bc74-19e203d464cb is version 1.0.0 (5), VALID and IN_BETA_TESTING, uploaded on 5 October 2026. It is available to the existing internal group. This supersedes the earlier pending queue notes.
