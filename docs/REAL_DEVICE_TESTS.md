@@ -98,7 +98,7 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 
 ## Notification information and sustained monitoring
 
-1. Open Settings and verify the Monitor switches remain aligned. Verify Sound matches the app’s iOS notification sound permission; Vibration directs to iOS settings; Critical alerts says Not available. Repeat in Spanish.
-2. Use Open Settings, change sound permission, return to SignalGuard and verify the displayed status refreshes. Disabling sound must block the next guard’s preflight. A failed settings read must show Not confirmed, never Allowed.
+1. Open Settings and verify only the aligned Monitor switches remain. No sound, vibration or Critical Alerts section appears. Repeat in Spanish.
+2. Disable notification or sound permission in iOS Settings, return to Home and verify the power button stays disabled with an Open Settings action. Repeat with Time Sensitive disabled. On a fresh installation, verify Enable notifications explains why permission is needed before requesting it, and denying permission leaves the guard blocked.
 3. Run an ordinary guard for more than four hours while locked, recording start time and any interruption notification time. Reopen and inspect the interruption reason in History. No running native task must be represented as active after process loss, and restart must require a foreground button press.
 4. Record task expiration separately from missed-heartbeat and process-stopped outcomes. A process-stopped reason alone does not identify why iOS ended the process. Do not declare the four-hour report resolved based only on local tests.

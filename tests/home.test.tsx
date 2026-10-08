@@ -13,7 +13,7 @@ jest.mock('react-native-safe-area-context', () => ({ SafeAreaView: require('reac
 jest.mock('@react-native-community/datetimepicker', () => () => null);
 jest.mock('../modules/signal-guard-native', () => ({
   SignalGuard: {
-    getNotificationStatus: jest.fn(), getGuardState: jest.fn(), getPreflightStatus: jest.fn(), startGuard: jest.fn(), stopGuard: jest.fn(),
+    getGuardState: jest.fn(), getPreflightStatus: jest.fn(), startGuard: jest.fn(), stopGuard: jest.fn(),
     requestNotificationPermission: jest.fn(), acknowledgeIncident: jest.fn(), addListener: jest.fn(),
   },
 }));
@@ -21,7 +21,6 @@ const bridge = SignalGuard as jest.Mocked<typeof SignalGuard>;
 const idle: GuardState = { phase: 'idle', internet: 'unknown', cellular: 'unknown', monitoring: false, settings: { internet: true, cellular: true } };
 let listener: (state: GuardState) => void;
 beforeEach(() => {
-  bridge.getNotificationStatus.mockResolvedValue({ sound: 'enabled', timeSensitive: 'enabled', vibration: 'system', critical: 'unavailable' });
   bridge.getGuardState.mockResolvedValue(idle);
   bridge.acknowledgeIncident.mockResolvedValue(undefined);
   bridge.startGuard.mockResolvedValue(idle);
@@ -150,20 +149,20 @@ test('an unavailable native module shows unconfirmed connections rather than cla
 });
 
 
-test('notification settings report actual sound permission without pretending to control vibration or critical alerts', async () => {
-  bridge.getNotificationStatus.mockResolvedValue({ sound: 'disabled', timeSensitive: 'enabled', vibration: 'system', critical: 'unavailable' });
+test('settings only shows monitoring conditions', async () => {
   const screen = await render(<GuardProvider><Settings /></GuardProvider>);
-  await waitFor(() => expect(screen.getByText('Not allowed')).toBeTruthy());
-  expect(screen.getByText('iOS settings')).toBeTruthy();
-  expect(screen.getByText('Not available')).toBeTruthy();
+  expect(screen.getByText('Monitor')).toBeTruthy();
   expect(screen.getAllByRole('switch')).toHaveLength(2);
-  expect(screen.getByRole('button', { name: 'Open Settings' })).toBeTruthy();
+  expect(screen.queryByText('Sound')).toBeNull();
+  expect(screen.queryByText('Vibration')).toBeNull();
+  expect(screen.queryByText('Critical alerts')).toBeNull();
 });
 
-test('notification settings stay unconfirmed when the native status cannot be read', async () => {
-  bridge.getNotificationStatus.mockRejectedValue(new Error('nativeUnavailable'));
-  const screen = await render(<GuardProvider><Settings /></GuardProvider>);
-  await waitFor(() => expect(bridge.getNotificationStatus).toHaveBeenCalled());
-  expect(screen.getByText('Not confirmed')).toBeTruthy();
-  expect(screen.queryByText('Allowed')).toBeNull();
+test.each([false, true])('missing notification readiness blocks power and offers the appropriate permission action (undetermined=%s)', async (undetermined) => {
+  bridge.getPreflightStatus.mockResolvedValue({ ready: false, internet: true, cellular: true, notifications: false, timeSensitive: false, permissionUndetermined: undetermined, issues: ['notificationsRequired'] });
+  const screen = await render(<GuardProvider><Home /></GuardProvider>);
+  const action = undetermined ? 'Enable notifications' : 'Open Settings';
+  await waitFor(() => expect(screen.getByRole('button', { name: action })).toBeTruthy());
+  expect(screen.getByRole('button', { name: 'START GUARD' }).props.accessibilityState.disabled).toBe(true);
+  expect(bridge.startGuard).not.toHaveBeenCalled();
 });

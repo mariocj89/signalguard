@@ -382,7 +382,6 @@ final class GuardCoordinator {
     // If code is still running, warn promptly. On SIGKILL the existing pending watchdog does this.
     try? await notifications.refreshWatchdog(delay: 1)
   }
-  func notificationStatus() async -> [String: Any] { await notifications.status() }
   func state() async -> [String: Any] {
     if task != nil && guardClock?.consistent(now: Date()) == false { await interrupt(code: "clockChanged") }
     if task != nil, let heartbeat = data.current?.lastHeartbeat, Date().timeIntervalSince(heartbeat) >= timing.watchdog {

@@ -132,12 +132,12 @@ The system activity's subtitle shows only localized Internet/cellular status wit
 - [CoreTelephony registration API](https://developer.apple.com/documentation/coretelephony/cttelephonynetworkinfo/servicecurrentradioaccesstechnology)
 - [Time Sensitive notification setting](https://developer.apple.com/documentation/usernotifications/unnotificationsettings/timesensitivesetting)
 
-Settings contains Internet and Cellular notification-condition switches plus a compact notification information section. It preserves last-enabled-condition validation and prevents changes during a guard. In development builds, long-press the Settings heading to open diagnostics; this gesture is absent in production.
+Settings contains only the Internet and Cellular notification-condition switches. It preserves last-enabled-condition validation and prevents changes during a guard. In development builds, long-press the Settings heading to open diagnostics; this gesture is absent in production.
 
 
 ## Notification controls and long sessions
 
-Settings reports whether iOS currently permits notification sound and opens the app’s iOS Settings. That permission does not guarantee audible delivery: Silent mode, Focus and system settings still apply. Vibration is governed by iOS Sounds & Haptics; public local-notification APIs do not expose an independent vibration preference. Critical Alerts are unavailable in this MVP and require Apple approval and a future entitlement/permission implementation. They would affect notification delivery, not background execution.
+Automatic preflight checks notification authorization, alert and sound permission, and Time Sensitive delivery. Missing prerequisites block the power button; Home offers a contextual permission request or opens the app’s iOS Settings. Settings has no notification options or information section. That permission does not guarantee audible delivery: Silent mode, Focus and system settings still apply. Vibration is governed by iOS Sounds & Haptics; public local-notification APIs do not expose an independent vibration preference. Critical Alerts are unavailable in this MVP and require Apple approval and a future entitlement/permission implementation. They would affect notification delivery, not background execution.
 
 An interruption after approximately four hours is not a known fixed limit in the app or a documented four-hour iOS cutoff. Apple can end a continued-processing task when resources are constrained. Do not suppress the watchdog or automatically restart from the background. New sessions persist the reason when observable: task expiration, a missed native heartbeat, or a previous process no longer running at launch. The last case cannot distinguish a crash, force-close or system termination. These diagnostics do not recover the exact cause of older sessions or guarantee a fix.
 

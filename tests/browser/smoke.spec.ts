@@ -15,9 +15,8 @@ test('browser inspection fails closed and navigation exposes compact settings an
   expect(cellular).not.toBeNull();
   expect(Math.abs(internet!.x - cellular!.x)).toBeLessThanOrEqual(1);
   await expect(page.getByText('Private by design')).toHaveCount(0);
-  await expect(page.getByText('Vibration', { exact: true })).toBeVisible();
-  await expect(page.getByText('Critical alerts', { exact: true })).toBeVisible();
-  await expect(page.getByText('Not available', { exact: true })).toBeVisible();
+  await expect(page.getByText('Vibration', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Critical alerts', { exact: true })).toHaveCount(0);
   await page.getByRole('tab', { name: /History/ }).click();
   await expect(page.getByText('No guards yet')).toBeVisible();
 });
@@ -30,8 +29,8 @@ test('Spanish route content is complete', async ({ browser }) => {
   await expect(page.getByRole('switch', { name: 'Internet', exact: true })).toBeVisible();
   await expect(page.getByRole('switch', { name: 'Red móvil', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Monitorizar', exact: true })).toBeVisible();
-  await expect(page.getByText('Vibración', { exact: true })).toBeVisible();
-  await expect(page.getByText('Avisos críticos', { exact: true })).toBeVisible();
+  await expect(page.getByText('Vibración', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Avisos críticos', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('switch')).toHaveCount(2);
   await page.getByRole('tab', { name: /Historial/ }).click();
   await expect(page.getByText('Todavía no hay guardias')).toBeVisible();

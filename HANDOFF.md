@@ -141,3 +141,10 @@ Build 6 queue follow-up: EAS reports NEW, NORMAL priority, no error, no logs and
 User reports a monitoring-interrupted warning after about four hours. No fixed four-hour cutoff was found in the app. Added persisted interruption reasons (taskExpired, heartbeatMissed, processStopped), backward-compatible with previous session JSON; processStopped cannot identify crash versus force-close/system termination. No guaranteed fix is claimed. Settings now reports actual sound permission and explains system-managed vibration, Time Sensitive timing and unavailable Critical Alerts in English/Spanish. No Critical Alerts entitlement or permission request was added.
 
 User explicitly forbids EAS/TestFlight builds unless requested. No build/submission was started for these changes. Their Apple-framework compilation and real-device behavior remain unvalidated until a later authorized build. Expo SDK 57 patch dependencies were aligned with current doctor recommendations.
+
+
+## 8 October 2026: simplified notification UX
+
+At the user’s request, removed the entire notification information section from Settings, the unused getNotificationStatus bridge/native helper and its UI-only translations. Settings again shows only the aligned Monitor switches. Preserved automatic native preflight for authorized alert/sound and Time Sensitive delivery, Home’s contextual permission request / Open Settings action, and interruption diagnostics. No EAS build or TestFlight submission. Existing explicitly approved temporary Expo Go tunnel serves the updated manifest and iOS bundle (HTTP 200); native monitoring cannot run in Expo Go.
+
+Local validation: typecheck/lint, 31 Jest tests, 19 Swift tests, two browser checks, iOS export, Expo Doctor 21/21 and whitespace checks pass. Regression coverage verifies absent notification UI and both undetermined/denied permission paths block Start. Device behavior still needs validation.

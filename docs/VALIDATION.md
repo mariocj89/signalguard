@@ -54,3 +54,6 @@ Local checks after the changes and SDK 57 patch alignment: TypeScript and ESLint
 The package installation reports 58 upstream audit findings (50 high, eight moderate); this is not a clean dependency security audit. No broad incompatible-major audit fix was applied.
 
 No EAS build or TestFlight submission was started, as explicitly requested by the user. The changed Apple-framework source has only been parsed, not compiled against an Apple SDK. Four-hour background interruption is unresolved: new diagnostics identify an observable expiration, missed heartbeat or process loss, but neither prove the original cause nor guarantee sustained execution. Real-device validation remains required.
+
+
+Notification UX follow-up, 8 October 2026: removed notification information UI and unused status API. All local checks pass: typecheck/lint, 31 Jest tests, 19 Swift tests, two English/Spanish browser checks, iOS bundle export, Swift parser checks, Expo Doctor 21/21 and whitespace validation. Existing permission/Time Sensitive preflight is retained. Verified the approved Expo Go tunnel’s current manifest and bundle respond HTTP 200. No cloud build or store upload was started.

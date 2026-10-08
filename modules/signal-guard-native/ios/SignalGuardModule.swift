@@ -11,7 +11,6 @@ public final class SignalGuardModule: Module {
         GuardCoordinator.shared.onChange = { [weak self] state in self?.sendEvent("onGuardState", state) }
       }
     }
-    AsyncFunction("getNotificationStatus") { () async -> [String: Any] in await GuardCoordinator.shared.notificationStatus() }
     AsyncFunction("getPreflightStatus") { () async -> [String: Any] in await GuardCoordinator.shared.preflight() }
     AsyncFunction("requestNotificationPermission") { () async throws in try await GuardCoordinator.shared.requestPermission() }
     AsyncFunction("startGuard") { (config: StartRecord) async throws -> [String: Any] in
