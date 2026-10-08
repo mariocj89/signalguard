@@ -27,7 +27,7 @@ Normal notification authorization, alerts, sound and enabled Time Sensitive deli
 React Native owns presentation. Swift owns the guard, timers, observations, state, persistence and notifications. No JavaScript interval, React lifecycle or live React bridge keeps monitoring alive.
 
 ```text
-src/app/                         Home, History, Settings, development diagnostics
+src/app/                         Home, History, development diagnostics
 src/domain/                      End-time, settings and presentation logic
 src/localization/                Complete en/es UI dictionaries + i18next
 src/state/GuardProvider.tsx       Automatic preflight and typed native state events
@@ -132,13 +132,15 @@ The system activity's subtitle shows only localized Internet/cellular status wit
 - [CoreTelephony registration API](https://developer.apple.com/documentation/coretelephony/cttelephonynetworkinfo/servicecurrentradioaccesstechnology)
 - [Time Sensitive notification setting](https://developer.apple.com/documentation/usernotifications/unnotificationsettings/timesensitivesetting)
 
-Settings contains only the Internet and Cellular notification-condition switches. It preserves last-enabled-condition validation and prevents changes during a guard. In development builds, long-press the Settings heading to open diagnostics; this gesture is absent in production.
+Home contains Internet and Cellular monitoring switches alongside their confirmation status. Both are enabled on first use; the last selection is saved locally. Changing the selection rechecks preflight before power is enabled. At least one condition must stay enabled, and selection cannot change during a guard. There is no Settings tab. In development builds, long-press the SignalGuard heading to open diagnostics; this gesture is absent in production.
 
 
 ## Notification controls and long sessions
 
-Automatic preflight checks notification authorization, alert and sound permission, and Time Sensitive delivery. Missing prerequisites block the power button; Home offers a contextual permission request or opens the app’s iOS Settings. Settings has no notification options or information section. That permission does not guarantee audible delivery: Silent mode, Focus and system settings still apply. Vibration is governed by iOS Sounds & Haptics; public local-notification APIs do not expose an independent vibration preference. Critical Alerts are unavailable in this MVP and require Apple approval and a future entitlement/permission implementation. They would affect notification delivery, not background execution.
+Automatic preflight checks notification authorization, alert and sound permission, and Time Sensitive delivery. Missing prerequisites block the power button; Home offers a contextual permission request or opens the app’s iOS Settings. There is no in-app notification configuration screen. That permission does not guarantee audible delivery: Silent mode, Focus and system settings still apply. Vibration is governed by iOS Sounds & Haptics; public local-notification APIs do not expose an independent vibration preference. Critical Alerts are unavailable in this MVP and require Apple approval and a future entitlement/permission implementation. They would affect notification delivery, not background execution.
 
 An interruption after approximately four hours is not a known fixed limit in the app or a documented four-hour iOS cutoff. Apple can end a continued-processing task when resources are constrained. Do not suppress the watchdog or automatically restart from the background. New sessions persist the reason when observable: task expiration, a missed native heartbeat, or a previous process no longer running at launch. The last case cannot distinguish a crash, force-close or system termination. These diagnostics do not recover the exact cause of older sessions or guarantee a fix.
 
 No cloud build or TestFlight submission is part of local maintenance. Start one only when explicitly requested by the user. Native changes need a subsequently authorized EAS build to reach the installed iPhone app.
+
+History shows newest sessions first, grouped by their start day, with outcome icons and elapsed duration. Incident rows distinguish brief interruptions, alerts and acknowledgement. Cross-midnight session end labels include the end date, and recorded monitoring interruption reasons remain available. A failed history read displays an error instead of an empty-history claim.

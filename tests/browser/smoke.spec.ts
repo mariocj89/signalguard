@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-test('browser inspection fails closed and navigation exposes compact settings and history', async ({ page }) => {
+test('browser inspection fails closed and home exposes compact monitoring choices and history', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'SignalGuard', exact: true })).toBeVisible();
   await expect(page.getByText('Native monitoring is unavailable.', { exact: false })).toBeVisible();
   await expect(page.getByRole('button', { name: 'START GUARD', exact: true })).toBeDisabled();
-  await page.getByRole('tab', { name: /Settings/ }).click();
+  await expect(page.getByRole('tab', { name: /Settings/ })).toHaveCount(0);
   await expect(page.getByRole('switch', { name: 'Internet', exact: true })).toBeVisible();
   await expect(page.getByRole('switch', { name: 'Cellular network', exact: true })).toBeVisible();
   await expect(page.getByRole('switch')).toHaveCount(2);
@@ -25,7 +25,7 @@ test('Spanish route content is complete', async ({ browser }) => {
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:8088');
   await expect(page.getByRole('button', { name: 'INICIAR GUARDIA', exact: true })).toBeDisabled();
-  await page.getByRole('tab', { name: /Ajustes/ }).click();
+  await expect(page.getByRole('tab', { name: /Ajustes/ })).toHaveCount(0);
   await expect(page.getByRole('switch', { name: 'Internet', exact: true })).toBeVisible();
   await expect(page.getByRole('switch', { name: 'Red móvil', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Monitorizar', exact: true })).toBeVisible();

@@ -57,3 +57,6 @@ No EAS build or TestFlight submission was started, as explicitly requested by th
 
 
 Notification UX follow-up, 8 October 2026: removed notification information UI and unused status API. All local checks pass: typecheck/lint, 31 Jest tests, 19 Swift tests, two English/Spanish browser checks, iOS bundle export, Swift parser checks, Expo Doctor 21/21 and whitespace validation. Existing permission/Time Sensitive preflight is retained. Verified the approved Expo Go tunnel’s current manifest and bundle respond HTTP 200. No cloud build or store upload was started.
+
+
+Home selection and History follow-up, 8 October 2026: TypeScript/lint pass; 36 Jest tests, 19 Swift tests/parser checks and two English/Spanish browser tests pass; iOS export, Expo Doctor 21/21 and git whitespace pass. Tests cover disabling either unavailable condition on Home, blocking power during selection changes, refusing both-off selection, hiding selectors during guards, newest-first History, brief/alert/acknowledgement presentation, interruption reasons and history read failures. Existing Expo manifest/current bundle respond HTTP 200. No native compilation or store upload was performed; cellular false-negative report remains unverified on device.

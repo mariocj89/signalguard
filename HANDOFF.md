@@ -148,3 +148,12 @@ User explicitly forbids EAS/TestFlight builds unless requested. No build/submiss
 At the user’s request, removed the entire notification information section from Settings, the unused getNotificationStatus bridge/native helper and its UI-only translations. Settings again shows only the aligned Monitor switches. Preserved automatic native preflight for authorized alert/sound and Time Sensitive delivery, Home’s contextual permission request / Open Settings action, and interruption diagnostics. No EAS build or TestFlight submission. Existing explicitly approved temporary Expo Go tunnel serves the updated manifest and iOS bundle (HTTP 200); native monitoring cannot run in Expo Go.
 
 Local validation: typecheck/lint, 31 Jest tests, 19 Swift tests, two browser checks, iOS export, Expo Doctor 21/21 and whitespace checks pass. Regression coverage verifies absent notification UI and both undetermined/denied permission paths block Start. Device behavior still needs validation.
+
+
+## 8 October 2026: Home monitoring selection and History UX
+
+Moved the two monitoring switches onto Home beside connectivity status, removed the Settings route/tab, and moved Debug-only diagnostics access to a long press on the SignalGuard heading. Both conditions default on at first use; native persistence retains the last choice. Saving/rechecking blocks power, at least one condition must remain on, and active guards hide selectors. Public CoreTelephony API usage remains unchanged; the reported false-negative registration cause is unverified. Preflight copy now says registration could not be confirmed rather than asserting no service.
+
+History now sorts newest first, groups by start day, shows compact outcome icons/durations and incident timelines, distinguishes brief interruptions and alerts/acknowledgement, handles midnight end dates, and shows loading/error without falsely claiming empty history. Added interrupted-reason localization mapping that was missing from errorText.
+
+Passed: TypeScript/lint, 36 Jest tests, 19 Swift tests/parser checks, two browser tests, iOS export, Expo Doctor 21/21 and git whitespace. Verified existing approved Expo tunnel manifest/current bundle HTTP 200; link remains exp://browsers-tobacco-winning-postage.trycloudflare.com while PC/processes run. Expo Go is UI-only and cannot run native monitoring. No EAS/TestFlight build or submission. Real-device false-negative cellular diagnosis and background runtime remain unverified.

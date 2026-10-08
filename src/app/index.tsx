@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Linking, Platform, Pressable, Text, View } from 'react-native';
+import { Alert, Linking, Platform, Pressable, Switch, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { SignalGuard, type Health } from '../../modules/signal-guard-native';
+import { SignalGuard, type GuardSettings, type Health } from '../../modules/signal-guard-native';
 import { useGuard } from '../state/GuardProvider';
 import { t, clock, errorText } from '../localization';
 import { endForClock, endForDuration } from '../domain/scheduling';
+import { validSettings } from '../domain/settings';
 import { isActive } from '../domain/presentation';
 import { Body, Button, Card, Heading, Page, StatusRow, styles, usePalette } from '../ui/components';
 import { PowerButton } from '../ui/PowerButton';
@@ -17,11 +18,12 @@ export default function Home() {
   const [selected, setSelected] = useState(() => endForDuration(new Date(), 8));
   const [duration, setDuration] = useState<number | null>(8);
   const [timed, setTimed] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [busy, setBusy] = useState(false);
   const [stopNotice, setStopNotice] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const active = isActive(state);
-  const transitioning = busy || state.phase === 'starting' || state.phase === 'stopping';
+  const transitioning = busy || saving || state.phase === 'starting' || state.phase === 'stopping';
   const tone = state.phase === 'activeIncident' || state.phase === 'interrupted' ? 'red' : state.phase === 'activeDegraded' ? 'amber' : 'green';
   useFocusEffect(useCallback(() => {
     void refresh().catch((failure: unknown) => setError(errorText(failure)));
@@ -32,6 +34,15 @@ export default function Home() {
     const timer = setTimeout(() => setStopNotice(false), 4000);
     return () => clearTimeout(timer);
   }, [stopNotice]);
+  const change = async (key: keyof GuardSettings, enabled: boolean) => {
+    if (active || transitioning) return;
+    const next = { ...state.settings, [key]: enabled };
+    if (!validSettings(next)) { setError(t('conditionsRequired')); return; }
+    setSaving(true); setError(null);
+    try { await SignalGuard.updateSettings(next); await refresh(); }
+    catch (failure) { setError(errorText(failure)); }
+    finally { setSaving(false); }
+  };
   const submit = async () => {
     setStopNotice(false);
     setBusy(true); setError(null);
@@ -63,7 +74,7 @@ export default function Home() {
   const inactiveHealth = (enabled: boolean, confirmed?: boolean): Health => !enabled ? 'disabled' : checking || confirmed === undefined || preflight?.issues.some(issue => issue === 'nativeUnavailable' || issue === 'iosRequired') ? 'unknown' : confirmed ? 'healthy' : 'unavailable';
   const nativeError = state.error ? errorText(new Error(state.error)) : null;
   return <Page>
-    <View style={{ alignItems: 'center' }}><Heading>{t('appName')}</Heading></View>
+    <Pressable style={{ alignItems: 'center' }} disabled={!__DEV__} onLongPress={__DEV__ ? () => router.push('/diagnostics') : undefined}><Heading>{t('appName')}</Heading></Pressable>
     {stopNotice && !active && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: colors.card, borderRadius: 14, padding: 12 }}>
       <Ionicons name="stop-circle-outline" size={20} color={colors.muted} accessible={false} />
       <Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={{ color: colors.text, fontSize: 15 }}>{t('monitoringStopped')}</Text>
@@ -84,10 +95,14 @@ export default function Home() {
       <Text style={{ color: colors.muted, fontSize: 15 }}>{t('interruptedBody')}</Text>
     </View>}
     {state.phase === 'completed' && <Text style={{ color: colors.green, textAlign: 'center', fontSize: 15 }}>{t('completed')}</Text>}
-    <Card style={{ gap: 0, paddingVertical: 4, paddingHorizontal: 16, width: '100%', maxWidth: 310, alignSelf: 'center' }}>
-      <StatusRow icon="globe-outline" label={t('internet')} health={active ? state.internet : inactiveHealth(state.settings.internet, preflight?.internet)} />
-      <StatusRow last icon="call-outline" label={t('cellular')} health={active ? state.cellular : inactiveHealth(state.settings.cellular, preflight?.cellular)} />
-    </Card>
+    <View style={{ gap: 8, width: '100%', maxWidth: 350, alignSelf: 'center' }}>
+      {!active && <Text accessibilityRole="header" style={{ color: colors.muted, fontSize: 15, fontWeight: '600', paddingHorizontal: 16 }}>{t('monitorSection')}</Text>}
+      <Card style={{ gap: 0, paddingVertical: 4, paddingHorizontal: 16 }}>
+        {(['internet', 'cellular'] as const).map((key, index) => <StatusRow key={key} last={index === 1} icon={key === 'internet' ? 'globe-outline' : 'call-outline'} label={t(key)}
+          health={active ? state[key] : inactiveHealth(state.settings[key], preflight?.[key])}
+          control={!active ? <View style={{ width: 52, alignItems: 'flex-end' }}><Switch accessibilityLabel={t(key)} value={state.settings[key]} disabled={transitioning} onValueChange={value => { void change(key, value); }} trackColor={{ true: colors.green }} /></View> : undefined} />)}
+      </Card>
+    </View>
     {active && state.internet === 'checking' && <Text style={{ color: colors.amber, textAlign: 'center' }}>{t('checkingInternet')}</Text>}
     {active && state.cellular === 'checking' && <Text style={{ color: colors.amber, textAlign: 'center' }}>{t('checkingCellular')}</Text>}
     {active && state.phase === 'activeIncident' && <Card>

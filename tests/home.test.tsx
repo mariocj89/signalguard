@@ -2,7 +2,6 @@ import React from 'react';
 import { Alert } from 'react-native';
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
 import Home from '../src/app/index';
-import Settings from '../src/app/settings';
 import { GuardProvider } from '../src/state/GuardProvider';
 import { SignalGuard, type GuardState } from '../modules/signal-guard-native';
 
@@ -14,13 +13,14 @@ jest.mock('@react-native-community/datetimepicker', () => () => null);
 jest.mock('../modules/signal-guard-native', () => ({
   SignalGuard: {
     getGuardState: jest.fn(), getPreflightStatus: jest.fn(), startGuard: jest.fn(), stopGuard: jest.fn(),
-    requestNotificationPermission: jest.fn(), acknowledgeIncident: jest.fn(), addListener: jest.fn(),
+    updateSettings: jest.fn(), requestNotificationPermission: jest.fn(), acknowledgeIncident: jest.fn(), addListener: jest.fn(),
   },
 }));
 const bridge = SignalGuard as jest.Mocked<typeof SignalGuard>;
 const idle: GuardState = { phase: 'idle', internet: 'unknown', cellular: 'unknown', monitoring: false, settings: { internet: true, cellular: true } };
 let listener: (state: GuardState) => void;
 beforeEach(() => {
+  bridge.updateSettings.mockResolvedValue(undefined);
   bridge.getGuardState.mockResolvedValue(idle);
   bridge.acknowledgeIncident.mockResolvedValue(undefined);
   bridge.startGuard.mockResolvedValue(idle);
@@ -149,8 +149,8 @@ test('an unavailable native module shows unconfirmed connections rather than cla
 });
 
 
-test('settings only shows monitoring conditions', async () => {
-  const screen = await render(<GuardProvider><Settings /></GuardProvider>);
+test('home shows monitoring choices without notification configuration', async () => {
+  const screen = await render(<GuardProvider><Home /></GuardProvider>);
   expect(screen.getByText('Monitor')).toBeTruthy();
   expect(screen.getAllByRole('switch')).toHaveLength(2);
   expect(screen.queryByText('Sound')).toBeNull();
@@ -165,4 +165,37 @@ test.each([false, true])('missing notification readiness blocks power and offers
   await waitFor(() => expect(screen.getByRole('button', { name: action })).toBeTruthy());
   expect(screen.getByRole('button', { name: 'START GUARD' }).props.accessibilityState.disabled).toBe(true);
   expect(bridge.startGuard).not.toHaveBeenCalled();
+});
+
+
+test.each(['internet', 'cellular'] as const)('disabling unavailable %s on Home rechecks and starts with only the selected condition', async key => {
+  bridge.getPreflightStatus.mockResolvedValue({ ready: false, internet: key !== 'internet', cellular: key !== 'cellular', notifications: true, timeSensitive: true, permissionUndetermined: false, issues: [key === 'internet' ? 'internetUnavailable' : 'cellularUnavailable'] });
+  let finish!: () => void;
+  bridge.updateSettings.mockImplementation(next => new Promise(resolve => {
+    finish = () => {
+      bridge.getGuardState.mockResolvedValue({ ...idle, settings: next });
+      bridge.getPreflightStatus.mockResolvedValue({ ready: true, internet: key !== 'internet', cellular: key !== 'cellular', notifications: true, timeSensitive: true, permissionUndetermined: false, issues: [] });
+      resolve();
+    };
+  }));
+  const screen = await render(<GuardProvider><Home /></GuardProvider>);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'START GUARD' }).props.accessibilityState.disabled).toBe(true));
+  await fireEvent(screen.getByRole('switch', { name: key === 'internet' ? 'Internet' : 'Cellular network' }), 'valueChange', false);
+  expect(screen.getByRole('button', { name: 'START GUARD' }).props.accessibilityState.disabled).toBe(true);
+  await act(async () => finish());
+  await waitFor(() => expect(screen.getByRole('button', { name: 'START GUARD' }).props.accessibilityState.disabled).toBe(false));
+  await fireEvent.press(screen.getByRole('button', { name: 'START GUARD' }));
+  expect(bridge.startGuard.mock.calls[0]![0][key]).toBe(false);
+  expect(bridge.startGuard.mock.calls[0]![0][key === 'internet' ? 'cellular' : 'internet']).toBe(true);
+});
+
+test('Home cannot disable the last condition and hides selectors during an active guard', async () => {
+  bridge.getGuardState.mockResolvedValue({ ...idle, settings: { internet: true, cellular: false } });
+  const screen = await render(<GuardProvider><Home /></GuardProvider>);
+  await waitFor(() => expect(screen.getByRole('switch', { name: 'Cellular network' }).props.value).toBe(false));
+  await fireEvent(screen.getByRole('switch', { name: 'Internet' }), 'valueChange', false);
+  expect(bridge.updateSettings).not.toHaveBeenCalled();
+  expect(screen.getByText('Keep at least one monitoring condition enabled.')).toBeTruthy();
+  await act(() => listener({ ...idle, phase: 'activeHealthy', monitoring: true, internet: 'healthy', cellular: 'disabled' }));
+  expect(screen.queryAllByRole('switch')).toHaveLength(0);
 });

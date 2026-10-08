@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
-import { Alert, Text, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { SignalGuard, type Session } from '../../modules/signal-guard-native';
-import { Body, Button, Card, Heading, Page, usePalette } from '../ui/components';
+import { Button, Card, Heading, Page, usePalette } from '../ui/components';
 import { t, clock, dateLabel, errorText, type StringKey } from '../localization';
 import { incidentDuration } from '../domain/presentation';
 
@@ -10,8 +11,13 @@ const outcomes: Record<Session['outcome'], StringKey> = { completed: 'completed'
 export default function History() {
   const colors = usePalette();
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const load = useCallback(async () => { setSessions(await SignalGuard.getHistory()); }, []);
+  const load = useCallback(async () => {
+    setLoading(true); setError(null);
+    try { setSessions([...(await SignalGuard.getHistory())].sort((a, b) => b.start - a.start)); }
+    finally { setLoading(false); }
+  }, []);
   useFocusEffect(useCallback(() => { void load().catch((failure: unknown) => setError(errorText(failure))); }, [load]));
   const clear = () => Alert.alert(t('clearTitle'), t('clearBody'), [
     { text: t('cancel'), style: 'cancel' },
@@ -19,20 +25,41 @@ export default function History() {
   ]);
   return <Page>
     <Heading>{t('history')}</Heading>
-    {sessions.length === 0 ? <Card><Body>{t('noHistory')}</Body><Body muted>{t('noHistoryBody')}</Body></Card> : sessions.map((session, index) => <View key={session.id} style={{ gap: 12 }}>
-      {dateLabel(session.start) !== (index > 0 ? dateLabel(sessions[index - 1]!.start) : '') && <Text accessibilityRole="header" style={{ color: colors.muted, fontSize: 17, fontWeight: '600' }}>{dateLabel(session.start)}</Text>}
-      <Card>
-        <Text style={{ color: session.outcome === 'interrupted' ? colors.red : colors.text, fontSize: 19, fontWeight: '600' }}>{t(outcomes[session.outcome])}</Text>
-        <Body muted>{t('sessionUntil', { start: clock(session.start), end: clock(session.end ?? session.scheduledEnd) })}</Body>
-        <Body muted>{t('duration', { duration: incidentDuration(session.start, session.end ?? session.lastHeartbeat) })}</Body>
-        {session.outcome === 'interrupted' && session.interruptionReason && <Body muted>{errorText(new Error(session.interruptionReason))}</Body>}
-        {session.incidents.map((incident) => <View key={incident.id} style={{ gap: 5, paddingTop: 12, borderTopColor: colors.line, borderTopWidth: 1 }}>
-          <Text style={{ color: incident.crossedThreshold ? colors.red : colors.amber, fontSize: 16, fontWeight: '600' }}>{clock(incident.start)} · {t(incident.dimensions.length > 1 ? 'bothIncident' : incident.dimensions.includes('cellular') ? 'cellularIncident' : 'internetIncident')}</Text>
-          <Body muted>{incidentDuration(incident.start, incident.end ?? session.lastHeartbeat)} · {t(incident.crossedThreshold ? 'alerted' : 'brief')}</Body>
-          {incident.acknowledged && <Body muted>{t('wasAcknowledged')}</Body>}
-        </View>)}
-      </Card>
-    </View>)}
+    {loading ? <ActivityIndicator color={colors.muted} /> : error ? null : sessions.length === 0 ? <Card style={{ alignItems: 'center', paddingVertical: 32 }}>
+      <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: colors.inset, alignItems: 'center', justifyContent: 'center' }}><Ionicons name="time-outline" size={28} color={colors.muted} accessible={false} /></View>
+      <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600', textAlign: 'center' }}>{t('noHistory')}</Text>
+      <Text style={{ color: colors.muted, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>{t('noHistoryBody')}</Text>
+    </Card> : sessions.map((session, index) => {
+      const tone = session.outcome === 'interrupted' ? colors.red : session.outcome === 'completed' ? colors.green : colors.muted;
+      const icon = session.outcome === 'interrupted' ? 'alert-circle-outline' : session.outcome === 'completed' ? 'checkmark-circle-outline' : session.outcome === 'stopped' ? 'stop-circle-outline' : 'time-outline';
+      const end = session.end ?? session.lastHeartbeat;
+      const endLabel = new Date(session.start).toDateString() === new Date(end).toDateString() ? clock(end) : `${dateLabel(end)} · ${clock(end)}`;
+      return <View key={session.id} style={{ gap: 10 }}>
+        {dateLabel(session.start) !== (index > 0 ? dateLabel(sessions[index - 1]!.start) : '') && <Text accessibilityRole="header" style={{ color: colors.muted, fontSize: 15, fontWeight: '600', paddingHorizontal: 4 }}>{dateLabel(session.start)}</Text>}
+        <Card style={{ gap: 16, padding: 16 }}>
+          <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+            <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: session.outcome === 'interrupted' ? colors.redTint : colors.inset, alignItems: 'center', justifyContent: 'center' }}><Ionicons name={icon} size={25} color={tone} accessible={false} /></View>
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text style={{ color: tone, fontSize: 17, fontWeight: '600' }}>{t(outcomes[session.outcome])}</Text>
+              <Text style={{ color: colors.muted, fontSize: 13, fontVariant: ['tabular-nums'] }}>{t('sessionUntil', { start: clock(session.start), end: endLabel })}</Text>
+            </View>
+            <Text accessibilityLabel={t('duration', { duration: incidentDuration(session.start, end) })} style={{ color: colors.text, fontSize: 16, fontWeight: '600', fontVariant: ['tabular-nums'] }}>{incidentDuration(session.start, end)}</Text>
+          </View>
+          {session.outcome === 'interrupted' && session.interruptionReason && <Text style={{ color: colors.muted, fontSize: 14, lineHeight: 20 }}>{errorText(new Error(session.interruptionReason))}</Text>}
+          {session.incidents.length === 0 && <View style={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line, paddingTop: 12 }}><Text style={{ color: colors.muted, fontSize: 14 }}>{t('noIncidents')}</Text></View>}
+          {session.incidents.map(incident => <View key={incident.id} style={{ gap: 8, paddingTop: 12, borderTopColor: colors.line, borderTopWidth: StyleSheet.hairlineWidth }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: incident.crossedThreshold ? colors.red : colors.amber }} />
+              <Text style={{ flex: 1, color: colors.muted, fontSize: 13, fontVariant: ['tabular-nums'] }}>{clock(incident.start)}</Text>
+              <Text style={{ color: colors.text, fontSize: 14, fontWeight: '500', fontVariant: ['tabular-nums'] }}>{incidentDuration(incident.start, incident.end ?? session.lastHeartbeat)}</Text>
+            </View>
+            <Text style={{ color: colors.text, fontSize: 16, fontWeight: '500' }}>{t(incident.dimensions.length > 1 ? 'bothIncident' : incident.dimensions.includes('cellular') ? 'cellularIncident' : 'internetIncident')}</Text>
+            <Text style={{ color: incident.crossedThreshold ? colors.red : colors.amber, fontSize: 13 }}>{t(incident.crossedThreshold ? 'alerted' : 'brief')}</Text>
+            {incident.acknowledged && <Text style={{ color: colors.muted, fontSize: 13 }}>{t('wasAcknowledged')}</Text>}
+          </View>)}
+        </Card>
+      </View>;
+    })}
     {error && <Text style={{ color: colors.red }}>{error}</Text>}
     {sessions.length > 0 && <Button secondary label={t('clearHistory')} onPress={clear} />}
   </Page>;

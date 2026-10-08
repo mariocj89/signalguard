@@ -10,7 +10,7 @@ Use an **iPhone on iOS 26 or later** and the EAS development build. Expo Go, a b
 4. Deny notification permission, reopen SignalGuard, and verify START GUARD is disabled with a direct Open Settings action.
 5. Disable Time Sensitive Notifications only. Reopen and verify START GUARD is disabled even if ordinary alerts and sound remain enabled.
 6. Remove cellular registration before starting (Airplane Mode, or disable all SIM lines). Verify the cellular row is unavailable and Start is blocked when cellular monitoring is enabled.
-7. In Settings, disable Internet, then attempt to disable Cellular. Verify the last enabled condition stays on and a clear explanation appears. Stop an active guard before changing these settings.
+7. On Home, disable Internet, then attempt to disable Cellular. Verify the last enabled condition stays on and a clear explanation appears. Stop an active guard before changing these settings.
 
 ## Start, Lock Screen and background runtime
 
@@ -70,7 +70,7 @@ Use an **iPhone on iOS 26 or later** and the EAS development build. Expo Go, a b
 
 ## Languages and accessibility
 
-1. Test English and Castilian Spanish using the app language in iOS Settings, including home, history, settings, permission explanation, errors, notification actions, watchdog, completion and system activity subtitles.
+1. Test English and Castilian Spanish using the app language in iOS Settings, including home, history, monitoring selection, permission explanation, errors, notification actions, watchdog, completion and system activity subtitles.
 2. Verify no technical network/SIM identifiers or untranslated keys appear.
 3. Test light/dark appearance, VoiceOver, large text, a smaller iPhone display and status contrast.
 4. Verify no copy claims guaranteed telephone-call receipt.
@@ -81,7 +81,7 @@ Start with both services registered. Lose registration on one original service w
 
 ## Development simulations
 
-In a development build, long-press the Settings heading to open Development diagnostics. Before starting, enable short timings (10-second grace, 30-second reminders, 18-second watchdog; heartbeat 3 seconds/probes 5 seconds). Return Home and start a real native task; simulations never bypass real preflight/task submission.
+In a development build, long-press the SignalGuard heading on Home to open Development diagnostics. Before starting, enable short timings (10-second grace, 30-second reminders, 18-second watchdog; heartbeat 3 seconds/probes 5 seconds). Return Home and start a real native task; simulations never bypass real preflight/task submission.
 
 Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restore real readings before real connectivity tests. Test a Release preview build to verify diagnostics are inaccessible and simulation/timing methods are absent. Short timings are memory-only and cannot persist into production.
 
@@ -98,7 +98,14 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 
 ## Notification information and sustained monitoring
 
-1. Open Settings and verify only the aligned Monitor switches remain. No sound, vibration or Critical Alerts section appears. Repeat in Spanish.
+1. Open Home and verify aligned Monitor switches are next to Internet and Cellular status; there is no Settings tab. No sound, vibration or Critical Alerts section appears. Repeat in Spanish.
 2. Disable notification or sound permission in iOS Settings, return to Home and verify the power button stays disabled with an Open Settings action. Repeat with Time Sensitive disabled. On a fresh installation, verify Enable notifications explains why permission is needed before requesting it, and denying permission leaves the guard blocked.
 3. Run an ordinary guard for more than four hours while locked, recording start time and any interruption notification time. Reopen and inspect the interruption reason in History. No running native task must be represented as active after process loss, and restart must require a foreground button press.
 4. Record task expiration separately from missed-heartbeat and process-stopped outcomes. A process-stopped reason alone does not identify why iOS ended the process. Do not declare the four-hour report resolved based only on local tests.
+
+
+## Home selection and history presentation
+
+- Verify both conditions are enabled on first use. Disable unavailable Internet and start a Cellular-only guard, then repeat with unavailable Cellular and Internet-only monitoring. After each selection change, power must wait for fresh preflight. The remaining enabled condition and all notification/watchdog requirements still apply.
+- Attempt to turn off both conditions; the last remains enabled with an explanation. During active monitoring, selectors disappear; stop to change them. Saved selection survives relaunch.
+- Review populated History in English and Spanish, light/dark mode and large text. Verify newest-first day grouping, outcome, duration, brief interruption/alert distinction and acknowledgement. Check sessions spanning midnight display the end date. Interrupted sessions must remain visibly distinct, and no incidents recorded must not imply uninterrupted system execution.

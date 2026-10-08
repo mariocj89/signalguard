@@ -96,7 +96,7 @@
   "nativeUnavailable": "La monitorización nativa no está disponible. Instala la versión de desarrollo de SignalGuard para iOS.",
   "iosRequired": "SignalGuard requiere un iPhone con iOS 26 o posterior.",
   "internetUnavailable": "No se ha podido confirmar la conectividad a Internet.",
-  "cellularUnavailable": "No hay ninguna red móvil registrada en este momento.",
+  "cellularUnavailable": "No se ha podido confirmar el registro en la red móvil.",
   "notificationsRequired": "Activa el permiso de notificaciones, los avisos y los sonidos para utilizar SignalGuard.",
   "timeSensitiveRequired": "Activa las notificaciones urgentes de SignalGuard en los Ajustes de iOS.",
   "conditionsRequired": "Mantén activada al menos una condición de monitorización.",
@@ -128,5 +128,6 @@
   "monitorSection": "Monitorizar",
   "taskExpired": "iOS ha finalizado la tarea de monitorización en segundo plano. Reinicia la guardia.",
   "heartbeatMissed": "El monitor nativo ha dejado de confirmar su funcionamiento. Reinicia la guardia.",
-  "processStopped": "El proceso de monitorización anterior ya no estaba en ejecución al abrir la app."
+  "processStopped": "El proceso de monitorización anterior ya no estaba en ejecución al abrir la app.",
+  "noIncidents": "Sin incidencias registradas"
 }
