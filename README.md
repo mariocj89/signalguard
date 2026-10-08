@@ -144,3 +144,8 @@ An interruption after approximately four hours is not a known fixed limit in the
 No cloud build or TestFlight submission is part of local maintenance. Start one only when explicitly requested by the user. Native changes need a subsequently authorized EAS build to reach the installed iPhone app.
 
 History shows newest sessions first, grouped by their start day, with outcome icons and elapsed duration. Incident rows distinguish brief interruptions, alerts and acknowledgement. Cross-midnight session end labels include the end date, and recorded monitoring interruption reasons remain available. A failed history read displays an error instead of an empty-history claim.
+
+
+## Expo Go UI preview
+
+When the native module is absent in development (Expo Go or local browser inspection), Home switches use an in-memory preview adapter and History contains four past sample sessions, clearly labeled as sample data. Clearing this preview only clears its memory; reload recreates the examples. Nothing is written to native storage. The adapter never reports ready or active, and Start, notifications and background monitoring remain unavailable. Custom native builds use the real module and never inject these examples. The production branch does not import the fixture module.

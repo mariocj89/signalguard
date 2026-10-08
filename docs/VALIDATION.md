@@ -60,3 +60,6 @@ Notification UX follow-up, 8 October 2026: removed notification information UI a
 
 
 Home selection and History follow-up, 8 October 2026: TypeScript/lint pass; 36 Jest tests, 19 Swift tests/parser checks and two English/Spanish browser tests pass; iOS export, Expo Doctor 21/21 and git whitespace pass. Tests cover disabling either unavailable condition on Home, blocking power during selection changes, refusing both-off selection, hiding selectors during guards, newest-first History, brief/alert/acknowledgement presentation, interruption reasons and history read failures. Existing Expo manifest/current bundle respond HTTP 200. No native compilation or store upload was performed; cellular false-negative report remains unverified on device.
+
+
+Expo Go preview fix, 8 October 2026: 38 Jest, 19 Swift and two browser tests pass, along with typecheck/lint, parser checks, iOS export and Expo Doctor 21/21. Browser tests exercise toggles, both-off protection, disabled Start and sample History in both languages. Preview data are memory-only and absent from native clients; production Hermes artifact excludes sample fixture IDs. Public approved preview manifest/bundle HTTP 200. No EAS/TestFlight build or upload.

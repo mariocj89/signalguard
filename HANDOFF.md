@@ -157,3 +157,10 @@ Moved the two monitoring switches onto Home beside connectivity status, removed 
 History now sorts newest first, groups by start day, shows compact outcome icons/durations and incident timelines, distinguishes brief interruptions and alerts/acknowledgement, handles midnight end dates, and shows loading/error without falsely claiming empty history. Added interrupted-reason localization mapping that was missing from errorText.
 
 Passed: TypeScript/lint, 36 Jest tests, 19 Swift tests/parser checks, two browser tests, iOS export, Expo Doctor 21/21 and git whitespace. Verified existing approved Expo tunnel manifest/current bundle HTTP 200; link remains exp://browsers-tobacco-winning-postage.trycloudflare.com while PC/processes run. Expo Go is UI-only and cannot run native monitoring. No EAS/TestFlight build or submission. Real-device false-negative cellular diagnosis and background runtime remain unverified.
+
+
+## 8 October 2026: fix Expo Go selectors and seed UI-only sample history
+
+The original fail-closed fallback rejected updateSettings, so Home switches could not change in Expo Go. Added a development-only memory adapter when native is absent; updates emit state and survive screen navigation. Both-off validation remains, and readiness/start/notifications/monitoring remain unavailable. Preview History contains four clearly labeled past sessions with completed/stopped/interrupted outcomes, brief and threshold-crossing failures, combined incidents and acknowledgement. Samples never touch disk/native history; clear empties preview memory until reload. Native clients always use real data.
+
+Passed typecheck/lint, 38 Jest tests, 19 Swift tests/parser checks, two English/Spanish browser checks including actual preview switch interaction and seeded history, iOS export, Expo Doctor 21/21 and whitespace validation. Production Hermes artifact explicitly checked to exclude fixture IDs. Existing approved Expo manifest and development bundle HTTP 200 and verified to include current samples. No EAS/TestFlight builds or submissions.

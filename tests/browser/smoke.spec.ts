@@ -17,8 +17,16 @@ test('browser inspection fails closed and home exposes compact monitoring choice
   await expect(page.getByText('Private by design')).toHaveCount(0);
   await expect(page.getByText('Vibration', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Critical alerts', { exact: true })).toHaveCount(0);
+  await page.getByRole('switch', { name: 'Cellular network', exact: true }).click();
+  await expect(page.getByRole('switch', { name: 'Cellular network', exact: true })).not.toBeChecked();
+  await expect(page.getByRole('button', { name: 'START GUARD', exact: true })).toBeDisabled();
+  await page.getByRole('switch', { name: 'Internet', exact: true }).click();
+  await expect(page.getByText('Keep at least one monitoring condition enabled.')).toBeVisible();
+  await expect(page.getByRole('switch', { name: 'Internet', exact: true })).toBeChecked();
   await page.getByRole('tab', { name: /History/ }).click();
-  await expect(page.getByText('No guards yet')).toBeVisible();
+  await expect(page.getByText('Sample data · UI preview only')).toBeVisible();
+  await expect(page.getByText('Brief interruption · no alert')).toBeVisible();
+  await expect(page.getByText('Guard interrupted', { exact: true })).toBeVisible();
 });
 test('Spanish route content is complete', async ({ browser }) => {
   const context = await browser.newContext({ locale: 'es-ES', viewport: { width: 390, height: 844 } });
@@ -33,6 +41,7 @@ test('Spanish route content is complete', async ({ browser }) => {
   await expect(page.getByText('Avisos críticos', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('switch')).toHaveCount(2);
   await page.getByRole('tab', { name: /Historial/ }).click();
-  await expect(page.getByText('Todavía no hay guardias')).toBeVisible();
+  await expect(page.getByText('Datos de ejemplo · Solo vista previa')).toBeVisible();
+  await expect(page.getByText('Guardia interrumpida', { exact: true })).toBeVisible();
   await context.close();
 });

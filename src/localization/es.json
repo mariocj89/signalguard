@@ -129,5 +129,6 @@
   "taskExpired": "iOS ha finalizado la tarea de monitorización en segundo plano. Reinicia la guardia.",
   "heartbeatMissed": "El monitor nativo ha dejado de confirmar su funcionamiento. Reinicia la guardia.",
   "processStopped": "El proceso de monitorización anterior ya no estaba en ejecución al abrir la app.",
-  "noIncidents": "Sin incidencias registradas"
+  "noIncidents": "Sin incidencias registradas",
+  "previewHistory": "Datos de ejemplo · Solo vista previa"
 }

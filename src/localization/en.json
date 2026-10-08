@@ -129,5 +129,6 @@
   "taskExpired": "iOS ended the background monitoring task. Restart the guard.",
   "heartbeatMissed": "Native monitoring stopped confirming its operation. Restart the guard.",
   "processStopped": "The previous monitoring process was no longer running when the app opened.",
-  "noIncidents": "No recorded incidents"
+  "noIncidents": "No recorded incidents",
+  "previewHistory": "Sample data · UI preview only"
 }

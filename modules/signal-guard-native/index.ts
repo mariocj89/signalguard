@@ -42,9 +42,12 @@ declare class SignalGuardNative extends NativeModule<Events> {
 const native = requireOptionalNativeModule<SignalGuardNative>('SignalGuardNative');
 const settings: GuardSettings = { internet: true, cellular: true };
 const unavailable = (): Promise<never> => Promise.reject(new Error('nativeUnavailable'));
-// Web / Expo Go fail closed. There is deliberately no browser monitoring emulation.
+// Expo Go can preview selection and sample history in development; monitoring always fails closed.
 export type SignalGuardInterface = Pick<SignalGuardNative, 'getPreflightStatus' | 'getGuardState' | 'getHistory' | 'getSettings' | 'addListener' | 'requestNotificationPermission' | 'startGuard' | 'stopGuard' | 'clearHistory' | 'acknowledgeIncident' | 'updateSettings' | 'simulate' | 'setTestTiming'>;
-export const SignalGuard: SignalGuardInterface = native ?? {
+export const isDevelopmentPreview = __DEV__ && native === null;
+export const SignalGuard: SignalGuardInterface = native ?? (__DEV__
+  ? (require('./preview') as typeof import('./preview')).createDevelopmentPreview()
+  : {
   getPreflightStatus: async (): Promise<PreflightStatus> => ({ ready: false, internet: false, cellular: false, notifications: false, timeSensitive: false, permissionUndetermined: false, issues: ['nativeUnavailable'] }),
   getGuardState: async (): Promise<GuardState> => ({ phase: 'idle', internet: 'unknown', cellular: 'unknown', monitoring: false, settings }),
   getHistory: async (): Promise<Session[]> => [],
@@ -53,4 +56,4 @@ export const SignalGuard: SignalGuardInterface = native ?? {
   requestNotificationPermission: unavailable, startGuard: unavailable, stopGuard: unavailable,
   clearHistory: unavailable, acknowledgeIncident: unavailable, updateSettings: unavailable,
   simulate: unavailable, setTestTiming: unavailable,
-};
+});
