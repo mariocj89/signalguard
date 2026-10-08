@@ -94,3 +94,11 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 - Test dark mode, large text and a narrow iPhone. The power button must remain tappable and status labels must remain readable without horizontal scrolling.
 
 - Check activity contrast against bright and dark Lock Screen wallpapers. The system activity background is controlled by iOS and cannot be made opaque through BGContinuedProcessingTask. Record readability problems for a future custom-activity evaluation, which must first rule out duplicate activities.
+
+
+## Notification information and sustained monitoring
+
+1. Open Settings and verify the Monitor switches remain aligned. Verify Sound matches the app’s iOS notification sound permission; Vibration directs to iOS settings; Critical alerts says Not available. Repeat in Spanish.
+2. Use Open Settings, change sound permission, return to SignalGuard and verify the displayed status refreshes. Disabling sound must block the next guard’s preflight. A failed settings read must show Not confirmed, never Allowed.
+3. Run an ordinary guard for more than four hours while locked, recording start time and any interruption notification time. Reopen and inspect the interruption reason in History. No running native task must be represented as active after process loss, and restart must require a foreground button press.
+4. Record task expiration separately from missed-heartbeat and process-stopped outcomes. A process-stopped reason alone does not identify why iOS ended the process. Do not declare the four-hour report resolved based only on local tests.

@@ -25,6 +25,7 @@ export default function History() {
         <Text style={{ color: session.outcome === 'interrupted' ? colors.red : colors.text, fontSize: 19, fontWeight: '600' }}>{t(outcomes[session.outcome])}</Text>
         <Body muted>{t('sessionUntil', { start: clock(session.start), end: clock(session.end ?? session.scheduledEnd) })}</Body>
         <Body muted>{t('duration', { duration: incidentDuration(session.start, session.end ?? session.lastHeartbeat) })}</Body>
+        {session.outcome === 'interrupted' && session.interruptionReason && <Body muted>{errorText(new Error(session.interruptionReason))}</Body>}
         {session.incidents.map((incident) => <View key={incident.id} style={{ gap: 5, paddingTop: 12, borderTopColor: colors.line, borderTopWidth: 1 }}>
           <Text style={{ color: incident.crossedThreshold ? colors.red : colors.amber, fontSize: 16, fontWeight: '600' }}>{clock(incident.start)} · {t(incident.dimensions.length > 1 ? 'bothIncident' : incident.dimensions.includes('cellular') ? 'cellularIncident' : 'internetIncident')}</Text>
           <Body muted>{incidentDuration(incident.start, incident.end ?? session.lastHeartbeat)} · {t(incident.crossedThreshold ? 'alerted' : 'brief')}</Body>

@@ -134,3 +134,10 @@ Build: https://expo.dev/accounts/etcaterva/projects/signalguard/builds/31135c77-
 Submission: https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/1f176e8d-a469-4ea9-b097-7e13341b55fc
 
 Build 6 queue follow-up: EAS reports NEW, NORMAL priority, no error, no logs and no queue-position/wait estimate. Native archive/Apple upload remain unvalidated for this build. Auto-submit is scheduled and will run after successful build; temporary status helpers can follow build 31135c77-edbc-498e-a0c5-7c6ebe98eb45 and submission 1f176e8d-a469-4ea9-b097-7e13341b55fc. Do not claim build 6 is installed/available until Apple processing is confirmed.
+
+
+## 8 October 2026: long-session diagnosis and notification information
+
+User reports a monitoring-interrupted warning after about four hours. No fixed four-hour cutoff was found in the app. Added persisted interruption reasons (taskExpired, heartbeatMissed, processStopped), backward-compatible with previous session JSON; processStopped cannot identify crash versus force-close/system termination. No guaranteed fix is claimed. Settings now reports actual sound permission and explains system-managed vibration, Time Sensitive timing and unavailable Critical Alerts in English/Spanish. No Critical Alerts entitlement or permission request was added.
+
+User explicitly forbids EAS/TestFlight builds unless requested. No build/submission was started for these changes. Their Apple-framework compilation and real-device behavior remain unvalidated until a later authorized build. Expo SDK 57 patch dependencies were aligned with current doctor recommendations.

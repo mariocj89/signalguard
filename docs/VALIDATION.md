@@ -45,3 +45,12 @@ One-tap-stop change: all local checks pass (28 Jest, 18 Swift, two browser tests
 
 
 Build 6 settings alignment: fixed trailing switch column and localized Monitor header pass typecheck/lint, 28 Jest tests, 18 Swift tests, two browser tests (including measured switch alignment), iOS export and Expo Doctor 21/21. EAS build 31135c77-edbc-498e-a0c5-7c6ebe98eb45 is pending, with auto-submit 1f176e8d-a469-4ea9-b097-7e13341b55fc scheduled. This archive also includes the phone icon and direct-stop notice; native compilation and Apple processing for build 6 are not yet confirmed.
+
+
+## 8 October 2026: notification information and interruption diagnosis
+
+Local checks after the changes and SDK 57 patch alignment: TypeScript and ESLint pass; 30 Jest tests, 19 Swift XCTest tests and two English/Spanish Playwright tests pass. Swift parser checks, iOS Metro/Hermes export, Expo Doctor 21/21 and git whitespace validation pass. Regression tests cover actual/unknown sound status, system-managed vibration and unavailable Critical Alerts, backward-compatible session decoding and persisted interruption reasons.
+
+The package installation reports 58 upstream audit findings (50 high, eight moderate); this is not a clean dependency security audit. No broad incompatible-major audit fix was applied.
+
+No EAS build or TestFlight submission was started, as explicitly requested by the user. The changed Apple-framework source has only been parsed, not compiled against an Apple SDK. Four-hour background interruption is unresolved: new diagnostics identify an observable expiration, missed heartbeat or process loss, but neither prove the original cause nor guarantee sustained execution. Real-device validation remains required.

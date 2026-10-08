@@ -142,6 +142,21 @@ final class GuardCoreTests: XCTestCase {
     XCTAssertThrowsError(try store.load())
   }
 
+  func testInterruptionReasonSurvivesPersistenceAndOlderHistoryStillDecodes() throws {
+    let session = GuardSession(start: base, scheduledEnd: date(28800), lastHeartbeat: date(14400), interruptionReason: "taskExpired", outcome: .interrupted)
+    let bytes = try JSONEncoder().encode(session)
+    let restored = try JSONDecoder().decode(GuardSession.self, from: bytes)
+    XCTAssertEqual(restored.interruptionReason, "taskExpired")
+    var old = try XCTUnwrap(JSONSerialization.jsonObject(with: bytes) as? [String: Any])
+    old.removeValue(forKey: "interruptionReason")
+    let legacy = try JSONDecoder().decode(GuardSession.self, from: JSONSerialization.data(withJSONObject: old))
+    XCTAssertNil(legacy.interruptionReason)
+    var data = StoreData()
+    data.current = GuardSession(start: base, scheduledEnd: date(28800), lastHeartbeat: date(14400))
+    XCTAssertTrue(data.recoverOrphan())
+    XCTAssertEqual(data.history.last?.interruptionReason, "processStopped")
+  }
+
   func testClockJumpsFailSafelyButNormalElapsedTimeAndMidnightDoNot() {
     XCTAssertTrue(GuardClock.consistent(wallStart: base, now: date(60), elapsed: 60))
     XCTAssertTrue(GuardClock.consistent(wallStart: base, now: date(86400), elapsed: 86400))

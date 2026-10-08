@@ -68,11 +68,14 @@ final class GuardCoordinator {
     // A persisted running session never proves a running task in this new process.
     if data.recoverOrphan() {
       life.interrupt()
-      failureCode = "monitorInterrupted"
+      failureCode = "processStopped"
       save()
       notifications.cancelReminders()
       // Leave the already-scheduled dead-man switch intact. Never silently submit a new task.
-    } else if data.terminal == .interrupted { life.interrupt() }
+    } else if data.terminal == .interrupted {
+      life.interrupt()
+      failureCode = data.history.last?.interruptionReason
+    }
     else if data.terminal == .completed { life.complete() }
     let staleIncidentIDs = Set(data.history.flatMap { $0.incidents.map { $0.id } })
     Task { await notifications.cancelPersistedIncidentNotifications(incidentIDs: staleIncidentIDs) }
@@ -182,7 +185,7 @@ final class GuardCoordinator {
     task = continued
     continued.expirationHandler = {
       Task { @MainActor in
-        if self.epoch == generation { await self.interrupt(code: "monitorInterrupted") }
+        if self.epoch == generation { await self.interrupt(code: "taskExpired") }
       }
     }
     continued.progress.totalUnitCount = max(1, Int64(ceil(session.scheduledEnd.timeIntervalSince(session.start))))
@@ -225,7 +228,7 @@ final class GuardCoordinator {
     guard task != nil, let session = data.current else { return }
     if guardClock?.consistent(now: Date()) == false { await interrupt(code: "clockChanged"); return }
     if pendingStart == nil && Date().timeIntervalSince(session.lastHeartbeat) >= timing.watchdog {
-      await interrupt(code: "monitorInterrupted"); return
+      await interrupt(code: "heartbeatMissed"); return
     }
     if Date() >= session.scheduledEnd { await finish(normal: true); return }
     guard !sampling else { return }
@@ -256,7 +259,7 @@ final class GuardCoordinator {
     let confirmedAt = Date()
     if guardClock?.consistent(now: confirmedAt) == false { await interrupt(code: "clockChanged"); return }
     if pendingStart == nil && confirmedAt.timeIntervalSince(session.lastHeartbeat) >= timing.watchdog {
-      await interrupt(code: "monitorInterrupted"); return
+      await interrupt(code: "heartbeatMissed"); return
     }
     if pendingStart != nil && confirmedAt.timeIntervalSince(session.start) > 15 {
       await interrupt(code: "startFailed"); return
@@ -297,7 +300,7 @@ final class GuardCoordinator {
       }
       guard epoch == generation, let task else { return }
       if Date().timeIntervalSince(confirmedAt) >= timing.watchdog {
-        await interrupt(code: "monitorInterrupted"); return
+        await interrupt(code: "heartbeatMissed"); return
       }
       task.progress.completedUnitCount = min(task.progress.totalUnitCount, max(0, Int64(Date().timeIntervalSince(session.start))))
       task.updateTitle(NativeStrings.text("task.title"), subtitle: NativeStrings.subtitle(internet: machine?.health(.internet, now: Date()) ?? .unknown, cellular: machine?.health(.cellular, now: Date()) ?? .unknown))
@@ -317,7 +320,7 @@ final class GuardCoordinator {
     guard task != nil || pendingStart != nil else { return }
     if normal && guardClock?.consistent(now: Date()) == false { await interrupt(code: "clockChanged"); return }
     if normal, let heartbeat = data.current?.lastHeartbeat, Date().timeIntervalSince(heartbeat) >= timing.watchdog {
-      await interrupt(code: "monitorInterrupted"); return
+      await interrupt(code: "heartbeatMissed"); return
     }
     finalizing = true
     defer { finalizing = false }
@@ -364,6 +367,7 @@ final class GuardCoordinator {
     if var session = data.current {
       session.end = ended
       session.outcome = .interrupted
+      session.interruptionReason = code
       session.incidents = machine?.records ?? session.incidents
       data.history.append(session)
     }
@@ -378,10 +382,11 @@ final class GuardCoordinator {
     // If code is still running, warn promptly. On SIGKILL the existing pending watchdog does this.
     try? await notifications.refreshWatchdog(delay: 1)
   }
+  func notificationStatus() async -> [String: Any] { await notifications.status() }
   func state() async -> [String: Any] {
     if task != nil && guardClock?.consistent(now: Date()) == false { await interrupt(code: "clockChanged") }
     if task != nil, let heartbeat = data.current?.lastHeartbeat, Date().timeIntervalSince(heartbeat) >= timing.watchdog {
-      await interrupt(code: "monitorInterrupted")
+      await interrupt(code: "heartbeatMissed")
     }
     return snapshot()
   }

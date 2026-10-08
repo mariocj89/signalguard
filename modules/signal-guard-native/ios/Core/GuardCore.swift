@@ -151,6 +151,7 @@ struct GuardSession: Codable {
   var scheduledEnd: Date
   var end: Date?
   var lastHeartbeat: Date
+  var interruptionReason: String?
   var outcome: SessionOutcome = .running
   var incidents: [Incident] = []
 }
@@ -163,6 +164,7 @@ struct StoreData: Codable {
   mutating func recoverOrphan() -> Bool {
     guard var orphan = current else { return false }
     orphan.outcome = .interrupted
+    orphan.interruptionReason = "processStopped"
     orphan.end = orphan.lastHeartbeat
     orphan.incidents = orphan.incidents.map { incident in
       var record = incident

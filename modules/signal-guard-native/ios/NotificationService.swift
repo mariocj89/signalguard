@@ -35,6 +35,18 @@ final class LocalNotificationService: GuardNotificationService {
     let sensitive = settings.timeSensitiveSetting == .enabled
     return NotificationReadiness(ready: notifications && sensitive, notifications: notifications, timeSensitive: sensitive, undetermined: settings.authorizationStatus == .notDetermined)
   }
+  func status() async -> [String: Any] {
+    let settings = await center.notificationSettings()
+    let authorized = settings.authorizationStatus == .authorized
+    return [
+      "sound": authorized && settings.soundSetting == .enabled ? "enabled" : "disabled",
+      "timeSensitive": authorized && settings.timeSensitiveSetting == .enabled ? "enabled" : "disabled",
+      // Public notification APIs do not expose independent vibration control.
+      "vibration": "system",
+      // This app neither requests nor holds the Critical Alerts entitlement.
+      "critical": "unavailable"
+    ]
+  }
   func requestPermission() async throws {
     // Time Sensitive delivery is enabled by the entitlement, not Critical Alerts authorization.
     _ = try await center.requestAuthorization(options: [.alert, .sound])

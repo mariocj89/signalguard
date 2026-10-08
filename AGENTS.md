@@ -47,3 +47,5 @@ Docs: https://docs.expo.dev/eas/index.md
 - The safety loop and source of active truth are native Swift. Never substitute JavaScript background timers.
 - Use only public APIs; no guaranteed-call or permanent-execution claims. Unknown prerequisites block Start.
 - Run npm run check, iOS export, Expo doctor and browser smoke checks. Real-device validation is required before release.
+
+- User preference: never create or submit a TestFlight/EAS build unless the user explicitly asks for that build/submission. Local fixes and checks do not authorize cloud builds.
