@@ -27,6 +27,7 @@ test('browser inspection fails closed and home exposes compact monitoring choice
   await expect(page.getByText('Sample data · UI preview only')).toBeVisible();
   await expect(page.getByText('Brief interruption · no alert')).toBeVisible();
   await expect(page.getByText('Guard interrupted', { exact: true })).toBeVisible();
+  await expect(page.getByText('Monitoring resumed', { exact: true })).toBeVisible();
 });
 test('Spanish route content is complete', async ({ browser }) => {
   const context = await browser.newContext({ locale: 'es-ES', viewport: { width: 390, height: 844 } });
@@ -43,5 +44,6 @@ test('Spanish route content is complete', async ({ browser }) => {
   await page.getByRole('tab', { name: /Historial/ }).click();
   await expect(page.getByText('Datos de ejemplo · Solo vista previa')).toBeVisible();
   await expect(page.getByText('Guardia interrumpida', { exact: true })).toBeVisible();
+  await expect(page.getByText('Monitorización reanudada', { exact: true })).toBeVisible();
   await context.close();
 });

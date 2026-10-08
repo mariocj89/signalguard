@@ -10,12 +10,12 @@ export interface Incident {
 }
 export interface Session {
   id: string; start: number; scheduledEnd: number; end?: number; lastHeartbeat: number;
-  outcome: 'running' | 'completed' | 'stopped' | 'interrupted'; incidents: Incident[]; interruptionReason?: string;
+  outcome: 'running' | 'completed' | 'stopped' | 'interrupted'; incidents: Incident[]; interruptionReason?: string; monitoredSettings?: GuardSettings; resumedFrom?: string;
 }
 export interface GuardState {
   phase: Phase; internet: Health; cellular: Health; monitoring: boolean;
   start?: number; end?: number; lastConfirmed?: number;
-  incident?: Incident; error?: string; settings: GuardSettings;
+  incident?: Incident; error?: string; settings: GuardSettings; canResume?: boolean; resuming?: boolean; resumeSettings?: GuardSettings;
   lastConfirmationRecent?: boolean; simulationActive?: boolean; testTimingActive?: boolean;
 }
 export type PreflightIssue = 'nativeUnavailable' | 'iosRequired' | 'internetUnavailable' | 'cellularUnavailable' | 'notificationsRequired' | 'timeSensitiveRequired' | 'conditionsRequired' | 'storageUnavailable' | 'taskUnavailable';
@@ -29,6 +29,7 @@ declare class SignalGuardNative extends NativeModule<Events> {
   getPreflightStatus(): Promise<PreflightStatus>;
   requestNotificationPermission(): Promise<void>;
   startGuard(config: GuardConfig): Promise<GuardState>;
+  resumeGuard(): Promise<GuardState>;
   stopGuard(): Promise<void>;
   getGuardState(): Promise<GuardState>;
   getHistory(): Promise<Session[]>;
@@ -43,7 +44,7 @@ const native = requireOptionalNativeModule<SignalGuardNative>('SignalGuardNative
 const settings: GuardSettings = { internet: true, cellular: true };
 const unavailable = (): Promise<never> => Promise.reject(new Error('nativeUnavailable'));
 // Expo Go can preview selection and sample history in development; monitoring always fails closed.
-export type SignalGuardInterface = Pick<SignalGuardNative, 'getPreflightStatus' | 'getGuardState' | 'getHistory' | 'getSettings' | 'addListener' | 'requestNotificationPermission' | 'startGuard' | 'stopGuard' | 'clearHistory' | 'acknowledgeIncident' | 'updateSettings' | 'simulate' | 'setTestTiming'>;
+export type SignalGuardInterface = Pick<SignalGuardNative, 'getPreflightStatus' | 'getGuardState' | 'getHistory' | 'getSettings' | 'addListener' | 'requestNotificationPermission' | 'startGuard' | 'resumeGuard' | 'stopGuard' | 'clearHistory' | 'acknowledgeIncident' | 'updateSettings' | 'simulate' | 'setTestTiming'>;
 export const isDevelopmentPreview = __DEV__ && native === null;
 export const SignalGuard: SignalGuardInterface = native ?? (__DEV__
   ? (require('./preview') as typeof import('./preview')).createDevelopmentPreview()
@@ -53,7 +54,7 @@ export const SignalGuard: SignalGuardInterface = native ?? (__DEV__
   getHistory: async (): Promise<Session[]> => [],
   getSettings: async () => settings,
   addListener: (_event: string, _listener: (state: GuardState) => void) => ({ remove() {} }),
-  requestNotificationPermission: unavailable, startGuard: unavailable, stopGuard: unavailable,
+  requestNotificationPermission: unavailable, startGuard: unavailable, resumeGuard: unavailable, stopGuard: unavailable,
   clearHistory: unavailable, acknowledgeIncident: unavailable, updateSettings: unavailable,
   simulate: unavailable, setTestTiming: unavailable,
 });

@@ -12,7 +12,7 @@
   "now": "Ahora",
   "end": "Fin",
   "startGuard": "INICIAR GUARDIA",
-  "restartGuard": "REINICIAR GUARDIA",
+  "restartGuard": "INICIAR GUARDIA",
   "stopGuard": "DETENER GUARDIA",
   "active": "Monitorización activa",
   "until": "Hasta las {{time}}",
@@ -25,7 +25,7 @@
   "starting": "Iniciando la guardia…",
   "stopping": "Deteniendo la guardia…",
   "interrupted": "Guardia interrumpida",
-  "interruptedBody": "Reinicia la guardia para reanudar la monitorización.",
+  "interruptedBody": "Reanuda para continuar la monitorización.",
   "completed": "Guardia finalizada",
   "stopped": "Guardia detenida",
   "enabled": "Activado",
@@ -130,5 +130,9 @@
   "heartbeatMissed": "El monitor nativo ha dejado de confirmar su funcionamiento. Reinicia la guardia.",
   "processStopped": "El proceso de monitorización anterior ya no estaba en ejecución al abrir la app.",
   "noIncidents": "Sin incidencias registradas",
-  "previewHistory": "Datos de ejemplo · Solo vista previa"
+  "previewHistory": "Datos de ejemplo · Solo vista previa",
+  "resumeGuard": "REANUDAR",
+  "resuming": "Reanudando…",
+  "resumed": "Monitorización reanudada",
+  "resumeUnavailable": "Esta guardia ya no se puede reanudar. Inicia una nueva."
 }

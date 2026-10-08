@@ -63,3 +63,6 @@ Home selection and History follow-up, 8 October 2026: TypeScript/lint pass; 36 J
 
 
 Expo Go preview fix, 8 October 2026: 38 Jest, 19 Swift and two browser tests pass, along with typecheck/lint, parser checks, iOS export and Expo Doctor 21/21. Browser tests exercise toggles, both-off protection, disabled Start and sample History in both languages. Preview data are memory-only and absent from native clients; production Hermes artifact excludes sample fixture IDs. Public approved preview manifest/bundle HTTP 200. No EAS/TestFlight build or upload.
+
+
+Foreground resume follow-up, 8 October 2026: TypeScript/lint, 40 Jest tests, 20 Swift tests/parser checks, two browser checks, iOS export, Expo Doctor 21/21 and whitespace validation pass. Regressions verify original end/settings and stale/expired resume rejection, linked History grouping with no gap-duration field, and no active claim while native resume is pending. Expo Go serves updated sample resume History (HTTP 200); production artifact excludes fixtures. Changed Apple-framework code has only been parsed locally; actual notification launch/task submission/resume needs an explicitly authorized native build and a physical iPhone. No build or upload was started.

@@ -16,6 +16,7 @@ public final class SignalGuardModule: Module {
     AsyncFunction("startGuard") { (config: StartRecord) async throws -> [String: Any] in
       try await GuardCoordinator.shared.start(end: Date(timeIntervalSince1970: config.end / 1000), internet: config.internet, cellular: config.cellular)
     }
+    AsyncFunction("resumeGuard") { () async throws -> [String: Any] in try await GuardCoordinator.shared.resume() }
     AsyncFunction("stopGuard") { () async in await GuardCoordinator.shared.stop() }
     AsyncFunction("getGuardState") { () async -> [String: Any] in await GuardCoordinator.shared.state() }
     AsyncFunction("getHistory") { () async -> [[String: Any]] in await GuardCoordinator.shared.history() }
@@ -39,6 +40,9 @@ struct SettingsRecord: Record {
   @Field var cellular: Bool = true
 }
 public final class SignalGuardAppDelegateSubscriber: ExpoAppDelegateSubscriber {
+  public func applicationDidBecomeActive(_ application: UIApplication) {
+    Task { @MainActor in await GuardCoordinator.shared.resumeFromNotificationIfActive() }
+  }
   public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
     // Synchronous registration before application launch finishes; independent of React initialization.
     MainActor.assumeIsolated { GuardCoordinator.shared.startup() }

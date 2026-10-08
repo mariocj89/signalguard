@@ -20,7 +20,7 @@ test('history sorts newest first and distinguishes brief outages from acknowledg
   ] };
   bridge.getHistory.mockResolvedValue([completed, interrupted]);
   const screen = await render(<History />);
-  await waitFor(() => expect(screen.getByText(t('interrupted'))).toBeTruthy());
+  await waitFor(() => expect(screen.getAllByText(t('interrupted'))).toBeTruthy());
   expect(screen.getByText(t('taskExpired'))).toBeTruthy();
   expect(screen.getByText(t('brief'))).toBeTruthy();
   expect(screen.getByText(t('alerted'))).toBeTruthy();

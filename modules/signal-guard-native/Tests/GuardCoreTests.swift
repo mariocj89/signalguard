@@ -171,4 +171,23 @@ final class GuardCoreTests: XCTestCase {
     XCTAssertEqual(ActivityPresentation.mark(.unknown), "⚪")
     XCTAssertEqual(ActivityPresentation.mark(.disabled), "—")
   }
+  func testResumeRetainsEndAndSettingsAndRejectsExpiredOrStaleRequests() throws {
+    var data = StoreData()
+    let selected = GuardSettings(internet: false, cellular: true)
+    var interrupted = GuardSession(start: base, scheduledEnd: date(28800), lastHeartbeat: date(14400), monitoredSettings: selected)
+    interrupted.end = date(14400); interrupted.outcome = .interrupted
+    data.history = [interrupted]; data.terminal = .interrupted
+    let resumable = try XCTUnwrap(data.resumableSession(now: date(15000), requestedID: interrupted.id))
+    XCTAssertEqual(resumable.scheduledEnd, date(28800))
+    XCTAssertEqual(resumable.monitoredSettings, selected)
+    XCTAssertNil(data.resumableSession(now: date(28800)))
+    XCTAssertNil(data.resumableSession(now: date(15000), requestedID: "old-notification"))
+    data.current = GuardSession(start: date(15000), scheduledEnd: resumable.scheduledEnd, lastHeartbeat: date(15000), monitoredSettings: selected, resumedFrom: resumable.id)
+    XCTAssertNil(data.resumableSession(now: date(16000)))
+    let encoded = try JSONEncoder().encode(data)
+    let decoded = try JSONDecoder().decode(StoreData.self, from: encoded)
+    XCTAssertEqual(decoded.current?.resumedFrom, interrupted.id)
+    XCTAssertEqual(decoded.current?.monitoredSettings, selected)
+  }
+
 }

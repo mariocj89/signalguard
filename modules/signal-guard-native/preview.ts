@@ -16,6 +16,7 @@ export function createDevelopmentPreview(now = Date.now()): SignalGuardInterface
       { id: 'preview-combined', start: completedStart + 5 * hour, end: completedStart + 5 * hour + 191000, dimensions: ['internet', 'cellular'], crossedThreshold: true, acknowledged: false },
     ] },
     { id: 'preview-interrupted', start: previousDay(1) - 8 * hour, scheduledEnd: previousDay(1), end: previousDay(1) - 4 * hour, lastHeartbeat: previousDay(1) - 4 * hour, outcome: 'interrupted', interruptionReason: 'taskExpired', incidents: [] },
+    { id: 'preview-resumed', start: previousDay(1) - 3.5 * hour, scheduledEnd: previousDay(1), end: previousDay(1), lastHeartbeat: previousDay(1), outcome: 'completed', resumedFrom: 'preview-interrupted', incidents: [] },
     { id: 'preview-healthy', start: previousDay(2) - 8 * hour, scheduledEnd: previousDay(2), end: previousDay(2), lastHeartbeat: previousDay(2), outcome: 'completed', incidents: [] },
   ];
   const listeners = new Set<(state: GuardState) => void>();
@@ -33,7 +34,7 @@ export function createDevelopmentPreview(now = Date.now()): SignalGuardInterface
     addListener: (_event, listener) => { listeners.add(listener); return { remove: () => { listeners.delete(listener); } }; },
     getHistory: async () => JSON.parse(JSON.stringify(history)) as Session[],
     clearHistory: async () => { history = []; },
-    requestNotificationPermission: unavailable, startGuard: unavailable, stopGuard: unavailable,
+    requestNotificationPermission: unavailable, startGuard: unavailable, resumeGuard: unavailable, stopGuard: unavailable,
     acknowledgeIncident: unavailable, simulate: unavailable, setTestTiming: unavailable,
   };
 }

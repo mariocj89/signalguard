@@ -2,11 +2,13 @@
 "task.starting" = "Confirming monitoring…";
 "task.subtitle" = "Internet %@ · Cellular %@";
 "action.acknowledge" = "Acknowledge";
-"watchdog.title" = "SignalGuard monitoring interrupted";
-"watchdog.body" = "SignalGuard can no longer confirm your connectivity. Open the app to restart monitoring.";
+"watchdog.title" = "Monitoring interrupted";
+"watchdog.body" = "SignalGuard has stopped checking your connectivity. Tap to resume.";
 "incident.title" = "SignalGuard alert";
 "incident.internet" = "Internet connectivity could not be confirmed. Open SignalGuard to check its status.";
 "incident.cellular" = "Cellular network registration could not be confirmed. Open SignalGuard to check its status.";
 "incident.both" = "Internet and cellular network could not be confirmed. Open SignalGuard to check its status.";
 "completion.title" = "✓ Guard completed";
 "completion.body" = "SignalGuard monitored your connectivity until %@.";
+
+"action.resume" = "Resume";

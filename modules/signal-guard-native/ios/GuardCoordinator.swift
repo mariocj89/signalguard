@@ -40,6 +40,8 @@ final class GuardCoordinator {
   private var lastConfirmed: Date?
   private var lastConnectivityConfirmed: Date?
   private var guardClock: GuardClock?
+  private var pendingResumedFrom: String?
+  private var notificationResumeID: String?
   private var failureCode: String?
   var onChange: (([String: Any]) -> Void)?
   #if DEBUG
@@ -114,7 +116,38 @@ final class GuardCoordinator {
     guard save() else { throw GuardFailure(code: "storageUnavailable") }
     emit()
   }
-  func start(end: Date, internet: Bool, cellular: Bool) async throws -> [String: Any] {
+  func requestNotificationResume(sessionID: String) {
+    notificationResumeID = sessionID
+    Task { await self.resumeFromNotificationIfActive() }
+  }
+  func resumeFromNotificationIfActive() async {
+    guard UIApplication.shared.applicationState == .active, let id = notificationResumeID else { return }
+    notificationResumeID = nil // One user tap authorizes one attempt, never repeated background retries.
+    do { _ = try await resume(requestedID: id) }
+    catch {
+      if task == nil { failureCode = (error as? GuardFailure)?.code ?? "startFailed"; emit() }
+    }
+  }
+  func resume(requestedID: String? = nil) async throws -> [String: Any] {
+    startup()
+    guard UIApplication.shared.applicationState == .active else { throw GuardFailure(code: "foregroundRequired") }
+    _ = await state() // Detect stale heartbeat before deciding whether the guard is still running.
+    if task != nil, life.phase.isActive { return snapshot() }
+    guard let previous = data.resumableSession(now: Date(), requestedID: requestedID) else { throw GuardFailure(code: "resumeUnavailable") }
+    let selected = previous.monitoredSettings ?? data.settings
+    try updateSettings(internet: selected.internet, cellular: selected.cellular)
+    do {
+      return try await start(end: previous.scheduledEnd, internet: selected.internet, cellular: selected.cellular, resumedFrom: previous.id)
+    } catch {
+      if task == nil, pendingStart == nil {
+        life.interrupt(); data.terminal = .interrupted
+        failureCode = (error as? GuardFailure)?.code ?? "startFailed"
+        save(); emit()
+      }
+      throw error
+    }
+  }
+  func start(end: Date, internet: Bool, cellular: Bool, resumedFrom: String? = nil) async throws -> [String: Any] {
     startup()
     guard UIApplication.shared.applicationState == .active else { throw GuardFailure(code: "foregroundRequired") }
     guard !finalizing, inFlightHeartbeats == 0, pendingStart == nil, task == nil, !life.phase.isActive, life.phase != .starting else { throw GuardFailure(code: "alreadyActive") }
@@ -145,7 +178,9 @@ final class GuardCoordinator {
     machine = IncidentMachine(enabled: settings.enabled, timing: timing)
     let now = Date()
     guardClock = GuardClock(wallStart: now)
-    data.current = GuardSession(start: now, scheduledEnd: end, lastHeartbeat: now)
+    pendingResumedFrom = resumedFrom
+    data.current = GuardSession(start: now, scheduledEnd: end, lastHeartbeat: now, monitoredSettings: settings)
+    notifications.watchdogSessionID = data.current?.id
     data.terminal = .starting
     guard save() else { life.reset(); emit(); throw GuardFailure(code: "storageUnavailable") }
     let request = BGContinuedProcessingTaskRequest(identifier: Self.identifier, title: NativeStrings.text("task.title"), subtitle: NativeStrings.text("task.starting"))
@@ -169,6 +204,7 @@ final class GuardCoordinator {
   private func failStart(_ code: String) {
     epoch = UUID()
     data.current = nil
+    pendingResumedFrom = nil
     data.terminal = .idle
     life.reset(); failureCode = code
     machine = nil; baseline = []; lastConfirmed = nil
@@ -207,6 +243,11 @@ final class GuardCoordinator {
     if pendingStart != nil {
       guard lastConfirmed != nil else { await interrupt(code: "startFailed"); return }
       do { try life.didStart() } catch { await interrupt(code: "startFailed"); return }
+      if let pendingResumedFrom {
+        data.current?.resumedFrom = pendingResumedFrom
+        self.pendingResumedFrom = nil
+        guard save() else { await interrupt(code: "storageUnavailable"); return }
+      }
       if let machine { life.sample(machine.phase) }
       let continuation = pendingStart; pendingStart = nil
       emit()
@@ -389,7 +430,12 @@ final class GuardCoordinator {
     }
     return snapshot()
   }
-  func history() -> [[String: Any]] { data.history.reversed().map { encode($0) } }
+  func history() -> [[String: Any]] {
+    var sessions = data.history
+    // A successful resumed segment is already persisted; expose its resume event before completion.
+    if let current = data.current, current.resumedFrom != nil, life.phase.isActive { sessions.append(current) }
+    return sessions.reversed().map { encode($0) }
+  }
   func clearHistory() throws {
     data.history = []
     guard save() else { throw GuardFailure(code: "storageUnavailable") }
@@ -420,6 +466,7 @@ final class GuardCoordinator {
     let monitoring = task != nil && life.phase.isActive && lastConfirmed.map { now.timeIntervalSince($0) < timing.watchdog } == true
     var result: [String: Any] = [
       "phase": life.phase.rawValue, "monitoring": monitoring,
+      "resuming": life.phase == .starting && pendingResumedFrom != nil,
       "internet": machine?.health(.internet, now: now).rawValue ?? "unknown",
       "cellular": machine?.health(.cellular, now: now).rawValue ?? "unknown",
       "settings": settings()
@@ -435,6 +482,10 @@ final class GuardCoordinator {
     result["testTimingActive"] = timing.grace != Timing.production.grace
     #endif
     if let incident = machine?.current { result["incident"] = encode(incident) }
+    if let previous = data.resumableSession(now: now) {
+      result["canResume"] = true
+      result["resumeSettings"] = encode(previous.monitoredSettings ?? data.settings)
+    }
     if let failureCode { result["error"] = failureCode }
     return result
   }

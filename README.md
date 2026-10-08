@@ -10,7 +10,7 @@ SignalGuard is a free, local iPhone application for people on call. It checks In
 
 ## Safety model
 
-A guard starts only from a foreground button press. Swift registers a continued-processing handler during application startup, submits a `BGContinuedProcessingTaskRequest` with **strategy `.fail`**, and waits for the actual launch handler and its first successful monitoring heartbeat/watchdog installation before reporting active. A submission success alone is insufficient. A delayed or refused start fails visibly, rather than queueing a guard.
+A guard starts only from an explicit foreground action: the power/resume button or tapping the monitoring-interrupted notification/Resume action. Swift registers a continued-processing handler during application startup, submits a `BGContinuedProcessingTaskRequest` with **strategy `.fail`**, and waits for the actual launch handler and its first successful monitoring heartbeat/watchdog installation before reporting active. A submission success alone is insufficient. A delayed or refused start fails visibly, rather than queueing a guard.
 
 There is one guard, maximum 24 hours. The central power button starts a 24-hour guard by default, with the limit shown explicitly. Optional “Choose end time” controls start at +8 hours and allow shorter sessions. This is not indefinite monitoring. Earlier clock times mean tomorrow. Manual stop takes one tap and shows a brief in-app “Monitoring stopped” notice after native completion. The native engine handles the scheduled end, cancels pending guard notifications and completes the task; the system ends its own Live Activity. No second ActivityKit activity is created.
 
@@ -148,4 +148,11 @@ History shows newest sessions first, grouped by their start day, with outcome ic
 
 ## Expo Go UI preview
 
-When the native module is absent in development (Expo Go or local browser inspection), Home switches use an in-memory preview adapter and History contains four past sample sessions, clearly labeled as sample data. Clearing this preview only clears its memory; reload recreates the examples. Nothing is written to native storage. The adapter never reports ready or active, and Start, notifications and background monitoring remain unavailable. Custom native builds use the real module and never inject these examples. The production branch does not import the fixture module.
+When the native module is absent in development (Expo Go or local browser inspection), Home switches use an in-memory preview adapter and History contains five past sample segments, clearly labeled as sample data. Clearing this preview only clears its memory; reload recreates the examples. Nothing is written to native storage. The adapter never reports ready or active, and Start, notifications and background monitoring remain unavailable. Custom native builds use the real module and never inject these examples. The production branch does not import the fixture module.
+
+
+## Resuming an interrupted guard
+
+The watchdog says monitoring has stopped and offers a foreground Resume action. Tapping the watchdog or its action authorizes one resume attempt once the app is active; normal icon launch never auto-restarts. A session identifier rejects stale notifications. Swift rechecks prerequisites and submits a fresh immediate/fail continued-processing request with the original end time and monitoring selection. Active is reported only after native startup/heartbeat succeeds. An expired original end does not become another 24-hour guard.
+
+Saved resume links are written only after successful task startup. History groups segments into one guard and shows interruption/resumption timestamps, without a separate interruption-period duration. Session duration sums monitored segments rather than counting the unmonitored interval. Native notification launch/resume behavior needs physical-iPhone acceptance; Expo Go only previews History and never resumes a real guard.

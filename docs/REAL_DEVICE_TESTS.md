@@ -18,7 +18,7 @@ Use an **iPhone on iOS 26 or later** and the EAS development build. Expo Go, a b
 2. During submission, verify the UI does not claim active. On success verify Guard Active, Until, monitoring and a recent confirmation appear.
 3. Lock the phone. Verify the **system continued-processing Live Activity** appears on the Lock Screen; verify Dynamic Island presentation on a supported iPhone. There must be exactly one activity.
 4. Leave the app backgrounded for at least 15 minutes; also test 4, 8 and 12 hours. Observe genuine duration progress. Capture early system termination instead of assuming eight-hour execution is guaranteed.
-5. Cancel via the system activity. Verify the app becomes interrupted, an interruption warning arrives, and a new guard requires a foreground button press.
+5. Cancel via the system activity. Verify the app becomes interrupted, an interruption warning arrives, and resuming requires an explicit foreground action.
 6. Test with low power/battery pressure and other apps doing continued processing. An immediate submission refusal must produce a visible error without claiming monitoring is active. There must be no queued future guard.
 
 ## Internet and cellular are independent
@@ -100,7 +100,7 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 
 1. Open Home and verify aligned Monitor switches are next to Internet and Cellular status; there is no Settings tab. No sound, vibration or Critical Alerts section appears. Repeat in Spanish.
 2. Disable notification or sound permission in iOS Settings, return to Home and verify the power button stays disabled with an Open Settings action. Repeat with Time Sensitive disabled. On a fresh installation, verify Enable notifications explains why permission is needed before requesting it, and denying permission leaves the guard blocked.
-3. Run an ordinary guard for more than four hours while locked, recording start time and any interruption notification time. Reopen and inspect the interruption reason in History. No running native task must be represented as active after process loss, and restart must require a foreground button press.
+3. Run an ordinary guard for more than four hours while locked, recording start time and any interruption notification time. Reopen and inspect the interruption reason in History. No running native task must be represented as active after process loss, and restart must require an explicit foreground Resume action.
 4. Record task expiration separately from missed-heartbeat and process-stopped outcomes. A process-stopped reason alone does not identify why iOS ended the process. Do not declare the four-hour report resolved based only on local tests.
 
 
@@ -109,3 +109,14 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 - Verify both conditions are enabled on first use. Disable unavailable Internet and start a Cellular-only guard, then repeat with unavailable Cellular and Internet-only monitoring. After each selection change, power must wait for fresh preflight. The remaining enabled condition and all notification/watchdog requirements still apply.
 - Attempt to turn off both conditions; the last remains enabled with an explanation. During active monitoring, selectors disappear; stop to change them. Saved selection survives relaunch.
 - Review populated History in English and Spanish, light/dark mode and large text. Verify newest-first day grouping, outcome, duration, brief interruption/alert distinction and acknowledgement. Check sessions spanning midnight display the end date. Interrupted sessions must remain visibly distinct, and no incidents recorded must not imply uninterrupted system execution.
+
+
+## Resume from interruption
+
+1. Start with an end time at least one hour away. Interrupt/force-close, then tap the watchdog notification or its Resume action. Verify the app becomes active, native preflight runs and a new immediate task starts. No active indication may appear before the first successful heartbeat/watchdog. The original end and monitoring selection must be preserved.
+2. Repeat by opening from the app icon instead: no task starts automatically; the power control says Resume and needs one tap.
+3. Disable notifications or make an enabled connection unavailable before resuming. Verify preflight fails visibly and no active state is claimed. Restore prerequisites and retry explicitly.
+4. Tap a stale watchdog notification from a previous guard; it must not restart a different session. Repeat taps/foreground events must not create duplicate tasks.
+5. Let the original end time pass before tapping Resume. Verify it does not start another 24-hour guard; a fresh guard requires a new explicit start.
+6. Inspect History after success and after completion: linked segments appear as one guard with interruption and resumption events. No interruption-period duration appears. After a failed resume attempt, no successful-resumption event may be recorded.
+7. Run all of the above in English and Spanish. Expo Go sample History is only a UI demonstration; real notifications/resume need a native build.

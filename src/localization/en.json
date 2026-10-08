@@ -12,7 +12,7 @@
   "now": "Now",
   "end": "End",
   "startGuard": "START GUARD",
-  "restartGuard": "RESTART GUARD",
+  "restartGuard": "START GUARD",
   "stopGuard": "STOP GUARD",
   "active": "Monitoring active",
   "until": "Until {{time}}",
@@ -25,7 +25,7 @@
   "starting": "Starting guard…",
   "stopping": "Stopping guard…",
   "interrupted": "Guard interrupted",
-  "interruptedBody": "Restart the guard to resume monitoring.",
+  "interruptedBody": "Resume to continue monitoring.",
   "completed": "Guard completed",
   "stopped": "Guard stopped",
   "enabled": "Enabled",
@@ -130,5 +130,9 @@
   "heartbeatMissed": "Native monitoring stopped confirming its operation. Restart the guard.",
   "processStopped": "The previous monitoring process was no longer running when the app opened.",
   "noIncidents": "No recorded incidents",
-  "previewHistory": "Sample data · UI preview only"
+  "previewHistory": "Sample data · UI preview only",
+  "resumeGuard": "RESUME",
+  "resuming": "Resuming…",
+  "resumed": "Monitoring resumed",
+  "resumeUnavailable": "This guard can no longer be resumed. Start a new guard."
 }

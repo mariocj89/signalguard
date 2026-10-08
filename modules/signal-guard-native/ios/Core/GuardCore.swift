@@ -152,6 +152,8 @@ struct GuardSession: Codable {
   var end: Date?
   var lastHeartbeat: Date
   var interruptionReason: String?
+  var monitoredSettings: GuardSettings?
+  var resumedFrom: String?
   var outcome: SessionOutcome = .running
   var incidents: [Incident] = []
 }
@@ -161,6 +163,13 @@ struct StoreData: Codable {
   var current: GuardSession?
   var terminal: GuardPhase = .idle
   var history: [GuardSession] = []
+  func resumableSession(now: Date, requestedID: String? = nil) -> GuardSession? {
+    guard current == nil, terminal == .interrupted, let previous = history.last,
+      previous.outcome == .interrupted,
+      requestedID == nil || requestedID == previous.id,
+      GuardLifecycle.validEnd(now: now, end: previous.scheduledEnd) else { return nil }
+    return previous
+  }
   mutating func recoverOrphan() -> Bool {
     guard var orphan = current else { return false }
     orphan.outcome = .interrupted

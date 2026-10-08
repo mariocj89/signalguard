@@ -20,13 +20,18 @@ protocol GuardNotificationService {
 final class LocalNotificationService: GuardNotificationService {
   static let watchdogID = "sg.watchdog"
 
+  var watchdogSessionID: String?
   private let center = UNUserNotificationCenter.current()
   private var incidentNotificationIDs: Set<String> = []
   private var reminderDimensions: [String: Set<Dimension>] = [:]
   private let delegate = SignalGuardNotificationDelegate()
   func configure() {
     let action = UNNotificationAction(identifier: "ACKNOWLEDGE", title: NativeStrings.text("action.acknowledge"), options: [])
-    center.setNotificationCategories([UNNotificationCategory(identifier: "SG_INCIDENT", actions: [action], intentIdentifiers: [], options: [])])
+    let resume = UNNotificationAction(identifier: "RESUME_GUARD", title: NativeStrings.text("action.resume"), options: [.foreground])
+    center.setNotificationCategories([
+      UNNotificationCategory(identifier: "SG_INCIDENT", actions: [action], intentIdentifiers: [], options: []),
+      UNNotificationCategory(identifier: "SG_WATCHDOG", actions: [resume], intentIdentifiers: [], options: [])
+    ])
     center.delegate = delegate
   }
   func readiness() async -> NotificationReadiness {
@@ -49,6 +54,8 @@ final class LocalNotificationService: GuardNotificationService {
   }
   func refreshWatchdog(delay: TimeInterval) async throws {
     let content = content(title: "watchdog.title", body: NativeStrings.text("watchdog.body"), sensitive: true)
+    content.categoryIdentifier = "SG_WATCHDOG"
+    if let watchdogSessionID { content.userInfo = ["guardSessionId": watchdogSessionID] }
     // Adding the SAME identifier replaces the previous request atomically at the notification center;
     // do not first cancel, which would leave a gap if the process dies before add().
     try await center.add(UNNotificationRequest(identifier: Self.watchdogID, content: content, trigger: UNTimeIntervalNotificationTrigger(timeInterval: max(1, delay), repeats: false)))
@@ -105,6 +112,13 @@ final class SignalGuardNotificationDelegate: NSObject, UNUserNotificationCenterD
     completionHandler([.banner, .list, .sound])
   }
   func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    if response.notification.request.content.categoryIdentifier == "SG_WATCHDOG",
+      response.actionIdentifier == "RESUME_GUARD" || response.actionIdentifier == UNNotificationDefaultActionIdentifier,
+      let id = response.notification.request.content.userInfo["guardSessionId"] as? String {
+      Task { @MainActor in GuardCoordinator.shared.requestNotificationResume(sessionID: id) }
+      completionHandler()
+      return
+    }
     guard response.actionIdentifier == "ACKNOWLEDGE", let id = response.notification.request.content.userInfo["incidentId"] as? String else { completionHandler(); return }
     Task { @MainActor in
       await GuardCoordinator.shared.acknowledge(incidentID: id)

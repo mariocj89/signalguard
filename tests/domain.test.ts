@@ -62,3 +62,16 @@ describe('Safety presentation and settings', () => {
     expect(incidentDuration(1000, 0)).toBe('0m 0s');
   });
 });
+
+
+test('resumed history groups linked segments and displays events without a gap duration', () => {
+  const { historyEntries } = require('../src/domain/history');
+  const first = { id: 'a', start: 0, scheduledEnd: 3600000, lastHeartbeat: 600000, end: 600000, outcome: 'interrupted', incidents: [] };
+  const next = { ...first, id: 'b', start: 900000, end: 3600000, lastHeartbeat: 3600000, outcome: 'completed', resumedFrom: 'a' };
+  const entries = historyEntries([next, first]);
+  expect(entries).toHaveLength(1);
+  expect(entries[0].session.outcome).toBe('completed');
+  expect(entries[0].monitoredDuration).toBe(3300000);
+  expect(entries[0].events).toEqual([{ kind: 'interrupted', at: 600000 }, { kind: 'resumed', at: 900000 }]);
+  expect(entries[0]).not.toHaveProperty('gapDuration');
+});

@@ -16,7 +16,7 @@ test('Expo Go preview can change selection and emit it without claiming monitori
 test('sample history covers past outcomes and incidents, can be cleared, and never mutates real storage', async () => {
   const preview = createDevelopmentPreview(now);
   const history = await preview.getHistory();
-  expect(history).toHaveLength(4);
+  expect(history).toHaveLength(5);
   expect(history.every(session => session.start < session.end! && session.end! < now)).toBe(true);
   expect(history.some(session => session.outcome === 'interrupted')).toBe(true);
   expect(history.flatMap(session => session.incidents).some(incident => !incident.crossedThreshold)).toBe(true);
@@ -25,5 +25,5 @@ test('sample history covers past outcomes and incidents, can be cleared, and nev
   expect((await preview.getHistory())[0]!.outcome).toBe('stopped');
   await preview.clearHistory();
   expect(await preview.getHistory()).toEqual([]);
-  expect(await createDevelopmentPreview(now).getHistory()).toHaveLength(4);
+  expect(await createDevelopmentPreview(now).getHistory()).toHaveLength(5);
 });

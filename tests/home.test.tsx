@@ -12,7 +12,7 @@ jest.mock('react-native-safe-area-context', () => ({ SafeAreaView: require('reac
 jest.mock('@react-native-community/datetimepicker', () => () => null);
 jest.mock('../modules/signal-guard-native', () => ({
   SignalGuard: {
-    getGuardState: jest.fn(), getPreflightStatus: jest.fn(), startGuard: jest.fn(), stopGuard: jest.fn(),
+    getGuardState: jest.fn(), getPreflightStatus: jest.fn(), startGuard: jest.fn(), resumeGuard: jest.fn(), stopGuard: jest.fn(),
     updateSettings: jest.fn(), requestNotificationPermission: jest.fn(), acknowledgeIncident: jest.fn(), addListener: jest.fn(),
   },
 }));
@@ -76,7 +76,7 @@ test('automatic guard completion clears old readiness and rechecks prerequisites
 test('interrupted monitoring stays unavailable even when restart prerequisites pass', async () => {
   bridge.getGuardState.mockResolvedValue({ ...idle, phase: 'interrupted' });
   const screen = await render(<GuardProvider><Home /></GuardProvider>);
-  await waitFor(() => expect(screen.getByRole('button', { name: 'RESTART GUARD' }).props.accessibilityState.disabled).toBe(false));
+  await waitFor(() => expect(screen.getByRole('button', { name: 'START GUARD' }).props.accessibilityState.disabled).toBe(false));
   expect(screen.getByText('Guard interrupted')).toBeTruthy();
   expect(screen.getByLabelText('Monitoring: Unavailable')).toBeTruthy();
   expect(screen.queryByText(/Monitoring active/)).toBeNull();
@@ -198,4 +198,25 @@ test('Home cannot disable the last condition and hides selectors during an activ
   expect(screen.getByText('Keep at least one monitoring condition enabled.')).toBeTruthy();
   await act(() => listener({ ...idle, phase: 'activeHealthy', monitoring: true, internet: 'healthy', cellular: 'disabled' }));
   expect(screen.queryAllByRole('switch')).toHaveLength(0);
+});
+
+
+test('resuming uses native resume rather than starting a fresh 24-hour guard and stays off until confirmed', async () => {
+  const end = Date.now() + 2 * 3600000;
+  const interrupted: GuardState = { ...idle, phase: 'interrupted', canResume: true, end, resumeSettings: idle.settings };
+  bridge.getGuardState.mockResolvedValue(interrupted);
+  let finish!: () => void;
+  bridge.resumeGuard.mockImplementation(() => new Promise(resolve => { finish = () => {
+    const active: GuardState = { ...idle, phase: 'activeHealthy', monitoring: true, end };
+    bridge.getGuardState.mockResolvedValue(active); resolve(active);
+  }; }));
+  const screen = await render(<GuardProvider><Home /></GuardProvider>);
+  await waitFor(() => expect(screen.getByRole('button', { name: 'RESUME' }).props.accessibilityState.disabled).toBe(false));
+  await fireEvent.press(screen.getByRole('button', { name: 'RESUME' }));
+  expect(bridge.resumeGuard).toHaveBeenCalledTimes(1);
+  expect(bridge.startGuard).not.toHaveBeenCalled();
+  expect(screen.getAllByText('Resuming…').length).toBeGreaterThan(0);
+  expect(screen.queryByText('Monitoring active')).toBeNull();
+  await act(async () => finish());
+  await waitFor(() => expect(screen.getByText('Monitoring active')).toBeTruthy());
 });
