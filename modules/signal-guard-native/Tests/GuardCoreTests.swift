@@ -190,4 +190,22 @@ final class GuardCoreTests: XCTestCase {
     XCTAssertEqual(decoded.current?.monitoredSettings, selected)
   }
 
+  func testClearingHistoryPreservesOnlyInterruptedGuardRecoveryMetadata() throws {
+    var data = StoreData()
+    var session = GuardSession(start: base, scheduledEnd: date(28800), lastHeartbeat: date(14400), monitoredSettings: GuardSettings(internet: true, cellular: false))
+    session.end = date(14400); session.outcome = .interrupted
+    session.incidents = [Incident(start: date(100), end: date(123), dimensions: [.internet])]
+    data.history = [session]; data.terminal = .interrupted
+    data.clearVisibleHistory()
+    XCTAssertTrue(data.history.isEmpty)
+    XCTAssertEqual(data.resumableSession(now: date(15000), requestedID: session.id)?.scheduledEnd, date(28800))
+    XCTAssertEqual(data.resumeCheckpoint?.incidents, [])
+    let decoded = try JSONDecoder().decode(StoreData.self, from: JSONEncoder().encode(data))
+    XCTAssertNotNil(decoded.resumableSession(now: date(15000), requestedID: session.id))
+    XCTAssertNil(decoded.resumableSession(now: date(28800)))
+    data.terminal = .completed
+    data.clearVisibleHistory()
+    XCTAssertNil(data.resumeCheckpoint)
+  }
+
 }

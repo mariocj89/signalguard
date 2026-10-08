@@ -75,3 +75,10 @@ test('resumed history groups linked segments and displays events without a gap d
   expect(entries[0].events).toEqual([{ kind: 'interrupted', at: 600000 }, { kind: 'resumed', at: 900000 }]);
   expect(entries[0]).not.toHaveProperty('gapDuration');
 });
+
+
+test('a resumed segment still shows its resume event after older history was cleared', () => {
+  const { historyEntries } = require('../src/domain/history');
+  const entries = historyEntries([{ id: 'new', resumedFrom: 'deleted', start: 1000, end: 2000, lastHeartbeat: 2000, scheduledEnd: 2000, outcome: 'completed', incidents: [] }]);
+  expect(entries[0].events).toEqual([{ kind: 'resumed', at: 1000 }]);
+});

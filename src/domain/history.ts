@@ -11,7 +11,7 @@ export function historyEntries(sessions: Session[]): HistoryEntry[] {
     const end = segment.end ?? segment.lastHeartbeat;
     let entry = segment.resumedFrom ? parents.get(segment.resumedFrom) : undefined;
     if (!entry) {
-      entry = { session: { ...segment, incidents: [...segment.incidents] }, monitoredDuration: 0, events: [] };
+      entry = { session: { ...segment, incidents: [...segment.incidents] }, monitoredDuration: 0, events: segment.resumedFrom ? [{ kind: 'resumed', at: segment.start }] : [] };
       entries.push(entry);
     } else {
       entry.events.push({ kind: 'resumed', at: segment.start });

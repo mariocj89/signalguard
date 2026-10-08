@@ -163,8 +163,16 @@ struct StoreData: Codable {
   var current: GuardSession?
   var terminal: GuardPhase = .idle
   var history: [GuardSession] = []
+  var resumeCheckpoint: GuardSession?
+  mutating func clearVisibleHistory() {
+    if current == nil, terminal == .interrupted, var previous = history.last ?? resumeCheckpoint, previous.outcome == .interrupted {
+      previous.incidents = [] // Keep only recovery metadata; erase all incident history.
+      resumeCheckpoint = previous
+    } else { resumeCheckpoint = nil }
+    history = []
+  }
   func resumableSession(now: Date, requestedID: String? = nil) -> GuardSession? {
-    guard current == nil, terminal == .interrupted, let previous = history.last,
+    guard current == nil, terminal == .interrupted, let previous = history.last ?? resumeCheckpoint,
       previous.outcome == .interrupted,
       requestedID == nil || requestedID == previous.id,
       GuardLifecycle.validEnd(now: now, end: previous.scheduledEnd) else { return nil }
@@ -181,6 +189,7 @@ struct StoreData: Codable {
       return record
     }
     history.append(orphan)
+    resumeCheckpoint = nil
     current = nil
     terminal = .interrupted
     return true

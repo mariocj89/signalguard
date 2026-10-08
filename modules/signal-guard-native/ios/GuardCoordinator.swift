@@ -76,7 +76,7 @@ final class GuardCoordinator {
       // Leave the already-scheduled dead-man switch intact. Never silently submit a new task.
     } else if data.terminal == .interrupted {
       life.interrupt()
-      failureCode = data.history.last?.interruptionReason
+      failureCode = (data.history.last ?? data.resumeCheckpoint)?.interruptionReason
     }
     else if data.terminal == .completed { life.complete() }
     let staleIncidentIDs = Set(data.history.flatMap { $0.incidents.map { $0.id } })
@@ -243,6 +243,7 @@ final class GuardCoordinator {
     if pendingStart != nil {
       guard lastConfirmed != nil else { await interrupt(code: "startFailed"); return }
       do { try life.didStart() } catch { await interrupt(code: "startFailed"); return }
+      data.resumeCheckpoint = nil
       if let pendingResumedFrom {
         data.current?.resumedFrom = pendingResumedFrom
         self.pendingResumedFrom = nil
@@ -378,6 +379,7 @@ final class GuardCoordinator {
       data.history.append(session)
     }
     data.current = nil
+    data.resumeCheckpoint = nil
     data.terminal = normal ? .completed : .idle
     notifications.cancelGuardNotifications()
     BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.identifier)
@@ -412,7 +414,7 @@ final class GuardCoordinator {
       session.incidents = machine?.records ?? session.incidents
       data.history.append(session)
     }
-    data.current = nil; data.terminal = .interrupted
+    data.current = nil; data.resumeCheckpoint = nil; data.terminal = .interrupted
     life.interrupt(); failureCode = code
     save()
     notifications.cancelReminders()
@@ -437,7 +439,7 @@ final class GuardCoordinator {
     return sessions.reversed().map { encode($0) }
   }
   func clearHistory() throws {
-    data.history = []
+    data.clearVisibleHistory()
     guard save() else { throw GuardFailure(code: "storageUnavailable") }
   }
   func acknowledge(incidentID: String? = nil) async {
@@ -462,7 +464,7 @@ final class GuardCoordinator {
   private func snapshot() -> [String: Any] {
     let now = Date()
     let session = data.current
-    let recent = data.history.last
+    let recent = data.history.last ?? data.resumeCheckpoint
     let monitoring = task != nil && life.phase.isActive && lastConfirmed.map { now.timeIntervalSince($0) < timing.watchdog } == true
     var result: [String: Any] = [
       "phase": life.phase.rawValue, "monitoring": monitoring,
@@ -510,7 +512,7 @@ final class GuardCoordinator {
         session.incidents = machine?.records ?? session.incidents
         data.history.append(session)
       }
-      data.current = nil; data.terminal = .interrupted; save()
+      data.current = nil; data.resumeCheckpoint = nil; data.terminal = .interrupted; save()
       notifications.cancelReminders()
       continued?.setTaskCompleted(success: false); emit()
       return

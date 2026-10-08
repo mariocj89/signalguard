@@ -28,6 +28,6 @@ export function dateLabel(date: number): string {
 }
 export function errorText(error: unknown): string {
   const message = error instanceof Error ? error.message : String(error);
-  const codes: StringKey[] = ['nativeUnavailable', 'resumeUnavailable', 'iosRequired', 'clockChanged', 'invalidEnd', 'alreadyActive', 'foregroundRequired', 'conditionsRequired', 'settingsLocked', 'settingsChanged', 'cellularUnavailable', 'notificationsChanged', 'notificationSchedulingFailed', 'monitorInterrupted', 'taskExpired', 'heartbeatMissed', 'processStopped', 'storageUnavailable', 'preflightFailed', 'startFailed', 'guardRequired', 'invalidSimulation'];
+  const codes: StringKey[] = ['nativeUnavailable', 'resumeUnavailable', 'iosRequired', 'clockChanged', 'invalidEnd', 'alreadyActive', 'foregroundRequired', 'conditionsRequired', 'settingsLocked', 'settingsChanged', 'cellularUnavailable', 'notificationsChanged', 'notificationSchedulingFailed', 'monitorInterrupted', 'taskExpired', 'heartbeatMissed', 'processStopped', 'storageUnavailable', 'preflightFailed', 'taskUnavailable', 'completionNotificationFailed', 'startFailed', 'guardRequired', 'invalidSimulation'];
   return t(codes.find((code) => message.includes(code)) ?? 'genericFailure');
 }

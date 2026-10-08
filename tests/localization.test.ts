@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import en from '../src/localization/en.json';
 import es from '../src/localization/es.json';
-import { supportedLanguage } from '../src/localization';
+import { errorText, supportedLanguage } from '../src/localization';
 
 const placeholders = (value: string) => value.match(/\{\{[^}]+\}\}|%@/g)?.sort() ?? [];
 test('all English UI strings have Spanish translations and matching placeholders', () => {
@@ -33,4 +33,10 @@ test('language follows the first supported iOS preference and falls back to Engl
   expect(supportedLanguage(['ca', 'es', 'en'])).toBe('es');
   expect(supportedLanguage(['en', 'es'])).toBe('en');
   expect(supportedLanguage(['de', null])).toBe('en');
+});
+
+
+test('native task and completion notification errors retain their specific explanation', () => {
+  expect(errorText(new Error('completionNotificationFailed'))).toBe(en.completionNotificationFailed);
+  expect(errorText(new Error('taskUnavailable'))).toBe(en.taskUnavailable);
 });

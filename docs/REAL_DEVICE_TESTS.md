@@ -120,3 +120,6 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 5. Let the original end time pass before tapping Resume. Verify it does not start another 24-hour guard; a fresh guard requires a new explicit start.
 6. Inspect History after success and after completion: linked segments appear as one guard with interruption and resumption events. No interruption-period duration appears. After a failed resume attempt, no successful-resumption event may be recorded.
 7. Run all of the above in English and Spanish. Expo Go sample History is only a UI demonstration; real notifications/resume need a native build.
+
+
+- Interrupt a guard, clear its visible History, quit/reopen and verify Resume retains its original end/selection. Old incidents must remain erased; a later successful resumed segment must still show its resume event. Clear History after completion and verify no resumable checkpoint is offered.
