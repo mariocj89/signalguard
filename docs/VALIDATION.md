@@ -72,3 +72,6 @@ Overall review, 8 October 2026: fixed History-clear recovery loss and generic na
 
 
 Privacy/support follow-up, 8 October 2026: TypeScript/lint, 43 Jest, 21 Swift tests/parser checks, two English/Spanish browser tests, iOS export, Expo Doctor 21/21 and whitespace pass. Browser tests verify localized external policy/support URLs and History return navigation. Five public static routes under https://web.mcorchero.com/apps/signalguard/ return HTTP 200 with expected headings, endpoint disclosure and valid local links. Existing hosting configuration is untouched. This is a source/UI change plus published static pages; no new native build, TestFlight upload or App Store Connect metadata change.
+
+
+TestFlight build 7, explicitly requested 8 October 2026: re-ran typecheck/lint, 43 Jest and 21 Swift core/probe tests/parser checks, all pass. EAS build 967a9e44-ff07-47cb-9095-a305a572b453 FINISHED with Xcode ARCHIVE SUCCEEDED: Apple SDK compilation, signing and artifact export validated for current native resume/notification code. Submission 27d8c769-5ad7-4bc3-aa3f-4606bf7e02fa is queued with no error; Apple has not received build 7 at this check. Physical iPhone acceptance is still required.
