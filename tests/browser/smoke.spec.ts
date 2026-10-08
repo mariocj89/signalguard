@@ -28,6 +28,12 @@ test('browser inspection fails closed and home exposes compact monitoring choice
   await expect(page.getByText('Brief interruption · no alert')).toBeVisible();
   await expect(page.getByText('Guard interrupted', { exact: true })).toBeVisible();
   await expect(page.getByText('Monitoring resumed', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'About SignalGuard', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'About SignalGuard', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Privacy policy', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/privacy/');
+  await expect(page.getByRole('link', { name: 'Support', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/support/');
+  await page.getByRole('button', { name: 'Back to history', exact: true }).click();
+  await expect(page.getByText('Sample data · UI preview only')).toBeVisible();
 });
 test('Spanish route content is complete', async ({ browser }) => {
   const context = await browser.newContext({ locale: 'es-ES', viewport: { width: 390, height: 844 } });
@@ -45,5 +51,8 @@ test('Spanish route content is complete', async ({ browser }) => {
   await expect(page.getByText('Datos de ejemplo · Solo vista previa')).toBeVisible();
   await expect(page.getByText('Guardia interrumpida', { exact: true })).toBeVisible();
   await expect(page.getByText('Monitorización reanudada', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Acerca de SignalGuard', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Política de privacidad', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/privacidad/');
+  await expect(page.getByRole('link', { name: 'Soporte', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/soporte/');
   await context.close();
 });

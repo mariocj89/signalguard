@@ -5,6 +5,7 @@ import { SignalGuard, type Session } from '../modules/signal-guard-native';
 import { t, dateLabel } from '../src/localization';
 
 jest.mock('expo-router', () => ({
+  router: { push: jest.fn() },
   useFocusEffect: (callback: () => void) => { const React = require('react'); React.useEffect(callback, [callback]); },
 }));
 jest.mock('react-native-safe-area-context', () => ({ SafeAreaView: require('react-native').View }));

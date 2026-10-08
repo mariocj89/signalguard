@@ -69,3 +69,6 @@ Foreground resume follow-up, 8 October 2026: TypeScript/lint, 40 Jest tests, 20 
 
 
 Overall review, 8 October 2026: fixed History-clear recovery loss and generic native error explanations. All local checks pass: 42 Jest, 21 Swift, two browser tests, typecheck/lint, iOS export, Expo Doctor 21/21 and whitespace. Fresh dependency audit remains 58 findings (50 high, eight moderate, zero critical); incompatible broad upgrades were not applied. Reviewed code is not a physical-iPhone acceptance result. Current native resume/notification source still needs Apple SDK compilation and actual device validation; unresolved cellular-registration and four-hour interruption reports remain device investigation items. No cloud builds or store submissions.
+
+
+Privacy/support follow-up, 8 October 2026: TypeScript/lint, 43 Jest, 21 Swift tests/parser checks, two English/Spanish browser tests, iOS export, Expo Doctor 21/21 and whitespace pass. Browser tests verify localized external policy/support URLs and History return navigation. Five public static routes under https://web.mcorchero.com/apps/signalguard/ return HTTP 200 with expected headings, endpoint disclosure and valid local links. Existing hosting configuration is untouched. This is a source/UI change plus published static pages; no new native build, TestFlight upload or App Store Connect metadata change.

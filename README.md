@@ -156,3 +156,16 @@ When the native module is absent in development (Expo Go or local browser inspec
 The watchdog says monitoring has stopped and offers a foreground Resume action. Tapping the watchdog or its action authorizes one resume attempt once the app is active; normal icon launch never auto-restarts. A session identifier rejects stale notifications. Swift rechecks prerequisites and submits a fresh immediate/fail continued-processing request with the original end time and monitoring selection. Active is reported only after native startup/heartbeat succeeds. An expired original end does not become another 24-hour guard.
 
 Saved resume links are written only after successful task startup. History groups segments into one guard and shows interruption/resumption timestamps, without a separate interruption-period duration. Session duration sums monitored segments rather than counting the unmonitored interval. Native notification launch/resume behavior needs physical-iPhone acceptance; Expo Go only previews History and never resumes a real guard.
+
+## Public privacy and support pages
+
+Published in the existing static server, following Cytowars, under `/home/mario/server/public/apps/signalguard/`. Hosting/DNS are unchanged. History's information button opens the localized policy and support links; it adds no Settings tab.
+
+- Spanish privacy: https://web.mcorchero.com/apps/signalguard/privacidad/
+- English privacy: https://web.mcorchero.com/apps/signalguard/privacy/
+- Spanish support: https://web.mcorchero.com/apps/signalguard/soporte/
+- English support: https://web.mcorchero.com/apps/signalguard/support/
+
+Use these privacy/support URLs in App Store Connect metadata when preparing a release. That metadata has not been changed by publishing these pages.
+
+Custom local-notification sounds are possible without Critical Alerts: bundle a compatible WAV/AIFF/CAF file shorter than 30 seconds and use UNNotificationSound(named:). Current notifications still use the default sound. Ordinary custom sounds remain subject to iOS Silent mode, Focus and sound settings. Critical Alerts would additionally require Apple's approval of the entitlement, an updated signed provisioning profile, native critical authorization/sound integration and the user's separate permission. This enhancement is not enabled in MVP.

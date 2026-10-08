@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import en from '../src/localization/en.json';
 import es from '../src/localization/es.json';
-import { errorText, supportedLanguage } from '../src/localization';
+import { errorText, supportedLanguage, informationURLs } from '../src/localization';
 
 const placeholders = (value: string) => value.match(/\{\{[^}]+\}\}|%@/g)?.sort() ?? [];
 test('all English UI strings have Spanish translations and matching placeholders', () => {
@@ -39,4 +39,9 @@ test('language follows the first supported iOS preference and falls back to Engl
 test('native task and completion notification errors retain their specific explanation', () => {
   expect(errorText(new Error('completionNotificationFailed'))).toBe(en.completionNotificationFailed);
   expect(errorText(new Error('taskUnavailable'))).toBe(en.taskUnavailable);
+});
+
+test('information links select the published privacy and support language', () => {
+  expect(informationURLs('es')).toEqual({ privacy: 'https://web.mcorchero.com/apps/signalguard/privacidad/', support: 'https://web.mcorchero.com/apps/signalguard/soporte/' });
+  expect(informationURLs('en')).toEqual({ privacy: 'https://web.mcorchero.com/apps/signalguard/privacy/', support: 'https://web.mcorchero.com/apps/signalguard/support/' });
 });

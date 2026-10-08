@@ -134,5 +134,8 @@
   "resumeGuard": "RESUME",
   "resuming": "Resuming…",
   "resumed": "Monitoring resumed",
-  "resumeUnavailable": "This guard can no longer be resumed. Start a new guard."
+  "resumeUnavailable": "This guard can no longer be resumed. Start a new guard.",
+  "privacyPolicy": "Privacy policy",
+  "support": "Support",
+  "backToHistory": "Back to history"
 }

@@ -134,5 +134,8 @@
   "resumeGuard": "REANUDAR",
   "resuming": "Reanudando…",
   "resumed": "Monitorización reanudada",
-  "resumeUnavailable": "Esta guardia ya no se puede reanudar. Inicia una nueva."
+  "resumeUnavailable": "Esta guardia ya no se puede reanudar. Inicia una nueva.",
+  "privacyPolicy": "Política de privacidad",
+  "support": "Soporte",
+  "backToHistory": "Volver al historial"
 }

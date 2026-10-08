@@ -11,6 +11,7 @@ export default function Layout() {
   return <SafeAreaProvider><GuardProvider><StatusBar style="auto" /><Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: colors.text, tabBarInactiveTintColor: colors.muted, tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.line } }}>
     <Tabs.Screen name="index" options={{ title: t('home'), tabBarIcon: ({ color }) => <Ionicons name="shield-checkmark-outline" size={23} color={color} /> }} />
     <Tabs.Screen name="history" options={{ title: t('history'), tabBarIcon: ({ color }) => <Ionicons name="time-outline" size={23} color={color} /> }} />
+    <Tabs.Screen name="information" options={{ href: null, title: t('aboutTitle') }} />
     <Tabs.Screen name="diagnostics" options={{ href: null, title: t('diagnostics') }} />
   </Tabs></GuardProvider></SafeAreaProvider>;
 }

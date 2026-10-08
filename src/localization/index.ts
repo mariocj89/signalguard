@@ -31,3 +31,9 @@ export function errorText(error: unknown): string {
   const codes: StringKey[] = ['nativeUnavailable', 'resumeUnavailable', 'iosRequired', 'clockChanged', 'invalidEnd', 'alreadyActive', 'foregroundRequired', 'conditionsRequired', 'settingsLocked', 'settingsChanged', 'cellularUnavailable', 'notificationsChanged', 'notificationSchedulingFailed', 'monitorInterrupted', 'taskExpired', 'heartbeatMissed', 'processStopped', 'storageUnavailable', 'preflightFailed', 'taskUnavailable', 'completionNotificationFailed', 'startFailed', 'guardRequired', 'invalidSimulation'];
   return t(codes.find((code) => message.includes(code)) ?? 'genericFailure');
 }
+
+export function informationURLs(code: 'en' | 'es' = language) {
+  const routes = { en: { privacy: 'privacy', support: 'support' }, es: { privacy: 'privacidad', support: 'soporte' } };
+  const base = 'https://web.mcorchero.com/apps/signalguard/';
+  return { privacy: `${base}${routes[code].privacy}/`, support: `${base}${routes[code].support}/` };
+}

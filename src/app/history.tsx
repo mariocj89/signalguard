@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
 import { SignalGuard, isDevelopmentPreview, type Session } from '../../modules/signal-guard-native';
 import { Button, Card, Heading, Page, usePalette } from '../ui/components';
 import { t, clock, dateLabel, errorText, type StringKey } from '../localization';
@@ -26,7 +26,12 @@ export default function History() {
     { text: t('clearConfirm'), style: 'destructive', onPress: () => { void SignalGuard.clearHistory().then(load).catch((failure: unknown) => setError(errorText(failure))); } },
   ]);
   return <Page>
-    <Heading>{t('history')}</Heading>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Heading>{t('history')}</Heading>
+      <Pressable accessibilityRole="button" accessibilityLabel={t('aboutTitle')} onPress={() => router.push('/information')} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
+        <Ionicons name="information-circle-outline" size={26} color={colors.muted} accessible={false} />
+      </Pressable>
+    </View>
     {isDevelopmentPreview && <Text style={{ color: colors.muted, fontSize: 14 }}>{t('previewHistory')}</Text>}
     {loading ? <ActivityIndicator color={colors.muted} /> : error ? null : sessions.length === 0 ? <Card style={{ alignItems: 'center', paddingVertical: 32 }}>
       <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: colors.inset, alignItems: 'center', justifyContent: 'center' }}><Ionicons name="time-outline" size={28} color={colors.muted} accessible={false} /></View>
