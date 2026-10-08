@@ -17,9 +17,9 @@ https://appstoreconnect.apple.com/apps/6736607323/distribution/ios/version/infli
 - Precio gratuito (0.00 USD en el territorio base, con equivalencias); disponibilidad existente de 175 territorios conservada. No se cambiaron precios o países.
 - Exportación cifrado: build con ITSAppUsesNonExemptEncryption=false, usa HTTPS del sistema. No se adjuntó documentación de cifrado inexistente.
 
-## Pendiente antes de una futura revisión
+## Capturas y pendientes antes de una futura revisión
 
-1. Capturas reales de la app actual en iPhone. App Store Connect no tenía capturas previas. No se han inventado ni subido capturas de monitorización nativa mediante Expo Go. Conviene Home con guardia activa, elección de condiciones y un historial real; en español e inglés si es posible. Apple establece los tamaños admitidos en https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/.
+1. Capturas **completadas**: portada promocional y tres capturas reales aportadas por el usuario, retocadas con IA para presentación. Subidas en orden a en-US y es-ES, tamaños APP_IPHONE_67 (1320×2868) y APP_IPHONE_61 (1206×2622). Las 16 reservas están COMPLETE, sin errores. El texto visual sigue en español en ambas fichas; una localización visual inglesa sería una mejora futura. Originales, maestros y prompts en store/screenshots/. No se modificó la interfaz de la app ni se generó otra build.
 2. Cuestionario **Privacidad de la app** en el panel web de App Store Connect. La API pública de Apple permite las URL de la política, pero no ofrece el cuestionario de etiquetas de privacidad. No se ha marcado como completado ni publicado. Datos conocidos: historial/preferencias en el dispositivo; sin cuentas, anuncios, analítica, seguimiento, telemetría o backend; solicitudes mínimas a Google/Microsoft sin identificadores de SignalGuard. Los proveedores reciben la IP de conexión necesaria para servir la solicitud, como explica la política. Revisar las definiciones de Apple al responder: https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/.
 3. Revisar en el panel cualquier aviso de cuenta/comerciante/contratos aplicable antes de enviar. No se han aceptado términos ni modificado declaraciones legales de la cuenta.
 

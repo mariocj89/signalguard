@@ -1,0 +1,254 @@
+{
+  "generation": "Built-in image_gen; user-provided real iPhone screenshots retouched; prompts in PROMPTS.json",
+  "uploadedToDraftVersion": "1.0.0",
+  "buildNumber": "7",
+  "submittedForReview": false,
+  "assetSets": [
+    {
+      "locale": "es-ES",
+      "display": "APP_IPHONE_67",
+      "setId": "085fe278-e6a8-4b75-bebb-c383c482c5cc",
+      "screenshots": [
+        {
+          "id": "fac00019-1887-885b-803d-a53c329367a9",
+          "fileName": "01-portada.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        },
+        {
+          "id": "68000019-1887-885b-8001-3a8478cb2e91",
+          "fileName": "02-guardia-activa.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        },
+        {
+          "id": "ee000019-1887-885b-8021-0c081d29c890",
+          "fileName": "03-elegir-monitorizacion.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        },
+        {
+          "id": "0c000019-1887-885b-8013-8eb054fecfeb",
+          "fileName": "04-historial.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        }
+      ]
+    },
+    {
+      "locale": "es-ES",
+      "display": "APP_IPHONE_61",
+      "setId": "90f0994c-234e-4f34-abc3-52b507937166",
+      "screenshots": [
+        {
+          "id": "8bc00019-1887-885b-8017-906ab8966093",
+          "fileName": "01-portada.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        },
+        {
+          "id": "15000019-1887-885b-803d-311d6b4be13f",
+          "fileName": "02-guardia-activa.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        },
+        {
+          "id": "4e000019-1887-885b-8019-ee4b5abb5e4e",
+          "fileName": "03-elegir-monitorizacion.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        },
+        {
+          "id": "74800019-1887-885b-800a-317480ea83e7",
+          "fileName": "04-historial.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        }
+      ]
+    },
+    {
+      "locale": "en-US",
+      "display": "APP_IPHONE_67",
+      "setId": "c79cdda0-6d09-42dc-9c1e-832134fa8208",
+      "screenshots": [
+        {
+          "id": "6a000019-1887-885b-8039-58d957d3e65a",
+          "fileName": "01-portada.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        },
+        {
+          "id": "f4000019-1887-885b-8020-5132bd871654",
+          "fileName": "02-guardia-activa.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        },
+        {
+          "id": "73800019-1887-885b-800f-9eee40f0cce8",
+          "fileName": "03-elegir-monitorizacion.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        },
+        {
+          "id": "86000019-1887-885b-8030-e1565a9935e2",
+          "fileName": "04-historial.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1320,
+            "height": 2868
+          }
+        }
+      ]
+    },
+    {
+      "locale": "en-US",
+      "display": "APP_IPHONE_61",
+      "setId": "e9b4ce04-5cef-43d1-921f-483e9028a3eb",
+      "screenshots": [
+        {
+          "id": "25800019-1887-885b-803e-4434acd7ecab",
+          "fileName": "01-portada.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        },
+        {
+          "id": "8a000019-1887-885b-8029-7f184b3b7122",
+          "fileName": "02-guardia-activa.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        },
+        {
+          "id": "11400019-1887-885b-800b-84986383431b",
+          "fileName": "03-elegir-monitorizacion.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        },
+        {
+          "id": "3d800019-1887-885b-8032-9e9facce7206",
+          "fileName": "04-historial.png",
+          "state": {
+            "errors": [],
+            "warnings": null,
+            "state": "COMPLETE"
+          },
+          "dimensions": {
+            "width": 1206,
+            "height": 2622
+          }
+        }
+      ]
+    }
+  ],
+  "sha256": {
+    "es-ES/01-portada.png": "c89e0540fe609dcf1ef623942eda0c5087afd1530ace9514959d07d0c4b6a834",
+    "es-ES/03-elegir-monitorizacion.png": "c03f2c0cbfc6b4b4aeb1bb99493c59ece353a40e49ad97a9d815fd6cd7548f79",
+    "es-ES/04-historial.png": "4690140320b754bb750b019a5f067d7af5c8587f093c8d3c0660170e5354038e",
+    "es-ES/02-guardia-activa.png": "207d4a0554b5c8453851ce9bc1ea2696ebdd46fc5ff16b4c856ac5ce3aaf2fce",
+    "es-ES-medium/01-portada.png": "bc40af91e9f651e87c02a1e343422065ce583168349d55916bd358e1c8710a07",
+    "es-ES-medium/03-elegir-monitorizacion.png": "e0da665bf7cedb46e0738a471f75ad6414d450fe3c37418ded399b1788d0e89e",
+    "es-ES-medium/04-historial.png": "3c1f42220836da36b06453a1f08909d49431d4ce1ed856112d15cc9c75326de6",
+    "es-ES-medium/02-guardia-activa.png": "ce19b994d7cc249a9ce5184cffdea42ee3f78ddccc8c85fd751c18e3cc3ea4a3"
+  }
+}
