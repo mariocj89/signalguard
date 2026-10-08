@@ -191,3 +191,16 @@ User authorized placing SignalGuard privacy/support beside Cytowars in ~/server.
 Policy accurately covers minimal HTTPS checks to Google/Microsoft (providers see connection IP), local history/recovery metadata, no analytics/telemetry/cloud sync, local notifications and execution limitations. Added a discreet information button on History and hidden information route with localized public policy/support links; no Settings tab or monitoring changes. URLs are documented for future App Store Connect privacy/support metadata, which was not modified.
 
 Passed typecheck/lint, 43 Jest tests, 21 Swift tests/parser checks, two browser tests including EN/ES information links and return navigation, iOS export, Expo Doctor 21/21 and whitespace. Native Apple SDK/device validation remains unchanged; no custom sound, Critical Alerts entitlement or permission was enabled, and no EAS/TestFlight build/submission was started. Explained to user that custom ordinary notification sounds under 30 seconds are supported subject to iOS settings; Critical Alerts separately require Apple entitlement approval and user authorization. Last-selection behavior remains unchanged/unresolved product choice.
+
+
+## 8 October 2026: explicitly requested TestFlight build 7
+
+User requested sending the current version to TestFlight. Re-ran npm run check: typecheck/lint, 43 Jest tests and 21 Swift core/probe tests/parser checks pass. Browser smoke, iOS export and Expo Doctor had already passed for this same source commit cc0f5ce in the prior turn. Dispatched production EAS build with --auto-submit --non-interactive --no-wait using existing scoped signing and App Store Connect credentials. No credentials or tester groups were changed. EAS incremented app.json from build 6 to 7.
+
+Version 1.0.0 (7), build 967a9e44-ff07-47cb-9095-a305a572b453:
+https://expo.dev/accounts/etcaterva/projects/signalguard/builds/967a9e44-ff07-47cb-9095-a305a572b453
+
+Submission 27d8c769-5ad7-4bc3-aa3f-4606bf7e02fa:
+https://expo.dev/accounts/etcaterva/projects/signalguard/submissions/27d8c769-5ad7-4bc3-aa3f-4606bf7e02fa
+
+Initial status: build IN_QUEUE, submission AWAITING_BUILD, no error. Includes Home monitoring switches, History UX, explicit notification/button resume preserving original end/settings, history-clear recovery fix and localized privacy/support access. No custom sound or Critical Alerts integration. No public App Store release. Do not claim TestFlight availability until the build finishes, submission succeeds and Apple processing is confirmed. Follow safe read-only status helpers /tmp/signalguard-build-status.py, /tmp/signalguard-submission-status.py and /tmp/signalguard-apple-build.cjs.
