@@ -1,0 +1,57 @@
+{
+  "createdAt": "2026-10-08T21:17:45.919Z",
+  "appId": "6736607323",
+  "versionId": "12fe7582-5804-4d01-86c6-168aa8648a11",
+  "images": [
+    {
+      "locale": "es-ES",
+      "fileName": "es-ES-universal.png",
+      "id": "19c00019-1887-885b-8002-9a218b11dec0",
+      "state": "PREPARE_FOR_SUBMISSION",
+      "sha256": "811069721397e26e6a269c9586c013f4659e9dee9d8944249e42b2628ca717a6",
+      "bytes": 6127494,
+      "specId": "c8f4e2b1-7a3d-5c9e-8b6f-2d1a0e9c8b7a",
+      "dimensions": {
+        "width": 5244,
+        "height": 2950
+      },
+      "placements": [
+        {
+          "placementType": "PRODUCT_PAGE_HEADER_ASSET",
+          "error": "HTTP 409 STATE_ERROR.INVALID_STATE: AppStoreVersion WAITING_FOR_REVIEW; placement creation not permitted."
+        },
+        {
+          "placementType": "APP_STORE_SEARCH_RESULTS_ASSET",
+          "error": "HTTP 409 STATE_ERROR.INVALID_STATE: AppStoreVersion WAITING_FOR_REVIEW; placement creation not permitted."
+        }
+      ]
+    },
+    {
+      "locale": "en-US",
+      "fileName": "en-US-universal.png",
+      "id": "f4800019-1887-885b-803a-5ab76bf18b43",
+      "state": "PREPARE_FOR_SUBMISSION",
+      "sha256": "eeb115bf0243fb59343924e867050a7f5b605cfccea3b877a7b6cfc6a186927d",
+      "bytes": 6340486,
+      "specId": "c8f4e2b1-7a3d-5c9e-8b6f-2d1a0e9c8b7a",
+      "dimensions": {
+        "width": 5244,
+        "height": 2950
+      },
+      "placements": [
+        {
+          "placementType": "PRODUCT_PAGE_HEADER_ASSET",
+          "error": "HTTP 409 STATE_ERROR.INVALID_STATE: AppStoreVersion WAITING_FOR_REVIEW; placement creation not permitted."
+        },
+        {
+          "placementType": "APP_STORE_SEARCH_RESULTS_ASSET",
+          "error": "HTTP 409 STATE_ERROR.INVALID_STATE: AppStoreVersion WAITING_FOR_REVIEW; placement creation not permitted."
+        }
+      ]
+    }
+  ],
+  "versionState": "WAITING_FOR_REVIEW",
+  "verifiedAt": "2026-10-08T21:18:17.189Z",
+  "standaloneReview": "Not created: no approved app version; first-version review must include assets.",
+  "existingReviewSubmissionId": "ca47e4c9-fb65-42e2-9351-3c1d382c5341"
+}
