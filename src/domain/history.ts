@@ -1,8 +1,9 @@
 import type { Session } from '../../modules/signal-guard-native';
+export type HistoryEvent = { kind: 'resumed'; at: number } | { kind: 'interrupted'; at: number; segment: Session };
 export interface HistoryEntry {
   session: Session;
   monitoredDuration: number;
-  events: { kind: 'interrupted' | 'resumed'; at: number }[];
+  events: HistoryEvent[];
 }
 export function historyEntries(sessions: Session[]): HistoryEntry[] {
   const parents = new Map<string, HistoryEntry>();
@@ -18,7 +19,7 @@ export function historyEntries(sessions: Session[]): HistoryEntry[] {
       entry.session = { ...segment, id: entry.session.id, start: entry.session.start, incidents: [...entry.session.incidents, ...segment.incidents] };
     }
     entry.monitoredDuration += Math.max(0, end - segment.start);
-    if (segment.outcome === 'interrupted') entry.events.push({ kind: 'interrupted', at: end });
+    if (segment.outcome === 'interrupted') entry.events.push({ kind: 'interrupted', at: end, segment });
     parents.set(segment.id, entry);
   }
   return entries.sort((a, b) => b.session.start - a.session.start);

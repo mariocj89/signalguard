@@ -137,5 +137,20 @@
   "resumeUnavailable": "Esta guardia ya no se puede reanudar. Inicia una nueva.",
   "privacyPolicy": "Política de privacidad",
   "support": "Soporte",
-  "backToHistory": "Volver al historial"
+  "backToHistory": "Volver al historial",
+  "interruptionDetails": "Detalles de la interrupción",
+  "interruptionOpen": "Interrupción a las {{time}} · detalles",
+  "interruptionCode": "Motivo registrado",
+  "interruptionNotRecorded": "No registrado",
+  "interruptionSegmentStart": "Monitorización iniciada o reanudada",
+  "interruptionRecordedAt": "Interrupción registrada",
+  "interruptionLastHeartbeat": "Última confirmación del monitor",
+  "interruptionSystemDetail": "iOS finalizó la tarea en segundo plano. No facilitó la causa concreta.",
+  "interruptionHeartbeatDetail": "El monitor nativo dejó de confirmar su funcionamiento. Se desconoce la causa concreta.",
+  "interruptionProcessDetail": "Al volver a abrir la app, el proceso de monitorización anterior ya no estaba en ejecución. Esto no indica por qué se detuvo.",
+  "interruptionUnknownDetail": "No está disponible el motivo concreto de esta interrupción.",
+  "interruptionEvidenceNote": "Son horas registradas, no una prueba del instante exacto en que se detuvo el monitor. Las fechas copiadas usan UTC.",
+  "copyInterruptionDetails": "Copiar detalles",
+  "interruptionCopied": "Detalles copiados",
+  "interruptionCopyFailed": "No se han podido copiar los detalles. Inténtalo de nuevo."
 }

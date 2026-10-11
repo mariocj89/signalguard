@@ -28,6 +28,10 @@ test('browser inspection fails closed and home exposes compact monitoring choice
   await expect(page.getByText('Brief interruption · no alert')).toBeVisible();
   await expect(page.getByText('Guard interrupted', { exact: true })).toBeVisible();
   await expect(page.getByText('Monitoring resumed', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Interruption at .* details/ }).click();
+  await expect(page.getByRole('button', { name: 'Copy details', exact: true })).toBeVisible();
+  await expect(page.getByText(/Recorded reason:/)).toBeVisible();
+  await page.screenshot({ path: 'test-results/interruption-en.png', fullPage: true });
   await page.getByRole('button', { name: 'About SignalGuard', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'About SignalGuard', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Privacy policy', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/privacy/');
@@ -51,6 +55,10 @@ test('Spanish route content is complete', async ({ browser }) => {
   await expect(page.getByText('Datos de ejemplo · Solo vista previa')).toBeVisible();
   await expect(page.getByText('Guardia interrumpida', { exact: true })).toBeVisible();
   await expect(page.getByText('Monitorización reanudada', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Interrupción a las .* detalles/ }).click();
+  await expect(page.getByRole('button', { name: 'Copiar detalles', exact: true })).toBeVisible();
+  await expect(page.getByText(/Motivo registrado:/)).toBeVisible();
+  await page.screenshot({ path: 'test-results/interruption-es.png', fullPage: true });
   await page.getByRole('button', { name: 'Acerca de SignalGuard', exact: true }).click();
   await expect(page.getByRole('link', { name: 'Política de privacidad', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/privacidad/');
   await expect(page.getByRole('link', { name: 'Soporte', exact: true })).toHaveAttribute('href', 'https://web.mcorchero.com/apps/signalguard/soporte/');

@@ -72,7 +72,7 @@ test('resumed history groups linked segments and displays events without a gap d
   expect(entries).toHaveLength(1);
   expect(entries[0].session.outcome).toBe('completed');
   expect(entries[0].monitoredDuration).toBe(3300000);
-  expect(entries[0].events).toEqual([{ kind: 'interrupted', at: 600000 }, { kind: 'resumed', at: 900000 }]);
+  expect(entries[0].events).toEqual([{ kind: 'interrupted', at: 600000, segment: first }, { kind: 'resumed', at: 900000 }]);
   expect(entries[0]).not.toHaveProperty('gapDuration');
 });
 
@@ -81,4 +81,18 @@ test('a resumed segment still shows its resume event after older history was cle
   const { historyEntries } = require('../src/domain/history');
   const entries = historyEntries([{ id: 'new', resumedFrom: 'deleted', start: 1000, end: 2000, lastHeartbeat: 2000, scheduledEnd: 2000, outcome: 'completed', incidents: [] }]);
   expect(entries[0].events).toEqual([{ kind: 'resumed', at: 1000 }]);
+});
+
+
+test('unknown interruption reasons do not imply iOS termination and reports exclude identifiers', () => {
+  const { interruptionDescription, interruptionReport } = require('../src/domain/interruption');
+  const { t } = require('../src/localization');
+  expect(interruptionDescription('futureReason')).toBe(t('interruptionUnknownDetail'));
+  expect(interruptionDescription('taskExpired-extra')).toBe(t('interruptionUnknownDetail'));
+  expect(interruptionDescription()).toBe(t('interruptionUnknownDetail'));
+  const segment = { id: 'private-session-id', start: 0, lastHeartbeat: 500, end: 1000, interruptionReason: 'futureReason' };
+  const report = interruptionReport(segment, 1000);
+  expect(report).toContain('futureReason');
+  expect(report).toContain(new Date(500).toISOString());
+  expect(report).not.toContain('private-session-id');
 });

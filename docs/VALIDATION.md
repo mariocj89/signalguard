@@ -75,3 +75,7 @@ Privacy/support follow-up, 8 October 2026: TypeScript/lint, 43 Jest, 21 Swift te
 
 
 TestFlight build 7, explicitly requested 8 October 2026: re-ran typecheck/lint, 43 Jest and 21 Swift core/probe tests/parser checks, all pass. EAS build 967a9e44-ff07-47cb-9095-a305a572b453 FINISHED with Xcode ARCHIVE SUCCEEDED: Apple SDK compilation, signing and artifact export validated for current native resume/notification code. Submission 27d8c769-5ad7-4bc3-aa3f-4606bf7e02fa is queued with no error; Apple has not received build 7 at this check. Physical iPhone acceptance is still required.
+
+## 11 October 2026 — interruption history details (local only)
+
+Passed: TypeScript, lint, 46 Jest tests, 21 native Swift core/probe tests and Swift source parse; iOS JS bundle export; Expo Doctor 21/21; two English/Spanish browser smoke tests including expanding detail rows. Browser screenshots in ignored test-results/interruption-en.png and interruption-es.png reviewed for legibility. Regressions cover distinct reasons after multiple resumes, copying the correct segment, unknown/older reason fallback, clipboard rejection/false result and report identifier exclusion. Clipboard delivery on a real iPhone still requires validation with the next explicitly requested native build. No EAS build, submission, OTA update or cloud quota use.

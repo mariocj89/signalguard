@@ -123,3 +123,11 @@ Exercise Internet, Cellular, Both, Recovery, Interruption and Completion. Restor
 
 
 - Interrupt a guard, clear its visible History, quit/reopen and verify Resume retains its original end/selection. Old incidents must remain erased; a later successful resumed segment must still show its resume event. Clear History after completion and verify no resumable checkpoint is offered.
+
+## Interruption detail inspection (next native build)
+
+- Start, interrupt and explicitly resume a guard twice, then stop it. In History tap each interruption row: each must show its own persisted reason, segment start and last heartbeat even though the group ends as stopped.
+- Verify taskExpired says iOS ended the task without claiming why; processStopped says the process was absent when reopening without claiming a crash/force-close. An old record missing its reason must say the reason is unavailable.
+- Tap Copy details, then paste into Notes. Verify the selected segment only, UTC timestamps, no SIM/device/session identifiers; it must not send anything remotely or request permission to read clipboard content.
+- Repeat in English and Spanish with large text and dark/light appearance. Expand/collapse must remain usable and copying must show success only after a successful write.
+- Existing TestFlight build 7 does not contain this feature. No EAS build is authorized automatically; await an explicit user request after quota is available.

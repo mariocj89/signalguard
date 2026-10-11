@@ -137,5 +137,20 @@
   "resumeUnavailable": "This guard can no longer be resumed. Start a new guard.",
   "privacyPolicy": "Privacy policy",
   "support": "Support",
-  "backToHistory": "Back to history"
+  "backToHistory": "Back to history",
+  "interruptionDetails": "Interruption details",
+  "interruptionOpen": "Interruption at {{time}} · details",
+  "interruptionCode": "Recorded reason",
+  "interruptionNotRecorded": "Not recorded",
+  "interruptionSegmentStart": "Monitoring resumed or started",
+  "interruptionRecordedAt": "Recorded interruption",
+  "interruptionLastHeartbeat": "Last monitoring heartbeat",
+  "interruptionSystemDetail": "iOS ended the background task. It did not provide the underlying reason.",
+  "interruptionHeartbeatDetail": "The native monitor stopped confirming that it was running. The underlying reason is unknown.",
+  "interruptionProcessDetail": "When the app reopened, the previous monitoring process was no longer running. This does not tell us why it stopped.",
+  "interruptionUnknownDetail": "The exact reason for this interruption is not available.",
+  "interruptionEvidenceNote": "These are recorded times, not proof of the exact moment monitoring stopped. Copied timestamps use UTC.",
+  "copyInterruptionDetails": "Copy details",
+  "interruptionCopied": "Details copied",
+  "interruptionCopyFailed": "Could not copy the details. Try again."
 }

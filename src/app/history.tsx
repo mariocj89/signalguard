@@ -6,6 +6,7 @@ import { SignalGuard, isDevelopmentPreview, type Session } from '../../modules/s
 import { Button, Card, Heading, Page, usePalette } from '../ui/components';
 import { t, clock, dateLabel, errorText, type StringKey } from '../localization';
 import { historyEntries } from '../domain/history';
+import { InterruptionDetails } from '../ui/InterruptionDetails';
 import { incidentDuration } from '../domain/presentation';
 
 const outcomes: Record<Session['outcome'], StringKey> = { completed: 'completed', stopped: 'stopped', interrupted: 'interrupted', running: 'running' };
@@ -53,10 +54,9 @@ export default function History() {
             </View>
             <Text accessibilityLabel={t('duration', { duration: incidentDuration(0, monitoredDuration) })} style={{ color: colors.text, fontSize: 16, fontWeight: '600', fontVariant: ['tabular-nums'] }}>{incidentDuration(0, monitoredDuration)}</Text>
           </View>
-          {session.outcome === 'interrupted' && session.interruptionReason && <Text style={{ color: colors.muted, fontSize: 14, lineHeight: 20 }}>{errorText(new Error(session.interruptionReason))}</Text>}
-          {events.map((event, eventIndex) => <View key={`${event.kind}-${eventIndex}`} style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-            <Ionicons name={event.kind === 'resumed' ? 'play-circle-outline' : 'pause-circle-outline'} size={18} color={event.kind === 'resumed' ? colors.muted : colors.red} accessible={false} />
-            <Text style={{ color: colors.muted, fontSize: 13, flex: 1 }}>{t(event.kind === 'resumed' ? 'resumed' : 'interrupted')}</Text>
+          {events.map((event, eventIndex) => event.kind === 'interrupted' ? <InterruptionDetails key={`interrupted-${eventIndex}`} segment={event.segment} at={event.at} /> : <View key={`${event.kind}-${eventIndex}`} style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+            <Ionicons name="play-circle-outline" size={18} color={colors.muted} accessible={false} />
+            <Text style={{ color: colors.muted, fontSize: 13, flex: 1 }}>{t('resumed')}</Text>
             <Text style={{ color: colors.muted, fontSize: 13, fontVariant: ['tabular-nums'] }}>{clock(event.at)}</Text>
           </View>)}
           {session.incidents.length === 0 && <View style={{ borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line, paddingTop: 12 }}><Text style={{ color: colors.muted, fontSize: 14 }}>{t('noIncidents')}</Text></View>}
